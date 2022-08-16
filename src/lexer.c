@@ -1,21 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   minishell.h                                        :+:    :+:            */
+/*   lexer.c                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/08/16 08:11:43 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/16 14:49:23 by pniezen       ########   odam.nl         */
+/*   Created: 2022/08/16 13:38:21 by pniezen       #+#    #+#                 */
+/*   Updated: 2022/08/16 15:21:21 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# include "libft.h"
-# include <stdlib.h>
+#include "minishell.h"
+#include <stdio.h>
 
-// lexer
-char	**lexer(char *input);
+char	**lexer(char *input)
+{
+	int		i;
+	char	**tokens;
+	char	*quotes;
 
-#endif
+	quotes = ft_strchr(input, '\"');
+	if (quotes && !ft_strchr(quotes, '\"'))
+		exit(EXIT_FAILURE);
+	tokens = ft_split(input, ' ');
+	if (!tokens)
+		exit(EXIT_FAILURE);
+	i = 0;
+	while (tokens[i])
+	{
+		printf("%s", tokens[i]);
+		i++;
+	}
+	return (tokens);
+}

@@ -1,1 +1,3 @@
-writing the lexer
+lexer:
+    schrijf een nieuwe split
+    wat tussen single of double quotes staat niet splitten op white spaces

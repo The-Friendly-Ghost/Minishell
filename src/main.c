@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/16 12:13:28 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/08/16 14:49:28 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ static char	*get_input(char *input)
 		if (!input)
 		{
 			ft_putendl_fd("minishell> exit", 1);
-			// get the errno
 			exit(EXIT_FAILURE);
 		}
 		if (!ft_strncmp(input, "exit", 5))
@@ -35,22 +34,19 @@ static char	*get_input(char *input)
 
 int	main(int argc, char **argv, char **envp)
 {
-	int		i;
 	char	*input;
-	char	**split;
+	char	**tokens;
 
-	// test
 	(void)argc;
 	(void)argv;
 	(void)envp;
 	input = NULL;
-	input = get_input(input);
-	split = ft_split(input, ' ');
-	i = 0;
-	while (split[i])
+	while (1)
 	{
-		printf("%s", split[i]);
-		i++;
+		input = get_input(input);
+		if (!input)
+			continue ;
+		tokens = lexer(input);
 	}
 	return (0);
 }
