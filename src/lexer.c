@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 13:38:21 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/17 15:36:02 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/08/17 16:39:08 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,6 @@ char	**lexer(char *input)
 
 	w_spc = count_whitespace(input);
 	tokens = split_tokens(set_whitespace(input, w_spc));
-	exit(0);
 	if (!tokens)
 		exit(EXIT_FAILURE);
 	i = 0;

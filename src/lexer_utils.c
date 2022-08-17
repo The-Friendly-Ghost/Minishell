@@ -6,12 +6,13 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/17 08:40:38 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/17 15:44:20 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/08/17 17:54:12 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer_utils.h"
 #include <stdio.h>
+#include <stdbool.h>
 
 char	is_whitespace(char c)
 {
@@ -71,60 +72,83 @@ void	skip_string(const char *str, int *i)
 
 int	count_whitespace(char *str)
 {
-	int	i;
-	int	count;
+	char	c;
+	int		i;
+	int		count;
 
+	c = '\0';
 	i = 0;
 	count = 0;
 	while (str[i])
 	{
-		if (is_quote(str[i]))
+		if (!c)
+			c = str[i];
+		if (c && is_quote(str[i]) && str[i + 1] != '\0' && i)
 			count++;
 		i++;
 	}
 	return (count);
 }
 
-//  "string" hallo"string";
+bool	in_quote(char s, char c)
+{
+	static bool	quote;
+
+	if (!quote && s == c)
+		quote = true;
+	else if (quote && s == c)
+		quote = false;
+	return (quote);
+}
+
+//  "str" hoi"str";
 //i 0123456789
-//  "string"  hallo "string" ;
+//  "str"  hoi "str" ;
 //j 0123456789
 
 char	*set_whitespace(char *str, int w_spc)
 {
+	bool	b_quote;
 	char	*line;
 	int		i;
 	int		j;
 	int		str_len;
-	char	quote;
 
+	b_quote = false;
 	i = 0;
 	j = 0;
-	str_len = ft_strlen(str) + (w_spc + 1);
+	str_len = ((int)ft_strlen(str) + w_spc) + 1;
+	printf("%i %i %i\n", (int)ft_strlen(str), w_spc, str_len);
 	line = NULL;
 	if (!w_spc)
 		return (str);
 	line = ft_calloc(str_len, sizeof(line));
 	if (!line)
 		return (NULL);
-	while (j < str_len && str[i])
+	while (str[i])
 	{
-		quote = is_quote(str[i]);
-		if (quote && i > 0)
+		if (!b_quote && str[i] == is_quote(str[i]) && str[i] != ' ')
 		{
 			line[j] = ' ';
 			j++;
-			while (str[i] != quote)
-			{
-				line [j] = str[i];
-				i++;
-				j++;
-			}
+			line[j] = str[i];
+			i++;
+			j++;
+			b_quote = true;
+		}
+		if (b_quote && str[i] == is_quote(str[i]) && str[i + 1] != '\0' && str[0] != ' ')
+		{
+			line[j] = str[i];
+			i++;
+			j++;
+			line[j] = ' ';
+			j++;
+			b_quote = false;
 		}
 		line[j] = str[i];
 		i++;
 		j++;
 	}
-	printf("%s\n%i %i %i\n", line, i, j, str_len);
+	printf("%s %i\n%s %i\n", str, i, line, j);
 	return (line);
 }
