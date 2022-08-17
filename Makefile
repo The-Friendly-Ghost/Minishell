@@ -6,7 +6,7 @@
 #    By: pniezen <pniezen@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/08/16 08:11:25 by pniezen       #+#    #+#                  #
-#    Updated: 2022/08/16 12:11:48 by pniezen       ########   odam.nl          #
+#    Updated: 2022/08/17 09:41:13 by pniezen       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,6 +45,9 @@ $(NAME): $(OBJ)
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c ./include/minishell.h
 	@mkdir -p $(OBJ_PATH)
 	@$(CC) $(CFLAGS) $(INC) -o $@ -c $< && printf "$(GREEN)$(BOLD)\rCompiling: $(notdir $<)\r\e[35C[OK]\n$(RESET)"
+
+run: all
+	@./minishell
 
 cleanlib:
 	@make -C $(LIBFT_PATH) clean
