@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 14:15:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/18 10:35:20 by cpost         ########   odam.nl         */
+/*   Updated: 2022/08/18 14:12:09 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static void	add_new_element_to_token_list(t_token **token_list,
 		temp = *token_list;
 		while (temp->next)
 			temp = temp->next;
+		new_element->previous = temp;
 		temp->next = new_element;
 	}
 }
@@ -51,6 +52,7 @@ static t_token	*create_new_element(char *token, unsigned int id)
 	new_element->id = id;
 	new_element->content = token;
 	new_element->next = NULL;
+	new_element->previous = NULL;
 	new_element->type = determine_token_type(token);
 }
 

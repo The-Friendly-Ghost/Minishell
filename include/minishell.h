@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:11:43 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/18 11:30:48 by cpost         ########   odam.nl         */
+/*   Updated: 2022/08/18 14:09:31 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ typedef struct s_token {
 	unsigned int	type;
 	char			*content;
 	t_token			*next;
+	t_token			*previous;
 }	t_token;
 
 typedef enum e_token_type {

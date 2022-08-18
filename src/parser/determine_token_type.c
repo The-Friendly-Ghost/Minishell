@@ -6,17 +6,23 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/17 14:54:42 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/18 13:40:01 by cpost         ########   odam.nl         */
+/*   Updated: 2022/08/18 15:27:48 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /**
- * @brief Determines if the token is a string with quotation markt
- * and returns a corresponding number or 0 if no match is found.
+ * @brief Determines if the token starts with a dollar sign. If so, then
+ * it checks:
+ * 1. if the next character is a question mark. If so, the token is a
+ * 'print_exit_code' token.
+ * 2. if there is a character after the dollar sign. If so, the token
+ * is a environement variable.
+ * 3. if there is no character after the dollar sign, return 0.
  * @param *token A pointer to a char * (the token)
- * @return int 
+ * @return The corresponding int for the token type, or 0 if no match
+ * is found.
  * @note -
  */
 static int	check_if_token_starts_with_dollar_sign(char *token,
@@ -31,8 +37,8 @@ static int	check_if_token_starts_with_dollar_sign(char *token,
 }
 
 /**
- * @brief Determines if the token is a string with quotation markt
- * and returns a corresponding number or 0 if no match is found.
+ * @brief Determines if the token is a redirect and returns a corresponding
+ * token_type number or 0 if no match is found.
  * @param *token A pointer to a char * (the token)
  * @return int 
  * @note -
@@ -52,8 +58,9 @@ static int	check_if_token_is_redirection(char *token, int *token_type)
 }
 
 /**
- * @brief Determines if the token is a string with quotation markt
- * and returns a corresponding number or 0 if no match is found.
+ * @brief Determines if the token is a string with single or double 
+ * quotation mark sand returns a corresponding token_type number or 0
+ * if no match is found.
  * @param *token A pointer to a char * (the token)
  * @return int 
  * @note -
@@ -104,7 +111,8 @@ static int	check_if_token_is_builtin(char *token, int *token_type)
 }
 
 /**
- * @brief Determines the type of the token given as a paramater. 
+ * @brief Identifies the type of the token given as a paramater. Then a
+ * corresponding token_type number gets returned.
  * @param *token A pointer to a char * (the token)
  * @return Unsigned int 
  * @note -
