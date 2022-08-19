@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:11:43 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/18 14:09:31 by cpost         ########   odam.nl         */
+/*   Updated: 2022/08/19 14:35:16 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,29 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <stddef.h>
+# include <stdbool.h>
+# include <unistd.h>
 
 typedef struct s_token {
 	unsigned int	id;
 	unsigned int	type;
 	char			*content;
-	t_token			*next;
-	t_token			*previous;
+	struct s_token	*next;
+	struct s_token	*previous;
 }	t_token;
+
+typedef struct s_env {
+	char			*name;
+	bool			is_number;
+	long			number_value;
+	char			*value;
+	struct s_env	*next;
+}	t_env;
+
+typedef struct s_program {
+	int		exit_code;
+	t_env	**env;
+}	t_program;
 
 typedef enum e_token_type {
 	string_single_quote = 1,
@@ -61,5 +76,9 @@ void			destroy_token_list(t_token **token_list);
 //parser_utils.c
 
 int				ft_strcmp(const char *s1, const char *s2);
+
+//get_env_data.c
+
+t_program		*get_program(void);
 
 #endif

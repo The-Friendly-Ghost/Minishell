@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/17 14:54:42 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/18 15:27:48 by cpost         ########   odam.nl         */
+/*   Updated: 2022/08/18 15:32:31 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@
  * is found.
  * @note -
  */
-static int	check_if_token_starts_with_dollar_sign(char *token,
-			int *token_type)
+static unsigned int	check_if_token_starts_with_dollar_sign(char *token,
+	int *token_type)
 {
 	*token_type = 0;
 	if (ft_strcmp(token, "$?") == 0)
@@ -43,7 +43,7 @@ static int	check_if_token_starts_with_dollar_sign(char *token,
  * @return int 
  * @note -
  */
-static int	check_if_token_is_redirection(char *token, int *token_type)
+static unsigned int	check_if_token_is_redirection(char *token, int *token_type)
 {
 	*token_type = 0;
 	if (ft_strcmp(token, "<") == 0)
@@ -65,7 +65,7 @@ static int	check_if_token_is_redirection(char *token, int *token_type)
  * @return int 
  * @note -
  */
-static int	check_if_token_is_string(char *token, int *token_type)
+static unsigned int	check_if_token_is_string(char *token, int *token_type)
 {
 	unsigned int	i;
 	unsigned int	len;
@@ -90,7 +90,7 @@ static int	check_if_token_is_string(char *token, int *token_type)
  * @return int 
  * @note -
  */
-static int	check_if_token_is_builtin(char *token, int *token_type)
+static unsigned int	check_if_token_is_builtin(char *token, int *token_type)
 {
 	*token_type = 0;
 	if (ft_strcmp(token, "echo") == 0)

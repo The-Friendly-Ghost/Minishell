@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/16 12:13:28 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/08/19 14:35:12 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,22 +35,19 @@ static char	*get_input(char *input)
 
 int	main(int argc, char **argv, char **envp)
 {
-	int		i;
-	char	*input;
-	char	**split;
+	int				i;
+	char			*input;
 
-	// test
-	(void)argc;
-	(void)argv;
-	(void)envp;
-	input = NULL;
-	input = get_input(input);
-	split = ft_split(input, ' ');
-	i = 0;
-	while (split[i])
-	{
-		printf("%s", split[i]);
-		i++;
-	}
+	get_program();
+	//input = get_input(input);
 	return (0);
 }
+
+
+	// split = ft_split(input, ' ');
+	// i = 0;
+	// while (split[i])
+	// {
+	// 	printf("%s", split[i]);
+	// 	i++;
+	// }
