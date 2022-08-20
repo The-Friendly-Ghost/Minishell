@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/17 14:54:42 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/18 15:32:31 by cpost         ########   odam.nl         */
+/*   Updated: 2022/08/20 22:15:47 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,6 @@ unsigned int	determine_token_type(char *token)
 	if (check_if_token_starts_with_dollar_sign(token, &token_type) != 0)
 		return (token_type);
 	if (ft_strcmp(token, "|") == 0)
-		return (pipe);
+		return (is_pipe);
 	return (string_without_quote);
 }

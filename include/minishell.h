@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:11:43 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/19 14:35:16 by cpost         ########   odam.nl         */
+/*   Updated: 2022/08/20 22:18:35 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 # include <stddef.h>
 # include <stdbool.h>
 # include <unistd.h>
+# include <stdio.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 typedef struct s_token {
 	unsigned int	id;
@@ -28,16 +31,15 @@ typedef struct s_token {
 }	t_token;
 
 typedef struct s_env {
-	char			*name;
-	bool			is_number;
-	long			number_value;
+	char			*var_name;
 	char			*value;
 	struct s_env	*next;
+	struct s_env	*previous;
 }	t_env;
 
 typedef struct s_program {
 	int		exit_code;
-	t_env	**env;
+	t_env	**env_list;
 }	t_program;
 
 typedef enum e_token_type {
@@ -48,7 +50,7 @@ typedef enum e_token_type {
 	redirect_output,
 	delimiter,
 	redirect_output_append,
-	pipe,
+	is_pipe,
 	enviroment_variable,
 	print_exit_code,
 	echo,
@@ -80,5 +82,10 @@ int				ft_strcmp(const char *s1, const char *s2);
 //get_env_data.c
 
 t_program		*get_program(void);
+
+//env_utils.c
+
+char			*ft_strdup_before_char(const char *str, char c);
+char			*ft_strdup_after_char(const char *str, char c);
 
 #endif
