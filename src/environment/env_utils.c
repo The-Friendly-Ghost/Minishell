@@ -6,51 +6,51 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/20 21:34:39 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/20 22:22:38 by cpost         ########   odam.nl         */
+/*   Updated: 2022/08/20 23:04:22 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	*ft_memcpy(void *dst, const void *src, size_t n)
-{
-	char		*d;
-	const char	*s;
-	size_t		i;
+// void	*ft_memcpy(void *dst, const void *src, size_t n)
+// {
+// 	char		*d;
+// 	const char	*s;
+// 	size_t		i;
 
-	d = dst;
-	s = src;
-	i = 0;
-	if (!dst && !src)
-		return (0);
-	while (n)
-	{
-		d[i] = s[i];
-		i++;
-		n--;
-	}
-	return (dst);
-}
-size_t	ft_strlen(const char *s)
-{
-	size_t	i;
+// 	d = dst;
+// 	s = src;
+// 	i = 0;
+// 	if (!dst && !src)
+// 		return (0);
+// 	while (n)
+// 	{
+// 		d[i] = s[i];
+// 		i++;
+// 		n--;
+// 	}
+// 	return (dst);
+// }
+// size_t	ft_strlen(const char *s)
+// {
+// 	size_t	i;
 
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
-}
-char	*ft_strdup(const char *s1)
-{
-	void	*ptr;
-	size_t	count;
+// 	i = 0;
+// 	while (s[i])
+// 		i++;
+// 	return (i);
+// }
+// char	*ft_strdup(const char *s1)
+// {
+// 	void	*ptr;
+// 	size_t	count;
 
-	count = ft_strlen(s1) + 1;
-	ptr = malloc(count * sizeof(char));
-	if (!ptr)
-		return (NULL);
-	return (ft_memcpy(ptr, s1, count));
-}
+// 	count = ft_strlen(s1) + 1;
+// 	ptr = malloc(count * sizeof(char));
+// 	if (!ptr)
+// 		return (NULL);
+// 	return (ft_memcpy(ptr, s1, count));
+// }
 
 
 
