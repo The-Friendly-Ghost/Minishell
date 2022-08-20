@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/19 12:56:50 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/20 22:37:21 by cpost         ########   odam.nl         */
+/*   Updated: 2022/08/20 23:00:16 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ t_program	*get_program(void)
 		return (&program);
 	else
 	{
-		program.env_list = malloc(sizeof(t_env));
+		program.env_list = malloc(sizeof(program.env_list));
 		if (set_environment_variables(program.env_list) == false)
 		{
 			// Write error naar STDERROR
