@@ -6,7 +6,7 @@
 #    By: pniezen <pniezen@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/08/16 08:11:25 by pniezen       #+#    #+#                  #
-#    Updated: 2022/08/17 09:41:13 by pniezen       ########   odam.nl          #
+#    Updated: 2022/08/20 17:26:24 by pniezen       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,12 +23,11 @@ CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address
 SRC_NAME = $(shell ls $(SRC_PATH))
 
 OBJ_NAME = $(SRC_NAME:.c=.o)
-LIBFT_NAME = libft.a
 
 SRC = $(addprefix $(SRC_PATH), $(SRC_NAME))
 OBJ = $(addprefix $(OBJ_PATH), $(OBJ_NAME))
 INC = $(addprefix -I,$(INC_PATH))
-LIB = -lreadline $(LIBFT_PATH)$(LIBFT_NAME)
+LIB = -lreadline $(LIBFT_PATH)libft.a
 
 BOLD = \033[1m
 GREEN = \033[32;1m

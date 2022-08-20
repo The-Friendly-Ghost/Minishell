@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 13:38:21 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/17 16:39:08 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/08/20 18:11:14 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,69 +14,45 @@
 #include "lexer_utils.h"
 #include <stdio.h>
 
-static int	len_wrds(const char *str)
+static void	copy_str_and_whitespace(char *str, char *line, int *i, int *j)
 {
-	int	i;
-	int	count;
+	line[*j] = ' ';
+	*j += 1;
+	line[*j] = str[*i];
+	*i += 1;
+	*j += 1;
+}
+
+static char	*set_whitespace(char *str, int w_spc)
+{
+	char	*line;
+	int		i;
+	int		j;
 
 	i = 0;
-	count = 0;
+	j = 0;
+	line = NULL;
+	line = ft_calloc(((int)ft_strlen(str) + w_spc) + 1, sizeof(line));
+	if (!line)
+		return (NULL);
 	while (str[i])
 	{
-		if (!is_whitespace(str[i]))
-			count++;
-		while (!is_whitespace(str[i]) && str[i])
-			i++;
-		while (is_whitespace(str[i]) && str[i])
-			i++;
+		if (!in_quotes(str[i], false) && str[i] == is_quote(str[i]) \
+		&& !ft_is_whitespace(str[i]))
+			copy_str_and_whitespace(str, line, &i, &j);
+		if (in_quotes(str[i], false) && str[i] == is_quote(str[i]) \
+		&& str[i + 1] != '\0' && !ft_is_whitespace(str[0]))
+			copy_str_and_whitespace(str, line, &i, &j);
+		line[j] = str[i];
+		i++;
+		j++;
 	}
-	return (count);
+	printf("%s\n%s\n", str, line);
+	free(str);
+	return (line);
 }
 
-static char	*find_word(char **words, const char *str, int n)
-{
-	char	*dst;
-	char	dilim;
-	int		i;
-
-	i = 0;
-	while (!is_whitespace(str[i]) && str[i])
-		i++;
-	dst = malloc((i + 1) * sizeof(char));
-	i = 0;
-	dilim = is_quote(str[i]);
-	if (dilim)
-	{
-		dst[i] = dilim;
-		i++;
-		while (str[i] != dilim)
-		{
-			dst[i] = str[i];
-			i++;
-		}
-		dst[i] = dilim;
-		dst[i + 1] = '\0';
-		words[n] = dst;
-		return (*words);
-	}
-	while (!is_whitespace(str[i]) && str[i])
-	{
-		dst[i] = str[i];
-		i++;
-	}
-	dst[i] = '\0';
-	words[n] = dst;
-	return (*words);
-}
-
-static void	make_free(char **words, int n)
-{
-	while (n > 0)
-		free(words[n]);
-	n--;
-}
-
-static char	**split_tokens(char const *str)
+static char	**split_tokens(char *input)
 {
 	char	**words;
 	int		i;
@@ -84,27 +60,24 @@ static char	**split_tokens(char const *str)
 
 	i = 0;
 	n = 0;
-	if (!str)
+	if (!input)
 		return (NULL);
-	words = ft_calloc((len_wrds(str) + 1), sizeof(*words));
+	words = ft_calloc((len_wrds(input) + 1), sizeof(*words));
 	if (!words)
-		return (NULL);
-	while (str[i])
+		return (free(input), NULL);
+	while (input[i])
 	{
-		if (!is_whitespace(str[i]))
+		if (!ft_is_whitespace(input[i]))
 		{
-			if (!(find_word(words, (str + i), n)))
+			if (!(get_word(words, (input + i), n, len_wrds(input))))
 				make_free(words, n);
 			n++;
-			if (is_quote(str[i]))
-				skip_string(str, &i);
+			if (is_quote(input[i]))
+				skip_string(input, &i);
 		}
-		while (!is_whitespace(str[i]) && str[i])
-			i++;
-		while (is_whitespace(str[i]) && str[i])
-			i++;
+		skip_word_and_whitespace(input, &i);
 	}
-	return (words);
+	return (free(input), words);
 }
 
 char	**lexer(char *input)

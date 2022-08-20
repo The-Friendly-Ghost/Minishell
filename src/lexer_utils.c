@@ -6,49 +6,58 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/17 08:40:38 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/17 17:54:12 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/08/20 18:05:19 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer_utils.h"
 #include <stdio.h>
 #include <stdbool.h>
-
-char	is_whitespace(char c)
-{
-	const char	dilims[] = " \t\n\v\f\r";
-	int			i;
-
-	i = 0;
-	while (dilims[i])
-	{
-		if (dilims[i] == c)
-			return (dilims[i]);
-		i++;
-	}
-	return ('\0');
-}
+#include <stdlib.h>
 
 char	is_quote(char c)
 {
-	const char	dilims[] = "\'\"";
-	int			i;
-
-	i = 0;
-	while (dilims[i])
-	{
-		if (dilims[i] == c)
-			return (dilims[i]);
-		i++;
-	}
+	if (c == '\'')
+		return ('\'');
+	if (c == '\"')
+		return ('\"');
 	return ('\0');
 }
 
-// is "een str" en "nog een str"
-// 012345678910
-//    012345678
-// ["een str", "nog een str"]
-//		0			1
+static bool	reset_in_quotes(int *single_q, int *double_q, bool boolean_val)
+{
+	if (single_q)
+		*single_q = 0;
+	if (double_q)
+		*double_q = 0;
+	return (boolean_val);
+}
+
+bool	in_quotes(char c, bool reset)
+{
+	static int	single_q = 0;
+	static int	double_q = 0;
+
+	if (reset)
+		return (reset_in_quotes(&single_q, &double_q, false));
+	if (c != '\'' && c != '\"' && !single_q && !double_q)
+		return (false);
+	if (c == '\'' && !double_q)
+	{
+		single_q++;
+		if (single_q == 2)
+			return (reset_in_quotes(&single_q, NULL, true));
+		return (false);
+	}
+	else if (c == '\"' && ! single_q)
+	{
+		double_q++;
+		if (double_q == 2)
+			return (reset_in_quotes(NULL, &double_q, true));
+		return (false);
+	}
+	return (true);
+}
 
 void	skip_string(const char *str, int *i)
 {
@@ -72,83 +81,16 @@ void	skip_string(const char *str, int *i)
 
 int	count_whitespace(char *str)
 {
-	char	c;
 	int		i;
 	int		count;
 
-	c = '\0';
 	i = 0;
 	count = 0;
 	while (str[i])
 	{
-		if (!c)
-			c = str[i];
-		if (c && is_quote(str[i]) && str[i + 1] != '\0' && i)
+		if (!in_quotes(str[i], false) && ft_is_whitespace(str[i]))
 			count++;
 		i++;
 	}
 	return (count);
-}
-
-bool	in_quote(char s, char c)
-{
-	static bool	quote;
-
-	if (!quote && s == c)
-		quote = true;
-	else if (quote && s == c)
-		quote = false;
-	return (quote);
-}
-
-//  "str" hoi"str";
-//i 0123456789
-//  "str"  hoi "str" ;
-//j 0123456789
-
-char	*set_whitespace(char *str, int w_spc)
-{
-	bool	b_quote;
-	char	*line;
-	int		i;
-	int		j;
-	int		str_len;
-
-	b_quote = false;
-	i = 0;
-	j = 0;
-	str_len = ((int)ft_strlen(str) + w_spc) + 1;
-	printf("%i %i %i\n", (int)ft_strlen(str), w_spc, str_len);
-	line = NULL;
-	if (!w_spc)
-		return (str);
-	line = ft_calloc(str_len, sizeof(line));
-	if (!line)
-		return (NULL);
-	while (str[i])
-	{
-		if (!b_quote && str[i] == is_quote(str[i]) && str[i] != ' ')
-		{
-			line[j] = ' ';
-			j++;
-			line[j] = str[i];
-			i++;
-			j++;
-			b_quote = true;
-		}
-		if (b_quote && str[i] == is_quote(str[i]) && str[i + 1] != '\0' && str[0] != ' ')
-		{
-			line[j] = str[i];
-			i++;
-			j++;
-			line[j] = ' ';
-			j++;
-			b_quote = false;
-		}
-		line[j] = str[i];
-		i++;
-		j++;
-	}
-	printf("%s %i\n%s %i\n", str, i, line, j);
-	return (line);
 }
