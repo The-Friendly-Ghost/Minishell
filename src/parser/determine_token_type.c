@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/17 14:54:42 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/20 22:15:47 by cpost         ########   odam.nl         */
+/*   Updated: 2022/08/22 09:01:47 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,11 @@ static unsigned int	check_if_token_is_redirection(char *token, int *token_type)
 	*token_type = 0;
 	if (ft_strcmp(token, "<") == 0)
 		*token_type = redirect_input;
-	if (ft_strcmp(token, ">") == 0)
+	else if (ft_strcmp(token, ">") == 0)
 		*token_type = redirect_output;
-	if (ft_strcmp(token, "<<") == 0)
+	else if (ft_strcmp(token, "<<") == 0)
 		*token_type = delimiter;
-	if (ft_strcmp(token, ">>") == 0)
+	else if (ft_strcmp(token, ">>") == 0)
 		*token_type = redirect_output_append;
 	return (*token_type);
 }
@@ -95,17 +95,17 @@ static unsigned int	check_if_token_is_builtin(char *token, int *token_type)
 	*token_type = 0;
 	if (ft_strcmp(token, "echo") == 0)
 		*token_type = echo;
-	if (ft_strcmp(token, "cd") == 0)
+	else if (ft_strcmp(token, "cd") == 0)
 		*token_type = cd;
-	if (ft_strcmp(token, "pwd") == 0)
+	else if (ft_strcmp(token, "pwd") == 0)
 		*token_type = pwd;
-	if (ft_strcmp(token, "export") == 0)
+	else if (ft_strcmp(token, "export") == 0)
 		*token_type = export;
-	if (ft_strcmp(token, "unset") == 0)
+	else if (ft_strcmp(token, "unset") == 0)
 		*token_type = unset;
-	if (ft_strcmp(token, "env") == 0)
+	else if (ft_strcmp(token, "env") == 0)
 		*token_type = env;
-	if (ft_strcmp(token, "exit") == 0)
+	else if (ft_strcmp(token, "exit") == 0)
 		*token_type = exit_program;
 	return (*token_type);
 }

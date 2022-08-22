@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/19 12:56:50 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/20 23:00:16 by cpost         ########   odam.nl         */
+/*   Updated: 2022/08/22 12:10:28 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,23 +18,19 @@
  * @return Nothing
  * @note -
  */
-static bool	add_node_to_env_list(t_env *new_node, t_env **env_list)
+static void	add_node_to_env_list(t_env *new_node, t_env **env_list)
 {
 	t_env	*temp;
 
-	//printf("new_node = %p\n", new_node);
-	//printf("env_list = %p\n", *env_list);
 	if (!(*env_list))
-	{
 		*env_list = new_node;
-	}
 	else
 	{
 		temp = *env_list;
-		while (temp->next)
+		while (temp->next != NULL)
 			temp = temp->next;
-		new_node->previous = temp;
 		temp->next = new_node;
+		new_node->previous = temp;
 	}
 }
 
@@ -55,6 +51,7 @@ static t_env	*create_new_node(char *env_var)
 	new_node->value = ft_strdup_after_char(env_var, '=');
 	new_node->next = NULL;
 	new_node->previous = NULL;
+	return (new_node);
 }
 
 /**
@@ -72,6 +69,7 @@ static bool	set_environment_variables(t_env **env_list)
 	t_env			*new_node;
 
 	i = 0;
+	*env_list = NULL;
 	while (environ[i])
 	{
 		new_node = create_new_node(environ[i]);
@@ -81,6 +79,22 @@ static bool	set_environment_variables(t_env **env_list)
 		i++;
 	}
 	return (true);
+}
+
+/**
+ * @brief Returns the address to the list with environment variables
+ * @param nothing
+ * @return Pointer to the list of environment variables
+ * @note -
+ */
+t_env	**get_env_list(void)
+{
+	t_program	*program;
+	t_env		**env;
+
+	program = get_program();
+	env = program->env_list;
+	return (env);
 }
 
 /**
@@ -99,7 +113,9 @@ t_program	*get_program(void)
 		return (&program);
 	else
 	{
-		program.env_list = malloc(sizeof(program.env_list));
+		program.env_list = malloc(sizeof(t_program));
+		if (!program.env_list)
+			printf("MALLOC FAUL\n");
 		if (set_environment_variables(program.env_list) == false)
 		{
 			// Write error naar STDERROR

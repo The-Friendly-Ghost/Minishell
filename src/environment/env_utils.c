@@ -6,52 +6,88 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/20 21:34:39 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/20 23:04:22 by cpost         ########   odam.nl         */
+/*   Updated: 2022/08/22 12:10:50 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+void	*ft_calloc(size_t count, size_t size)
+{
+	void	*ptr;
 
-// void	*ft_memcpy(void *dst, const void *src, size_t n)
-// {
-// 	char		*d;
-// 	const char	*s;
-// 	size_t		i;
+	ptr = malloc(count * size);
+	if (ptr)
+		ft_bzero(ptr, count * size);
+	return (ptr);
+}
+void	ft_bzero(void *s, size_t n)
+{
+	unsigned char	*p;
+	unsigned int	i;
 
-// 	d = dst;
-// 	s = src;
-// 	i = 0;
-// 	if (!dst && !src)
-// 		return (0);
-// 	while (n)
-// 	{
-// 		d[i] = s[i];
-// 		i++;
-// 		n--;
-// 	}
-// 	return (dst);
-// }
-// size_t	ft_strlen(const char *s)
-// {
-// 	size_t	i;
+	p = s;
+	i = 0;
+	while (i < n)
+	{
+		*p = '\0';
+		p++;
+		i++;
+	}
+}
+void	*ft_memcpy(void *dst, const void *src, size_t n)
+{
+	char		*d;
+	const char	*s;
+	size_t		i;
 
-// 	i = 0;
-// 	while (s[i])
-// 		i++;
-// 	return (i);
-// }
-// char	*ft_strdup(const char *s1)
-// {
-// 	void	*ptr;
-// 	size_t	count;
+	d = dst;
+	s = src;
+	i = 0;
+	if (!dst && !src)
+		return (0);
+	while (n)
+	{
+		d[i] = s[i];
+		i++;
+		n--;
+	}
+	return (dst);
+}
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+{
+	size_t	i;
 
-// 	count = ft_strlen(s1) + 1;
-// 	ptr = malloc(count * sizeof(char));
-// 	if (!ptr)
-// 		return (NULL);
-// 	return (ft_memcpy(ptr, s1, count));
-// }
+	i = 0;
+	if (dstsize == 0)
+		return (ft_strlen(src));
+	while (src[i] && (dstsize - 1) > i)
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = '\0';
+	return (ft_strlen(src));
+}
+size_t	ft_strlen(const char *s)
+{
+	size_t	i;
 
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}
+char	*ft_strdup(const char *s1)
+{
+	void	*ptr;
+	size_t	count;
+
+	count = ft_strlen(s1) + 1;
+	ptr = malloc(count * sizeof(char));
+	if (!ptr)
+		return (NULL);
+	return (ft_memcpy(ptr, s1, count));
+}
 
 
 /**
@@ -104,8 +140,36 @@ char	*ft_strdup_before_char(const char *str, char c)
 			return (NULL);
 		i++;
 	}
-	new_str = malloc((i * sizeof(char)) + 1);
-	new_str = ft_memcpy(new_str, str, i);
-	new_str[i + 1] = '\0';
+	new_str = ft_calloc(sizeof(char), i + 1);
+	ft_strlcpy(new_str, str, i + 1);
 	return (new_str);
+}
+
+/**
+ * @brief searches for the environment string pointed to by name and 
+ * returns the associated value to the string.
+ * @param name This is the C string containing the name of the 
+ * requested variable.
+ * @return This function returns a null-terminated string with the 
+ * value of the requested environment variable, or NULL if that environment 
+ * variable does not exist.
+ * @note
+ */
+char	*ft_getenv(const char *name)
+{
+	t_env		**env;
+	t_env		*temp;
+
+	env = get_env_list();
+	if (!(*env))
+		return (NULL);
+	else
+		temp = *env;
+	while (temp->next)
+	{
+		if (ft_strcmp(temp->var_name, name) == 0)
+			return (temp->value);
+		temp = temp->next;
+	}
+	return (NULL);
 }
