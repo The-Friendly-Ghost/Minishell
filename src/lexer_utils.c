@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/17 08:40:38 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/20 18:05:19 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/08/23 14:03:12 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	is_quote(char c)
 	return ('\0');
 }
 
-static bool	reset_in_quotes(int *single_q, int *double_q, bool boolean_val)
+static bool	reset_in_string(int *single_q, int *double_q, bool boolean_val)
 {
 	if (single_q)
 		*single_q = 0;
@@ -33,28 +33,28 @@ static bool	reset_in_quotes(int *single_q, int *double_q, bool boolean_val)
 	return (boolean_val);
 }
 
-bool	in_quotes(char c, bool reset)
+bool	in_string(char c, bool reset)
 {
 	static int	single_q = 0;
 	static int	double_q = 0;
 
 	if (reset)
-		return (reset_in_quotes(&single_q, &double_q, false));
+		return (reset_in_string(&single_q, &double_q, false));
 	if (c != '\'' && c != '\"' && !single_q && !double_q)
 		return (false);
 	if (c == '\'' && !double_q)
 	{
 		single_q++;
 		if (single_q == 2)
-			return (reset_in_quotes(&single_q, NULL, true));
-		return (false);
+			return (reset_in_string(&single_q, NULL, true));
+		return (true);
 	}
 	else if (c == '\"' && ! single_q)
 	{
 		double_q++;
 		if (double_q == 2)
-			return (reset_in_quotes(NULL, &double_q, true));
-		return (false);
+			return (reset_in_string(NULL, &double_q, true));
+		return (true);
 	}
 	return (true);
 }
@@ -79,18 +79,19 @@ void	skip_string(const char *str, int *i)
 	}
 }
 
-int	count_whitespace(char *str)
-{
-	int		i;
-	int		count;
+// int	count_whitespace(char *str)
+// {
+// 	int		i;
+// 	int		count;
 
-	i = 0;
-	count = 0;
-	while (str[i])
-	{
-		if (!in_quotes(str[i], false) && ft_is_whitespace(str[i]))
-			count++;
-		i++;
-	}
-	return (count);
-}
+// 	i = 0;
+// 	count = 0;
+// 	while (str[i])
+// 	{
+// 		if (ft_is_whitespace(str[i]) && !in_string(str[i + 1], false))
+// 			count++;
+// 		i++;
+// 	}
+// 	in_string('\0', true);
+// 	return (count);
+// }

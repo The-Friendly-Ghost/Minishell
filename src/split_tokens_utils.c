@@ -1,86 +1,126 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   tokenizer.c                                        :+:    :+:            */
+/*   split_tokens_utils.c                               :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/20 12:31:03 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/20 15:31:38 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/08/23 15:34:38 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "lexer_utils.h"
+#include <stdio.h>
 
-int	len_wrds(const char *str)
+int	is_special(char *input, int i)
+{
+	if (input[i - 1] != '|' && input[i] == '|' && input[i + 1] != '|')
+		return (1);
+	if ((input[i - 1] != '<' && input[i] == '<' && input[i + 1] != '<')
+		|| (input[i - 1] != '>' && input[i] == '>' && input[i + 1] != '>'))
+		return (1);
+	if (input[i - 1] != '<' && input[i] == '<' && input[i + 1] == '<'
+		&& input[i + 2] != '<' && input[i + 1] != '\0')
+		return (2);
+	if (input[i - 1] != '>' && input[i] == '>' && input[i + 1] == '>'
+		&& input[i + 2] != '>' && input[i + 1] != '\0')
+		return (2);
+	return (0);
+}
+
+int	count_specials(char *input)
+{
+	int	count;
+	int	i;
+
+	count = 0;
+	i = 0;
+	while (input[i])
+	{
+		if (is_special(input, i))
+			count++;
+		i++;
+	}
+	return (count);
+}
+
+int	is_set(char c, const char *set)
+{
+	while (*set)
+	{
+		if (c == *set)
+			return (1);
+		set++;
+	}
+	return (0);
+}
+
+int	count_whitespace(char *input, const char *set)
 {
 	int	i;
 	int	count;
 
 	i = 0;
 	count = 0;
-	while (str[i])
+	while (input[i])
 	{
-		if (!ft_is_whitespace(str[i]))
+		if (in_string(input[i], false))
+			skip_string(input, &i);
+		if (is_set(input[i], set))
 			count++;
-		while (!ft_is_whitespace(str[i]) && str[i])
-			i++;
-		while (ft_is_whitespace(str[i]) && str[i])
-			i++;
+		i++;
 	}
 	return (count);
 }
 
-char	*copy_on_dilim(const char *str, char *dst, int *i, char dilim)
+static void	add_space(char *line, char *str, int *i, int *j)
 {
-	dst[*i] = dilim;
-	*i += 1;
-	while (str[*i] != dilim)
+	if (is_special(str, *i) == 1)
 	{
-		dst[*i] = str[*i];
+		line[*j] = ' ';
+		*j += 1;
+		line[*j] = str[*i];
+		*j += 1;
 		*i += 1;
+		line[*j] = ' ';
+		*j += 1;
 	}
-	dst[*i] = dilim;
-	dst[*i + 1] = '\0';
-	return (dst);
+	if (is_special(str, *i) == 2)
+	{
+		line[*j] = ' ';
+		*j += 1;
+		line[*j] = str[*i];
+		*j += 1;
+		*i += 1;
+		line[*j] = str[*i];
+		*j += 1;
+		*i += 1;
+		line[*j] = ' ';
+		*j += 1;
+	}
 }
 
-char	*get_word(char **words, const char *str, int n, int total_words)
+char	*set_whitespace(char *str, int specials_count)
 {
-	char	*dst;
-	char	dilim;
+	char	*line;
 	int		i;
+	int		j;
 
 	i = 0;
-	dst = malloc((total_words + 1) * sizeof(char));
-	dilim = is_quote(str[i]);
-	if (dilim)
+	j = 0;
+	line = ft_calloc(ft_strlen(str) + specials_count, sizeof(line));
+	if (!line)
+		return (NULL);
+	while (str[i])
 	{
-		words[n] = copy_on_dilim(str, dst, &i, dilim);
-		return (*words);
-	}
-	while (!ft_is_whitespace(str[i]) && str[i])
-	{
-		dst[i] = str[i];
+		if (is_special(str, i))
+			add_space(line, str, &i, &j);
+		line[j] = str[i];
+		j++;
 		i++;
 	}
-	dst[i] = '\0';
-	words[n] = dst;
-	return (*words);
-}
-
-void	make_free(char **words, int n)
-{
-	while (n > 0)
-		free(words[n]);
-	n--;
-}
-
-void	skip_word_and_whitespace(char *str, int *i)
-{
-	while (!ft_is_whitespace(str[*i]) && str[*i])
-		*i += 1;
-	while (ft_is_whitespace(str[*i]) && str[*i])
-		*i += 1;
+	printf("%s;\n", str);
+	return (free(str), line);
 }

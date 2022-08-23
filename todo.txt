@@ -1,3 +1,7 @@
-lexer:
-    schrijf een nieuwe split
-    wat tussen single of double quotes staat niet splitten op white spaces
+fix get the whitespace count
+fix get the token count
+
+<< >> | < >
+
+split alleen op whitespaces als het buiten de str is.
+echo "dit is een str" >> << > < |

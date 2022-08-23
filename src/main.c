@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/20 13:59:21 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/08/22 18:00:21 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-static char	*get_input(char *input)
+static char	*get_input(void)
 {
 	const char	prompt[] = "minishell> ";
+	char		*input;
 
 	while (1)
 	{
@@ -49,7 +50,7 @@ int	main(int argc, char **argv, char **envp)
 	input = NULL;
 	while (1)
 	{
-		input = get_input(input);
+		input = get_input();
 		if (!input)
 			continue ;
 		if (tokens)
