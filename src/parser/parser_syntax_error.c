@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 17:22:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/24 20:09:38 by cpost         ########   odam.nl         */
+/*   Updated: 2022/08/24 20:45:00 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,10 @@ bool	print_syntax_error(int *print_code)
  */
 static int	check_pipe_error(t_token *token, int *print_code)
 {
-	t_token			*temp;
-
-	temp = token;
-	if (temp->previous == NULL)
+	if (token->previous == NULL)
 		*print_code = pipe_error;
-	else if (temp->previous->type == is_pipe
-		|| is_redirect(temp->previous->type))
+	else if (token->previous->type == is_pipe
+		|| is_redirect(token->previous->type))
 		*print_code = pipe_error;
 	return (*print_code);
 }
@@ -79,12 +76,9 @@ static int	check_pipe_error(t_token *token, int *print_code)
  */
 static int	check_redirect_error(t_token *token, int *print_code)
 {
-	t_token			*temp;
-
-	temp = token;
-	if (temp->previous != NULL && is_redirect(temp->previous->type))
-		*print_code = temp->type;
-	else if (temp->next == NULL)
+	if (token->previous != NULL && is_redirect(token->previous->type))
+		*print_code = token->type;
+	else if (token->next == NULL)
 		*print_code = newline_error;
 	return (*print_code);
 }
@@ -106,7 +100,8 @@ bool	check_for_syntax_error(t_token **token_list)
 	{
 		if (temp->type == is_pipe && check_pipe_error(temp, &print_code))
 			return (print_syntax_error(&print_code));
-		if (is_redirect(temp->type) && check_redirect_error(temp, &print_code))
+		else if (is_redirect(temp->type)
+			&& check_redirect_error(temp, &print_code))
 			return (print_syntax_error(&print_code));
 		temp = temp->next;
 	}
