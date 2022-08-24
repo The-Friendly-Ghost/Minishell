@@ -5,27 +5,25 @@
 #                                                      +:+                     #
 #    By: pniezen <pniezen@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
-#    Created: 2022/08/16 08:11:25 by pniezen       #+#    #+#                  #
-#    Updated: 2022/08/24 11:54:19 by pniezen       ########   odam.nl          #
+#    Created: 2022/08/24 13:48:16 by pniezen       #+#    #+#                  #
+#    Updated: 2022/08/24 14:55:51 by pniezen       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
-SRC_PATH = ./src/
-OBJ_PATH = ./obj/
-INC_PATH = ./include/ ./lib/libft/include/
+SRC_PATH = src
+OBJ_PATH = obj
+INC_PATH = include lib/libft/include
 
-LIBFT_PATH = ./lib/libft/
+LIBFT_PATH = lib/libft/
 
 NAME = minishell
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror
 
-SRC_NAME = $(shell ls $(SRC_PATH))
+SRC = $(shell find $(SRC_PATH) -type f -name '*.c')
 
-OBJ_NAME = $(SRC_NAME:.c=.o)
+OBJ = $(addprefix $(OBJ_PATH)/,$(SRC:.c=.o))
 
-SRC = $(addprefix $(SRC_PATH), $(SRC_NAME))
-OBJ = $(addprefix $(OBJ_PATH), $(OBJ_NAME))
 INC = $(addprefix -I,$(INC_PATH))
 LIB = -lreadline $(LIBFT_PATH)libft.a
 
@@ -39,11 +37,11 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@make -C $(LIBFT_PATH)
-	@$(CC) $(CFLAGS) $(LIB) $(INC) $(OBJ) -o $(NAME) && printf "$(YELLOW)$(BOLD)\rBuild $(NAME)\r\e[35C[OK]\n$(RESET)"
+	@$(CC) $(CFLAGS) $(LIB) $(OBJ) $(INC) -o $(NAME) && printf "$(YELLOW)$(BOLD)\rBuild $(NAME)\r\e[35C[OK]\n$(RESET)"
 
-$(OBJ_PATH)%.o: $(SRC_PATH)%.c ./include/minishell.h
-	@mkdir -p $(OBJ_PATH)
-	@$(CC) $(CFLAGS) $(INC) -o $@ -c $< && printf "$(GREEN)$(BOLD)\rCompiling: $(notdir $<)\r\e[35C[OK]\n$(RESET)"
+$(OBJ_PATH)/%.o: %.c include/minishell.h
+	@mkdir -p $(@D)
+	@$(CC) $(CFLAGS) -o $@ -c $< $(INC) && printf "$(GREEN)$(BOLD)\rCompiling: $(notdir $<)\r\e[35C[OK]\n$(RESET)"
 
 run: all
 	@./minishell

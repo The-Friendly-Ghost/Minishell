@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   minishell.h                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
+/*   Updated: 2022/08/24 14:45:05 by pniezen       ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # include "libft.h"
@@ -89,7 +101,7 @@ void			print_env(void);
 void			print_pwd(void);
 
 // lexer
-char	**lexer(char *input);
-char	**tokenizer(char *input, int token_count);
+char			**lexer(char *input);
+char			**tokenizer(char *input, int token_count);
 
 #endif
