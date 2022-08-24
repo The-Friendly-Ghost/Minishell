@@ -6,11 +6,15 @@
 #    By: pniezen <pniezen@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/08/16 08:11:25 by pniezen       #+#    #+#                  #
-#    Updated: 2022/08/16 12:11:48 by pniezen       ########   odam.nl          #
+#    Updated: 2022/08/24 10:56:14 by cpost         ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 SRC_PATH = ./src/
+BUILTIN_PATH = ./src/builtin
+ENV_PATH = ./src/environment
+LEX_PATH = ./src/lexer
+PAR_PATH = ./src/parser
 OBJ_PATH = ./obj/
 INC_PATH = ./include/ ./lib/libft/include/
 
@@ -23,12 +27,11 @@ CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address
 SRC_NAME = $(shell ls $(SRC_PATH))
 
 OBJ_NAME = $(SRC_NAME:.c=.o)
-LIBFT_NAME = libft.a
 
 SRC = $(addprefix $(SRC_PATH), $(SRC_NAME))
 OBJ = $(addprefix $(OBJ_PATH), $(OBJ_NAME))
 INC = $(addprefix -I,$(INC_PATH))
-LIB = -lreadline $(LIBFT_PATH)$(LIBFT_NAME)
+LIB = -lreadline $(LIBFT_PATH)libft.a
 
 BOLD = \033[1m
 GREEN = \033[32;1m
@@ -45,6 +48,9 @@ $(NAME): $(OBJ)
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c ./include/minishell.h
 	@mkdir -p $(OBJ_PATH)
 	@$(CC) $(CFLAGS) $(INC) -o $@ -c $< && printf "$(GREEN)$(BOLD)\rCompiling: $(notdir $<)\r\e[35C[OK]\n$(RESET)"
+
+run: all
+	@./minishell
 
 cleanlib:
 	@make -C $(LIBFT_PATH) clean

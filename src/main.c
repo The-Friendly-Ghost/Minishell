@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/22 15:03:54 by cpost         ########   odam.nl         */
+/*   Updated: 2022/08/23 17:16:04 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,17 +49,24 @@ int	main(void)
 	char	*input;
 	char	*tokens;
 	t_token	**token_list;
+	t_token	*print_temp;
 
+	//init_signals();
 	get_program();
 	//if (program == NULL);
 		// EXIT MET ERROR CODE
 	while (1)
 	{
 		input = get_input(input);
-		//tokens = lexer(input);
-		//token_list = parser(tokens);
+		token_list = parser(input);
 		//expander(token_list);
 		//executor(token_list);
+	}
+	print_temp = *token_list;
+	while (print_temp->next)
+	{
+		printf("[%s]\n", print_temp->content);
+		print_temp = print_temp->next;
 	}
 	return (0);
 }

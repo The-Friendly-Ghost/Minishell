@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 14:15:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/20 21:15:00 by cpost         ########   odam.nl         */
+/*   Updated: 2022/08/23 17:13:17 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,23 +53,8 @@ static t_token	*create_new_element(char *token, unsigned int id)
 	new_element->content = token;
 	new_element->next = NULL;
 	new_element->previous = NULL;
-	new_element->type = determine_token_type(token);
-}
-
-/**
- * @brief Determines the amount of tokens inside of the token array
- * @param **tokens A pointer to a 2D-array with the tokens in it
- * @return Unsigned int
- * @note -
- */
-static unsigned int	get_token_count(char **token_array)
-{
-	int	i;
-
-	i = 0;
-	while (token_array[i])
-		i++;
-	return (i);
+	//new_element->type = determine_token_type(token);
+	return (new_element);
 }
 
 /**
@@ -79,31 +64,27 @@ static unsigned int	get_token_count(char **token_array)
  * @return **token_list - Pointer to the first element of the linked list 
  * @note Destroy functions can be found in parser_destroy.c
  */
-t_token	**parser(char **token_array)
+t_token	**parser(char *input)
 {
 	t_token			**token_list;
 	t_token			*new_element;
-	unsigned int	token_count;
-	unsigned int	i;
+	char			*new_token;
+	int				i;
 
-	token_count = get_token_count(token_array);
-	//if (token_count == 0)
-		//error_function
-	//*token_list = create_new_element(token_array[0], 0);
 	i = 0;
-	while (i < token_count)
+	while (input[i])
 	{
-		new_element = create_new_element(token_array[i], i);
+		new_token = get_next_token(input, &i);
+		new_element = create_new_element(new_token, i);
 		if (new_element == NULL)
 		{
-			//PRINTF VERVANGEN - WRITEN NAAR STDERROR
 			printf("Error Parser Linked List Creation\n");
-			destroy_token_array(token_array);
-			destroy_token_list(token_list);
+			//free(input);
+			//destroy_token_list(token_list);
 			return (NULL);
 		}
 		add_new_element_to_token_list(token_list, new_element);
 	}
-	destroy_token_array(token_array);
+	//free(input);
 	return (token_list);
 }

@@ -6,9 +6,12 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/17 14:20:14 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/18 13:41:02 by cpost         ########   odam.nl         */
+/*   Updated: 2022/08/22 10:12:48 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <stdio.h>
+#include "minishell.h"
 
 // // main to test if the determine token function is working
 // int	main(void)

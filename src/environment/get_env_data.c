@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/19 12:56:50 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/22 12:10:28 by cpost         ########   odam.nl         */
+/*   Updated: 2022/08/23 13:33:52 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,11 @@ static t_env	*create_new_node(char *env_var)
 	if (!new_node)
 		return (NULL);
 	new_node->var_name = ft_strdup_before_char(env_var, '=');
-	new_node->value = ft_strdup_after_char(env_var, '=');
+	new_node->has_value = ft_strchr_bool(env_var, '=');
+	if (new_node->has_value == true)
+		new_node->value = ft_strdup_after_char(env_var, '=');
+	else
+		new_node->value = NULL;
 	new_node->next = NULL;
 	new_node->previous = NULL;
 	return (new_node);

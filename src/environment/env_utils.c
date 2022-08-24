@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/20 21:34:39 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/22 12:10:50 by cpost         ########   odam.nl         */
+/*   Updated: 2022/08/23 17:06:32 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,30 @@ char	*ft_strdup(const char *s1)
 	return (ft_memcpy(ptr, s1, count));
 }
 
+/**
+ * @brief checks if the source string (str) contains char c.
+ * @param str The source string
+ * @param c The character to check for
+ * @param c ascii value of the character to search for
+ * @return True if character is found. False if character is not
+ * found within the source string.
+ * @note
+ */
+bool	ft_strchr_bool(const char *str, char c)
+{
+	unsigned long	i;
+
+	i = 0;
+	if (c == '\0')
+		return (true);
+	while (str[i])
+	{
+		if (str[i] == c)
+			return (true);
+		i++;
+	}
+	return (false);
+}
 
 /**
  * @brief The ft_strdup_after_char() searches for the first occurrence of 
