@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 14:15:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/24 14:37:20 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/08/24 18:05:31 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ t_token	**parser(char **token_array)
 	t_token	*new_element;
 	int		i;
 
-	token_list = NULL;
+	token_list = malloc(sizeof(char *));
+	*token_list = NULL;
 	i = 0;
 	while (token_array[i])
 	{
@@ -83,7 +84,12 @@ t_token	**parser(char **token_array)
 			return (NULL);
 		}
 		add_new_element_to_token_list(token_list, new_element);
+		i++;
 	}
-	//free(token_array);
+	free(token_array);
+	if (check_for_syntax_error(token_list) == true)
+		return (NULL); //ik weet niet of dit een juiste return is.
+		//Alles freeen, error code en exit;
+	//expander(token_list);
 	return (token_list);
 }

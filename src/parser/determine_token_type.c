@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/17 14:54:42 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/22 09:01:47 by cpost         ########   odam.nl         */
+/*   Updated: 2022/08/24 17:18:19 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,23 +65,23 @@ static unsigned int	check_if_token_is_redirection(char *token, int *token_type)
  * @return int 
  * @note -
  */
-static unsigned int	check_if_token_is_string(char *token, int *token_type)
-{
-	unsigned int	i;
-	unsigned int	len;
+// static unsigned int	check_if_token_is_string(char *token, int *token_type)
+// {
+// 	unsigned int	i;
+// 	unsigned int	len;
 
-	i = 0;
-	*token_type = 0;
-	len = ft_strlen(token);
-	if (len > 2)
-	{
-		if (token[0] == '"' && token[len - 1] == '"')
-			*token_type = string_double_quote;
-		if (token[0] == '\'' && token[len - 1] == '\'')
-			*token_type = string_single_quote;
-	}
-	return (*token_type);
-}
+// 	i = 0;
+// 	*token_type = 0;
+// 	len = ft_strlen(token);
+// 	if (len > 2)
+// 	{
+// 		if (token[0] == '"' && token[len - 1] == '"')
+// 			*token_type = string_double_quote;
+// 		if (token[0] == '\'' && token[len - 1] == '\'')
+// 			*token_type = string_single_quote;
+// 	}
+// 	return (*token_type);
+// }
 
 /**
  * @brief Determines if the token is a builtin function and returns
@@ -123,13 +123,13 @@ unsigned int	determine_token_type(char *token)
 
 	if (check_if_token_is_builtin(token, &token_type) != 0)
 		return (token_type);
-	if (check_if_token_is_string(token, &token_type) != 0)
-		return (token_type);
+	// if (check_if_token_is_string(token, &token_type) != 0)
+	// 	return (token_type);
 	if (check_if_token_is_redirection(token, &token_type) != 0)
 		return (token_type);
 	if (check_if_token_starts_with_dollar_sign(token, &token_type) != 0)
 		return (token_type);
 	if (ft_strcmp(token, "|") == 0)
 		return (is_pipe);
-	return (string_without_quote);
+	return (string);
 }

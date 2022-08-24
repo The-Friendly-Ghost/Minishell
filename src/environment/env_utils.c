@@ -6,35 +6,33 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/20 21:34:39 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/24 12:11:57 by cpost         ########   odam.nl         */
+/*   Updated: 2022/08/24 16:40:12 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /**
- * @brief checks if the source string (str) contains char c.
+ * @brief checks if the source string (str) contains a character after
+ * the first '=' character.
  * @param str The source string
  * @param c The character to check for
- * @param c ascii value of the character to search for
- * @return True if character is found. False if character is not
+ * @return True if there is a character after the '='. False if
+ * there is a '\0' after the '='.
  * found within the source string.
  * @note
  */
-bool	ft_strchr_bool(const char *str, char c)
+bool	check_if_env_has_value(const char *str)
 {
 	unsigned long	i;
 
 	i = 0;
-	if (c == '\0')
-		return (true);
-	while (str[i])
-	{
-		if (str[i] == c)
-			return (true);
+	while (str[i] != '=')
 		i++;
-	}
-	return (false);
+	if (str[i + 1] == '\0')
+		return (false);
+	else
+		return (true);
 }
 
 /**

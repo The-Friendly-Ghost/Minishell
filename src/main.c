@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/24 14:53:22 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/08/24 16:59:06 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ static char	*get_input(void)
 			ft_putendl_fd("minishell> exit", 1);
 			exit(EXIT_FAILURE);
 		}
-		if (!ft_strncmp(input, "exit", 4))
-			exit(EXIT_SUCCESS);
+		add_history(input);
 		return (input);
 	}
 }
@@ -38,33 +37,21 @@ static void	at_exit(void)
 	system("leaks -q minishell");
 }
 
-int	main(int argc, char **argv, char **envp)
+int	main(void)
 {
-	char	*input;
-	char	**tokens;
+	char		*input;
+	char		**tokens;
+	t_token		**token_list;
 
 	atexit(at_exit);
-	(void)argc;
-	(void)argv;
-	(void)envp;
+	get_program();
 	input = NULL;
 	while (1)
 	{
 		input = get_input();
-		if (!input)
-			continue ;
-		if (tokens)
-		{
-			int i = 0;
-			while (tokens[i])
-			{
-				free(tokens[i]);
-				i++;
-			}
-			free(tokens);
-		}
 		tokens = lexer(input);
 		free(input);
+		token_list = parser(tokens);
 	}
 	return (0);
 }

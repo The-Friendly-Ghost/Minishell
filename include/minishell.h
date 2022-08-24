@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/24 14:45:05 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/08/24 19:42:07 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,7 @@ typedef struct s_program {
 }	t_program;
 
 typedef enum e_token_type {
-	string_single_quote = 1,
-	string_double_quote,
-	string_without_quote,
+	string = 1,
 	redirect_input,
 	redirect_output,
 	delimiter,
@@ -62,6 +60,20 @@ typedef enum e_token_type {
 	env,
 	exit_program
 }	t_token_type;
+
+typedef enum e_print_code {
+	no_error,
+	newline_error,
+	redirect_error_input,
+	redirect_error_output,
+	delimiter_error,
+	redirect_append_error,
+	pipe_error,
+}	t_print_code;
+
+// expander/expander.c
+
+void			expander(t_token **token_list);
 
 //parser/parser.c
 
@@ -80,6 +92,10 @@ void			destroy_token_list(t_token **token_list);
 
 int				ft_strcmp(const char *s1, const char *s2);
 
+// parser/parser_syntax_error.c
+
+bool			check_for_syntax_error(t_token **token_list);
+
 //environment/get_env_data.c
 
 t_program		*get_program(void);
@@ -90,7 +106,7 @@ t_env			**get_env_list(void);
 char			*ft_strdup_before_char(const char *str, char c);
 char			*ft_strdup_after_char(const char *str, char c);
 char			*ft_getenv(const char *name);
-bool			ft_strchr_bool(const char *str, char c);
+bool			check_if_env_has_value(const char *str);
 
 //builtin/env.c
 
@@ -103,5 +119,9 @@ void			print_pwd(void);
 // lexer
 char			**lexer(char *input);
 char			**tokenizer(char *input, int token_count);
+
+// test_functions.c
+
+void			print_token_list(t_token **token_list);
 
 #endif
