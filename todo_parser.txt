@@ -1,6 +1,0 @@
-
-- Tokens komen binnen in 2d array, gesplit op whitespace. Errors zijn al gecheckt
-
-- Zet de token info in een struct. Zet deze struct in een linked list.
-
-- Identificeer token

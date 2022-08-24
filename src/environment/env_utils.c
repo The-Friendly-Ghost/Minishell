@@ -6,88 +6,11 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/20 21:34:39 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/23 17:06:32 by cpost         ########   odam.nl         */
+/*   Updated: 2022/08/24 12:11:57 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-void	*ft_calloc(size_t count, size_t size)
-{
-	void	*ptr;
-
-	ptr = malloc(count * size);
-	if (ptr)
-		ft_bzero(ptr, count * size);
-	return (ptr);
-}
-void	ft_bzero(void *s, size_t n)
-{
-	unsigned char	*p;
-	unsigned int	i;
-
-	p = s;
-	i = 0;
-	while (i < n)
-	{
-		*p = '\0';
-		p++;
-		i++;
-	}
-}
-void	*ft_memcpy(void *dst, const void *src, size_t n)
-{
-	char		*d;
-	const char	*s;
-	size_t		i;
-
-	d = dst;
-	s = src;
-	i = 0;
-	if (!dst && !src)
-		return (0);
-	while (n)
-	{
-		d[i] = s[i];
-		i++;
-		n--;
-	}
-	return (dst);
-}
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
-{
-	size_t	i;
-
-	i = 0;
-	if (dstsize == 0)
-		return (ft_strlen(src));
-	while (src[i] && (dstsize - 1) > i)
-	{
-		dst[i] = src[i];
-		i++;
-	}
-	dst[i] = '\0';
-	return (ft_strlen(src));
-}
-size_t	ft_strlen(const char *s)
-{
-	size_t	i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
-}
-char	*ft_strdup(const char *s1)
-{
-	void	*ptr;
-	size_t	count;
-
-	count = ft_strlen(s1) + 1;
-	ptr = malloc(count * sizeof(char));
-	if (!ptr)
-		return (NULL);
-	return (ft_memcpy(ptr, s1, count));
-}
 
 /**
  * @brief checks if the source string (str) contains char c.

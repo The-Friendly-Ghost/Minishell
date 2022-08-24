@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:11:43 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/23 17:13:24 by cpost         ########   odam.nl         */
+/*   Updated: 2022/08/24 12:03:22 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,9 @@ typedef enum e_token_type {
 	exit_program
 }	t_token_type;
 
-//lexer.c
-
-char			*get_next_token(char *input, int *i);
-char			*ft_strldup(char *input, int size);
-
 //parser/parser.c
 
-t_token			**parser(char *input);
+t_token			**parser(char **input);
 
 //parser/determine_token_type.c
 
