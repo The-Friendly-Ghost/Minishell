@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/17 08:40:38 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/23 14:03:12 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/08/24 08:57:39 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void	skip_string(const char *str, int *i)
 			*i += 1;
 		if (str[*i] == '\'')
 			*i += 1;
+		in_string(*str, true);
 	}
 	else if (str[*i] == '\"')
 	{
@@ -76,22 +77,6 @@ void	skip_string(const char *str, int *i)
 			*i += 1;
 		if (str[*i] == '\"')
 			*i += 1;
+		in_string(*str, true);
 	}
 }
-
-// int	count_whitespace(char *str)
-// {
-// 	int		i;
-// 	int		count;
-
-// 	i = 0;
-// 	count = 0;
-// 	while (str[i])
-// 	{
-// 		if (ft_is_whitespace(str[i]) && !in_string(str[i + 1], false))
-// 			count++;
-// 		i++;
-// 	}
-// 	in_string('\0', true);
-// 	return (count);
-// }

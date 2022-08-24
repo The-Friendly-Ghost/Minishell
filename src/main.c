@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/22 18:00:21 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/08/24 10:26:32 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,5 @@ int	main(int argc, char **argv, char **envp)
 		}
 		tokens = lexer(input);
 	}
-	return (0);
+	return (free(input), 0);
 }

@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:11:43 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/22 15:50:03 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/08/24 09:58:21 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,5 +17,6 @@
 
 // lexer
 char	**lexer(char *input);
+char	**tokenizer(char *input, int token_count);
 
 #endif
