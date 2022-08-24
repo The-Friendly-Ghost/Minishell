@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 13:38:21 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/24 11:27:03 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/08/24 11:50:12 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,11 @@ char	**lexer(char *input)
 	char		*line;
 	char		**tokens;
 
-	token_count = count_whitespace(input, set) + 1;
-	printf("token_count: %i\n", token_count);
 	line = set_whitespace(input, count_specials(input));
 	if (!line)
 		return (NULL);
+	token_count = count_whitespace(line, set) + 1;
+	printf("token_count: %i\n", token_count);
 	tokens = tokenizer(line, token_count);
 	if (!tokens)
 		exit(EXIT_FAILURE);

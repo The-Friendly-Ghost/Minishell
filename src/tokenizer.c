@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/23 10:34:47 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/24 11:26:02 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/08/24 11:29:06 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ static char	*find_token(char **tokens, char *line, const char *set, int n)
 		return (NULL);
 	ft_strlcpy(tkn, line, space + 1);
 	tokens[n] = tkn;
-// printf("size: %i str_len: %i token: %s\n", space, (int)ft_strlen(tkn), tkn);
 	return (*tokens);
 }
 
