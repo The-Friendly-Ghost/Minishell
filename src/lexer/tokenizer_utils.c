@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/20 12:31:03 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/27 14:22:38 by paulniezen    ########   odam.nl         */
+/*   Updated: 2022/08/27 15:28:25 by paulniezen    ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,23 @@ int	is_set(char c, const char *set)
 	return (0);
 }
 
-int	count_whitespace(char *input, const char *set)
+int	count_whitespace(char *line, const char *set)
 {
 	int	i;
 	int	count;
 
 	i = 0;
 	count = 0;
-	while (input[i])
+	while (line[i])
 	{
-		if (in_string(input[i], false))
-			skip_string(input, &i);
-		if (is_set(input[i], set))
+		while (in_string(line[i], false))
+			skip_string(line, &i);
+		if (is_set(line[i], set))
+		{
+			while (is_set(line[i + 1], set) && line[i + 1])
+				i++;
 			count++;
+		}
 		i++;
 	}
 	return (count);
@@ -72,4 +76,18 @@ int	count_specials(char *input)
 		i++;
 	}
 	return (count);
+}
+
+int	is_s_qoute_d_qoute(char *input, int i)
+{
+	if (i > 0)
+	{
+		if (!is_quote(input[i - 1]) && input[i] == '\'' && input[i + 1] == '\"'
+			&& input[i + 1] != '\0')
+			return (1);
+		if (!is_quote(input[i - 1]) && input[i] == '\"' && input[i + 1] == '\''
+			&& input[i + 1] != '\0')
+			return (1);
+	}
+	return (0);
 }
