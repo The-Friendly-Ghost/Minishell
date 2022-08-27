@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/20 12:31:03 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/24 11:49:23 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/08/27 14:22:38 by paulniezen    ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,20 +44,17 @@ int	count_whitespace(char *input, const char *set)
 
 int	is_special(char *input, int i)
 {
-	if (i > 0)
-	{
-		if (input[i - 1] != '|' && input[i] == '|' && input[i + 1] != '|')
-			return (1);
-		if ((input[i - 1] != '<' && input[i] == '<' && input[i + 1] != '<')
-			|| (input[i - 1] != '>' && input[i] == '>' && input[i + 1] != '>'))
-			return (1);
-		if (input[i - 1] != '<' && input[i] == '<' && input[i + 1] == '<'
-			&& input[i + 2] != '<' && input[i + 1] != '\0')
-			return (2);
-		if (input[i - 1] != '>' && input[i] == '>' && input[i + 1] == '>'
-			&& input[i + 2] != '>' && input[i + 1] != '\0')
-			return (2);
-	}
+	if (input[i] == '|' && input[i + 1] != '|')
+		return (1);
+	if ((input[i] == '<' && input[i + 1] != '<' && input[i + 1] != '\0')
+		|| (input[i] == '>' && input[i + 1] != '>' && input[i + 1] != '\0'))
+		return (1);
+	if (input[i] == '<' && input[i + 1] == '<'
+		&& input[i + 1] != '\0')
+		return (2);
+	if (input[i] == '>' && input[i + 1] == '>'
+		&& input[i + 1] != '\0')
+		return (2);
 	return (0);
 }
 

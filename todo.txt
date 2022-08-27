@@ -5,3 +5,5 @@ fix get the token count
 
 split alleen op whitespaces als het buiten de str is.
 echo "dit is een str" >> << > < |
+
+env exit "dit is een string"'en nog een string' hallo << >>

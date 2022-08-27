@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 13:38:21 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/24 19:58:10 by cpost         ########   odam.nl         */
+/*   Updated: 2022/08/27 14:21:15 by paulniezen    ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ static void	add_space(char *line, char *str, int *i, int *j)
 		*i += 1;
 		line[*j] = ' ';
 		*j += 1;
+		return ;
 	}
 	if (is_special(str, *i) == 2)
 	{
@@ -39,7 +40,17 @@ static void	add_space(char *line, char *str, int *i, int *j)
 		*i += 1;
 		line[*j] = ' ';
 		*j += 1;
+		return ;
 	}
+}
+
+static void	add_space_after_quote(char *line, char *str, int *i, int *j)
+{
+	line[*j] = str[*i];
+	*j += 1;
+	*i += 1;
+	line[*j] = ' ';
+	*j += 1;
 }
 
 static char	*set_whitespace(char *str, int specials_count)
@@ -55,8 +66,10 @@ static char	*set_whitespace(char *str, int specials_count)
 		return (NULL);
 	while (str[i])
 	{
-		if (is_special(str, i))
+		while (is_special(str, i))
 			add_space(line, str, &i, &j);
+		if (is_s_qoute_d_qoute(str, i))
+			add_space_after_quote(line, str, &i, &j);
 		line[j] = str[i];
 		j++;
 		i++;
@@ -81,12 +94,12 @@ char	**lexer(char *input)
 	if (!tokens)
 		exit(EXIT_FAILURE);
 	i = 0;
-//printf("tokens: ");
-	// while (tokens[i])
-	// {
-	// 	printf("[%s] ", tokens[i]);
-	// 	i++;
-	// }
-	// printf("\n");
+// printf("tokens: ");
+// 	while (tokens[i])
+// 	{
+// 		printf("[%s] ", tokens[i]);
+// 		i++;
+// 	}
+// 	printf("\n");
 	return (free(line), tokens);
 }

@@ -6,7 +6,7 @@
 #    By: pniezen <pniezen@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/08/24 13:48:16 by pniezen       #+#    #+#                  #
-#    Updated: 2022/08/24 15:52:30 by cpost         ########   odam.nl          #
+#    Updated: 2022/08/27 12:45:08 by paulniezen    ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ LIBFT_PATH = lib/libft/
 
 NAME = minishell
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address
 
 SRC = $(shell find $(SRC_PATH) -type f -name '*.c')
 
