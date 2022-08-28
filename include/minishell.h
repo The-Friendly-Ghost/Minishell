@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/24 19:42:07 by cpost         ########   odam.nl         */
+/*   Updated: 2022/08/28 12:50:40 by paulniezen    ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,9 +119,5 @@ void			print_pwd(void);
 // lexer
 char			**lexer(char *input);
 char			**tokenizer(char *input, int token_count);
-
-// test_functions.c
-
-void			print_token_list(t_token **token_list);
 
 #endif

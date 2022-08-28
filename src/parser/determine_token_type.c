@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/17 14:54:42 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/24 17:18:19 by cpost         ########   odam.nl         */
+/*   Updated: 2022/08/28 13:20:36 by paulniezen    ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,8 @@ static unsigned int	check_if_token_is_builtin(char *token, int *token_type)
 }
 
 /**
- * @brief Identifies the type of the token given as a paramater. Then a
- * corresponding token_type number gets returned.
+ * @brief Identifies the type of the token given as a paramater. The
+ * corresponding token_type number will be returned.
  * @param *token A pointer to a char * (the token)
  * @return Unsigned int 
  * @note -
@@ -121,13 +121,13 @@ unsigned int	determine_token_type(char *token)
 {
 	int	token_type;
 
-	if (check_if_token_is_builtin(token, &token_type) != 0)
+	if (check_if_token_is_builtin(token, &token_type))
 		return (token_type);
 	// if (check_if_token_is_string(token, &token_type) != 0)
 	// 	return (token_type);
-	if (check_if_token_is_redirection(token, &token_type) != 0)
+	if (check_if_token_is_redirection(token, &token_type))
 		return (token_type);
-	if (check_if_token_starts_with_dollar_sign(token, &token_type) != 0)
+	if (check_if_token_starts_with_dollar_sign(token, &token_type))
 		return (token_type);
 	if (ft_strcmp(token, "|") == 0)
 		return (is_pipe);

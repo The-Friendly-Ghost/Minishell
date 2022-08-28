@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 14:15:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/24 18:05:31 by cpost         ########   odam.nl         */
+/*   Updated: 2022/08/28 12:53:02 by paulniezen    ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,20 +76,16 @@ t_token	**parser(char **token_array)
 	while (token_array[i])
 	{
 		new_element = create_new_element(token_array[i], i);
-		if (new_element == NULL)
+		if (!new_element)
 		{
 			printf("Error Parser Linked List Creation\n");
-			//free(token_array);
-			//destroy_token_list(token_list);
-			return (NULL);
+			return (free(token_list), NULL);
 		}
 		add_new_element_to_token_list(token_list, new_element);
 		i++;
 	}
-	free(token_array);
-	if (check_for_syntax_error(token_list) == true)
-		return (NULL); //ik weet niet of dit een juiste return is.
-		//Alles freeen, error code en exit;
+	if (check_for_syntax_error(token_list))
+		return (destroy_token_list(token_list), NULL);
 	//expander(token_list);
 	return (token_list);
 }
