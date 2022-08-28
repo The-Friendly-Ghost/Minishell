@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 14:15:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/28 12:53:02 by paulniezen    ########   odam.nl         */
+/*   Updated: 2022/08/28 13:37:47 by paulniezen    ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,5 @@ t_token	**parser(char **token_array)
 	if (check_for_syntax_error(token_list))
 		return (destroy_token_list(token_list), NULL);
 	//expander(token_list);
-	return (token_list);
+	return (destroy_token_array(token_array), token_list);
 }

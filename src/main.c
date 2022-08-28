@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/28 12:55:26 by paulniezen    ########   odam.nl         */
+/*   Updated: 2022/08/28 13:36:28 by paulniezen    ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ int	main(void)
 	get_program();
 	while (1)
 	{
+		if (token_list)
+			destroy_token_list(token_list);
 		input = get_input();
 		tokens = lexer(input);
 		free(input);
