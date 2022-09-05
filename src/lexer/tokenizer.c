@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/23 10:34:47 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/24 11:29:06 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/09/05 09:49:22 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,11 @@ static void	make_free(char **tokens, int n)
 static void	skip(char *line, const char *set, int *i)
 {
 	while (!is_set(line[*i], set) && line[*i])
+	{
+		if (in_string(line[*i], false))
+			skip_string(line, i);
 		(*i)++;
+	}
 	while (is_set(line[*i], set) && line[*i])
 		(*i)++;
 }

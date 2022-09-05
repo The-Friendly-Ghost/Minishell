@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/17 08:40:38 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/24 08:57:39 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/09/05 09:46:34 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,20 +63,20 @@ void	skip_string(const char *str, int *i)
 {
 	if (str[*i] == '\'')
 	{
-		*i += 1;
+		(*i)++;
 		while (str[*i] != '\'' && str[*i])
-			*i += 1;
+			(*i)++;
 		if (str[*i] == '\'')
-			*i += 1;
+			(*i)++;
 		in_string(*str, true);
 	}
 	else if (str[*i] == '\"')
 	{
-		*i += 1;
+		(*i)++;
 		while (str[*i] != '\"' && str[*i])
-			*i += 1;
+			(*i)++;
 		if (str[*i] == '\"')
-			*i += 1;
+			(*i)++;
 		in_string(*str, true);
 	}
 }
