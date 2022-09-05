@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 17:22:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/24 20:45:00 by cpost         ########   odam.nl         */
+/*   Updated: 2022/08/28 12:30:34 by paulniezen    ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ bool	is_redirect(unsigned int type)
 bool	print_syntax_error(int *print_code)
 {
 	if (*print_code == newline_error)
-		ft_putendl_fd("minishell: syntax error near unexpected token `newline'", 2);
+		ft_putendl_fd(
+			"minishell: syntax error near unexpected token `newline'", 2);
 	else if (*print_code == redirect_error_input)
 		ft_putendl_fd("minishell: syntax error near unexpected token `<'", 2);
 	else if (*print_code == redirect_error_output)
