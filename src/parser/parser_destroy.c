@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/17 14:19:55 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/28 12:50:32 by paulniezen    ########   odam.nl         */
+/*   Updated: 2022/09/05 13:45:35 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,16 @@ void	destroy_token_array(char **token_array)
 	unsigned int	i;
 
 	i = 0;
-	while (token_array[i])
-	{
-		if (token_array[i])
-			free(token_array[i]);
-		i++;
-	}
 	if (token_array)
+	{
+		while (token_array[i])
+		{
+			if (token_array[i])
+				free(token_array[i]);
+			i++;
+		}
 		free(token_array);
+	}
 }
 
 /**
@@ -52,6 +54,7 @@ void	destroy_token_list(t_token **token_list)
 		while (temp)
 		{
 			free_temp = temp;
+			free(temp->content);
 			temp = temp->next;
 			free(free_temp);
 		}
