@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 14:15:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/09/05 13:53:45 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/09/05 16:32:44 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	add_new_element_to_token_list(t_token **token_list,
  * @return *t_token (pointer to the new token element) 
  * @note determine_token_type can be found in determine_token_type.c
  */
-static t_token	*create_new_element(char *token, unsigned int id)
+static t_token	*create_new_element(char *token, int id)
 {
 	t_token	*new_element;
 
