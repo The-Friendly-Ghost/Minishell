@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/24 16:59:06 by cpost         ########   odam.nl         */
+/*   Updated: 2022/09/29 14:32:05 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int	main(void)
 		tokens = lexer(input);
 		free(input);
 		token_list = parser(tokens);
+		print_token_list(token_list);
 	}
 	return (0);
 }

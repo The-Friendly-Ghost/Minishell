@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/08/24 19:42:07 by cpost         ########   odam.nl         */
+/*   Updated: 2022/09/29 14:31:17 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,13 @@ typedef enum e_print_code {
 
 // expander/expander.c
 
-void			expander(t_token **token_list);
+t_token			**expander(t_token **token_list);
+
+// expander/expander_utils.c
+
+char			*id_env_var(char *str);
+char			*expand_env_var(char *name, char *value, char *str,
+					unsigned int i);
 
 //parser/parser.c
 
