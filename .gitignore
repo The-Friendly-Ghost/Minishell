@@ -2,4 +2,5 @@
 .DS_Store
 obj
 lib/libft/obj
+lib/libft/libft.a
 minishell

@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 14:15:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/09/29 14:33:40 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/03 10:48:35 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,6 @@ t_token	**parser(char **token_array)
 	if (check_for_syntax_error(token_list) == true)
 		return (NULL); //ik weet niet of dit een juiste return is.
 		//Alles freeen, error code en exit;
-	//expander(token_list);
+	expander(token_list);
 	return (token_list);
 }
