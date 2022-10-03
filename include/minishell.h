@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/09/29 14:31:17 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/03 11:13:43 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 # include <readline/history.h>
 
 typedef struct s_token {
-	unsigned int	id;
-	unsigned int	type;
+	int				id;
+	int				type;
 	char			*content;
 	struct s_token	*next;
 	struct s_token	*previous;
@@ -83,51 +83,37 @@ char			*expand_env_var(char *name, char *value, char *str,
 
 //parser/parser.c
 
+//parser/
 t_token			**parser(char **input);
 
-//parser/determine_token_type.c
+//parser/parser_utils.c
+int				ft_strcmp(const char *s1, const char *s2);
 
-unsigned int	determine_token_type(char *token);
+//parser/determine_token_type.c
+int	determine_token_type(char *token);
 
 //parser/destroy_parser.c
-
 void			destroy_token_array(char **token_array);
 void			destroy_token_list(t_token **token_list);
 
-//parser/parser_utils.c
-
-int				ft_strcmp(const char *s1, const char *s2);
-
 // parser/parser_syntax_error.c
-
 bool			check_for_syntax_error(t_token **token_list);
 
-//environment/get_env_data.c
+// expander/expander.c
+void			expander(t_token **token_list);
 
+//environment/get_env_data.c
 t_program		*get_program(void);
 t_env			**get_env_list(void);
 
 //environment/env_utils.c
-
 char			*ft_strdup_before_char(const char *str, char c);
 char			*ft_strdup_after_char(const char *str, char c);
 char			*ft_getenv(const char *name);
 bool			check_if_env_has_value(const char *str);
 
-//builtin/env.c
-
+//builtin/
 void			print_env(void);
-
-//builtin/pwd.c
-
 void			print_pwd(void);
-
-// lexer
-char			**lexer(char *input);
-char			**tokenizer(char *input, int token_count);
-
-// test_functions.c
-
-void			print_token_list(t_token **token_list);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 14:15:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/03 10:48:35 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/03 11:07:20 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	add_new_element_to_token_list(t_token **token_list,
  * @return *t_token (pointer to the new token element) 
  * @note determine_token_type can be found in determine_token_type.c
  */
-static t_token	*create_new_element(char *token, unsigned int id)
+static t_token	*create_new_element(char *token, int id)
 {
 	t_token	*new_element;
 
@@ -50,7 +50,9 @@ static t_token	*create_new_element(char *token, unsigned int id)
 	if (!new_element)
 		return (NULL);
 	new_element->id = id;
-	new_element->content = token;
+	new_element->content = ft_strdup(token);
+	if (!new_element->content)
+		return (free(new_element), NULL);
 	new_element->next = NULL;
 	new_element->previous = NULL;
 	new_element->type = determine_token_type(token);
@@ -76,20 +78,17 @@ t_token	**parser(char **token_array)
 	while (token_array[i])
 	{
 		new_element = create_new_element(token_array[i], i);
-		if (new_element == NULL)
+		if (!new_element)
 		{
 			printf("Error Parser Linked List Creation\n");
-			//free(token_array);
-			//destroy_token_list(token_list);
-			return (NULL);
+			destroy_token_array(token_array);
+			return (destroy_token_list(token_list), NULL);
 		}
 		add_new_element_to_token_list(token_list, new_element);
 		i++;
 	}
-	free(token_array);
-	if (check_for_syntax_error(token_list) == true)
-		return (NULL); //ik weet niet of dit een juiste return is.
-		//Alles freeen, error code en exit;
-	expander(token_list);
+	destroy_token_array(token_array);
+	if (check_for_syntax_error(token_list))
+		return (destroy_token_list(token_list), NULL);
 	return (token_list);
 }
