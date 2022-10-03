@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/03 11:23:12 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/03 13:07:18 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ typedef enum e_token_type {
 	echo,
 	cd,
 	pwd,
-	export,
+	export_var,
 	unset,
 	env,
 	exit_program

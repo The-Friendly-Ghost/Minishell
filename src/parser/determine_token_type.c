@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/17 14:54:42 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/03 11:13:56 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/03 13:07:44 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static int	check_if_token_is_builtin(char *token, int *token_type)
 	else if (ft_strcmp(token, "pwd") == 0)
 		*token_type = pwd;
 	else if (ft_strcmp(token, "export") == 0)
-		*token_type = export;
+		*token_type = export_var;
 	else if (ft_strcmp(token, "unset") == 0)
 		*token_type = unset;
 	else if (ft_strcmp(token, "env") == 0)
