@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/20 21:34:39 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/24 16:40:12 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/03 14:15:23 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ char	*ft_getenv(const char *name)
 	t_env		**env;
 	t_env		*temp;
 
+	if (name == NULL)
+		return (NULL);
 	env = get_env_list();
 	if (!(*env))
 		return (NULL);
