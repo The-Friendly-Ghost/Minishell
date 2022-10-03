@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 17:49:46 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/03 14:52:44 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/03 17:13:24 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ static char	*ft_strjoin_alt(char *s1, char *s2)
 		return (NULL);
 	ft_memcpy(str, s1, s1_len + 1);
 	ft_strlcat(str, s2, (s1_len + s2_len + 1));
-	free(s1);
-	return (str);
+	return (free(s1), str);
 }
 
 /**
@@ -83,7 +82,7 @@ char	*id_env_var(char *str)
 	char	*env_var;
 
 	i = 0;
-	while (str[i] && str[i] != '"' && str[i] != '\''
+	while (str[i] && str[i] != '"' && str[i] != '\'' && str[i] != '\\'
 		&& !ft_is_whitespace(str[i]))
 	{
 		if (i > 0 && str[i] == '$')
@@ -92,6 +91,8 @@ char	*id_env_var(char *str)
 			i++;
 	}
 	env_var = malloc(sizeof(char) * (i + 1));
+	if (env_var == NULL)
+		return (NULL);
 	env_var[i] = '\0';
 	i--;
 	while (i >= 0)
@@ -113,15 +114,23 @@ char	*expand_env_var(char *name, char *value, char *str, unsigned int i)
 {
 	char	*str_before;
 	char	*str_after;
+	char	*temp;
 	char	*expanded_str;
 
+	if (value == NULL)
+		value = ft_strdup("");
 	str_before = ft_strdup_before_size(str, i);
 	str_after = ft_strdup(str + (i + ft_strlen(name)));
 	if (str_before == NULL)
 		expanded_str = ft_strdup(value);
 	else
 		expanded_str = ft_strjoin_alt(str_before, value);
-	if (str_after != NULL)
-		expanded_str = ft_strjoin(expanded_str, str_after);
-	return (expanded_str);
+	if (str_after)
+	{
+		temp = expanded_str;
+		expanded_str = ft_strjoin(temp, str_after);
+		free(temp);
+		free(str_after);
+	}
+	return (free(name), expanded_str);
 }

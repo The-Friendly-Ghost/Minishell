@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 16:56:17 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/03 14:49:17 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/03 17:25:03 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,13 @@ static unsigned int	skip_single_quotes(char *str, unsigned int i)
  */
 static char	*search_env_variables(char *str)
 {
-	unsigned int	i;
-	char			*env_var_name;
-	char			*env_var_value;
+	int		i;
+	char	*env_var_name;
+	char	*env_var_value;
+	char	*temp;
 
+	if (str == NULL)
+		return (NULL);
 	i = 0;
 	while (str[i])
 	{
@@ -54,18 +57,13 @@ static char	*search_env_variables(char *str)
 			|| (i == 0 && str[i] == '$'))
 		{
 			env_var_name = id_env_var(str + i);
-printf("%s\n", env_var_name);
 			env_var_value = ft_getenv(env_var_name + 1);
-			if (env_var_value == NULL)
-				str = expand_env_var(env_var_name, "", str, i);
-			else
-				str = expand_env_var(env_var_name, env_var_value, str, i);
-			free(env_var_name);
-			free(env_var_value);
+			temp = str;
+			str = expand_env_var(env_var_name, env_var_value, str, i);
 		}
 		i++;
 	}
-	return (str);
+	return (free(temp), str);
 }
 
 /**

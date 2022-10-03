@@ -7,3 +7,9 @@ split alleen op whitespaces als het buiten de str is.
 echo "dit is een str" >> << > < |
 
 env exit "dit is een string"'en nog een string' hallo << >>
+
+
+minishell> halo$USER\$
+id = 0 - type = 1 : halo$
+minishell> halo$USER\$PWD
+id = 2 - type = -1879048192 : halo$USER\$PWD
