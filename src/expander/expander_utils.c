@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 17:49:46 by cpost         #+#    #+#                 */
-/*   Updated: 2022/09/29 14:09:53 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/03 14:52:44 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,12 @@ char	*id_env_var(char *str)
 	i = 0;
 	while (str[i] && str[i] != '"' && str[i] != '\''
 		&& !ft_is_whitespace(str[i]))
-		i++;
+	{
+		if (i > 0 && str[i] == '$')
+			break ;
+		else
+			i++;
+	}
 	env_var = malloc(sizeof(char) * (i + 1));
 	env_var[i] = '\0';
 	i--;

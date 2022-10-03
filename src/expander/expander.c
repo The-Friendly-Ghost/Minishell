@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 16:56:17 by cpost         #+#    #+#                 */
-/*   Updated: 2022/09/13 15:52:19 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/03 14:49:17 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,14 @@ static char	*search_env_variables(char *str)
 			|| (i == 0 && str[i] == '$'))
 		{
 			env_var_name = id_env_var(str + i);
+printf("%s\n", env_var_name);
 			env_var_value = ft_getenv(env_var_name + 1);
-			str = expand_env_var(env_var_name, env_var_value, str, i);
-			//free(env_var_name);
+			if (env_var_value == NULL)
+				str = expand_env_var(env_var_name, "", str, i);
+			else
+				str = expand_env_var(env_var_name, env_var_value, str, i);
+			free(env_var_name);
+			free(env_var_value);
 		}
 		i++;
 	}
@@ -76,7 +81,7 @@ t_token	**expander(t_token **token_list)
 	temp = *token_list;
 	while (temp)
 	{
-		if (temp->type == string)
+		if (temp->type == string || temp->type == enviroment_variable)
 			temp->content = search_env_variables(temp->content);
 		temp = temp->next;
 	}
