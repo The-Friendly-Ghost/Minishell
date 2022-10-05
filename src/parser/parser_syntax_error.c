@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 17:22:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/28 12:30:34 by paulniezen    ########   odam.nl         */
+/*   Updated: 2022/10/05 12:07:19 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,12 +90,12 @@ static int	check_redirect_error(t_token *token, int *print_code)
  * @return true if syntax error is found. False if no error found.
  * @note
  */
-bool	check_for_syntax_error(t_token **token_list)
+bool	check_for_syntax_error(t_token *token_list)
 {
 	t_token	*temp;
 	int		print_code;
 
-	temp = *token_list;
+	temp = token_list;
 	print_code = 0;
 	while (temp)
 	{

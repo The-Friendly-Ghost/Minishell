@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/03 17:19:18 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/05 12:19:10 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	main(void)
 {
 	char		*input;
 	char		**tokens;
-	t_token		**token_list;
+	t_token		*token_list;
 
 	input = NULL;
 	token_list = NULL;
@@ -53,7 +53,7 @@ int	main(void)
 	while (1)
 	{
 		if (token_list)
-			destroy_token_list(token_list);
+			destroy_token_list(&token_list);
 		input = get_input();
 		tokens = lexer(input);
 		free(input);

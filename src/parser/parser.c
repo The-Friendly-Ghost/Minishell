@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 14:15:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/03 11:07:20 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/05 12:48:34 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,14 +66,13 @@ static t_token	*create_new_element(char *token, int id)
  * @return **token_list - Pointer to the first element of the linked list 
  * @note Destroy functions can be found in parser_destroy.c
  */
-t_token	**parser(char **token_array)
+t_token	*parser(char **token_array)
 {
-	t_token	**token_list;
+	t_token	*token_list;
 	t_token	*new_element;
 	int		i;
 
-	token_list = malloc(sizeof(char *));
-	*token_list = NULL;
+	token_list = NULL;
 	i = 0;
 	while (token_array[i])
 	{
@@ -82,13 +81,13 @@ t_token	**parser(char **token_array)
 		{
 			printf("Error Parser Linked List Creation\n");
 			destroy_token_array(token_array);
-			return (destroy_token_list(token_list), NULL);
+			return (destroy_token_list(&token_list), NULL);
 		}
-		add_new_element_to_token_list(token_list, new_element);
+		add_new_element_to_token_list(&token_list, new_element);
 		i++;
 	}
 	destroy_token_array(token_array);
 	if (check_for_syntax_error(token_list))
-		return (destroy_token_list(token_list), NULL);
+		return (destroy_token_list(&token_list), NULL);
 	return (token_list);
 }

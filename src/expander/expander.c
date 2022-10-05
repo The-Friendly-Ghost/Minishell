@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 16:56:17 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/03 17:25:03 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/05 12:49:24 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static char	*search_env_variables(char *str)
 	int		i;
 	char	*env_var_name;
 	char	*env_var_value;
-	char	*temp;
+	char	*temp_str;
 
 	if (str == NULL)
 		return (NULL);
@@ -53,17 +53,17 @@ static char	*search_env_variables(char *str)
 			i = skip_single_quotes(str, i + 1);
 		if (str[i] == '\0')
 			return (str);
-		if ((i >= 1 && str[i - 1] != '\\' && str[i] == '$')
-			|| (i == 0 && str[i] == '$'))
+		if (str[i] == '$')
 		{
 			env_var_name = id_env_var(str + i);
 			env_var_value = ft_getenv(env_var_name + 1);
-			temp = str;
+			temp_str = str;
 			str = expand_env_var(env_var_name, env_var_value, str, i);
+			free(temp_str);
 		}
 		i++;
 	}
-	return (free(temp), str);
+	return (str);
 }
 
 /**
@@ -72,11 +72,11 @@ static char	*search_env_variables(char *str)
  * @return **token_list - Pointer to the first element of the linked list 
  * @note
  */
-t_token	**expander(t_token **token_list)
+t_token	*expander(t_token *token_list)
 {
 	t_token	*temp;
 
-	temp = *token_list;
+	temp = token_list;
 	while (temp)
 	{
 		if (temp->type == string || temp->type == enviroment_variable)

@@ -1,27 +1,20 @@
-
-
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   test_functions.c                                   :+:    :+:            */
+/*   ft_isquote.c                                       :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: cpost <cpost@student.codam.nl>               +#+                     */
+/*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/08/24 16:01:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/24 16:12:11 by cpost         ########   odam.nl         */
+/*   Created: 2022/10/05 13:14:58 by pniezen       #+#    #+#                 */
+/*   Updated: 2022/10/05 13:15:20 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-void	print_token_list(t_token *token_list)
+int	ft_isquote(char c)
 {
-	t_token	*temp;
-
-	temp = token_list;
-	while (temp)
-	{
-		printf("id = %d - type = %d : %s\n", temp->id, temp->type, temp->content);
-		temp = temp->next;
-	}
+	if (c == '\'')
+		return (1);
+	if (c == '\"')
+		return (1);
+	return (0);
 }

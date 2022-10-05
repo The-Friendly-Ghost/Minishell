@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/17 14:19:55 by cpost         #+#    #+#                 */
-/*   Updated: 2022/09/05 13:45:35 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/05 13:04:36 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,18 +46,19 @@ void	destroy_token_array(char **token_array)
 void	destroy_token_list(t_token **token_list)
 {
 	t_token	*temp;
-	t_token	*free_temp;
+	t_token	*previous_node;
 
 	if (*token_list)
 	{
 		temp = *token_list;
 		while (temp)
 		{
-			free_temp = temp;
+			previous_node = temp;
 			free(temp->content);
 			temp = temp->next;
-			free(free_temp);
+			free(previous_node);
 		}
-		free(token_list);
+		// free(*token_list);
+		*token_list = NULL;
 	}
 }

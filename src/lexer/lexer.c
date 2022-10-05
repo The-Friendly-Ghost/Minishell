@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 13:38:21 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/09/05 09:48:51 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/05 13:16:57 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,11 @@ static char	*set_whitespace(char *str, int specials_count)
 		while (is_special(str, i))
 			add_space(line, str, &i, &j);
 		if (is_s_qoute_d_qoute(str, i))
-			add_space_after_quote(line, str, &i, &j);
+		{
+			if ((i > 0 && str[i] == '\"' && str[i - 1] != '\'')
+				&& (i > 0 && str[i] == '\'' && str[i - 1] != '\"'))
+				add_space_after_quote(line, str, &i, &j);
+		}
 		line[j] = str[i];
 		j++;
 		i++;

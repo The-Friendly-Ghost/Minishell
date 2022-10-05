@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/03 13:07:18 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/05 12:09:11 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ typedef enum e_print_code {
 
 // expander/expander.c
 
-t_token			**expander(t_token **token_list);
+t_token			*expander(t_token *token_list);
 
 // expander/expander_utils.c
 
@@ -86,7 +86,7 @@ char			**lexer(char *input);
 char			**tokenizer(char *input, int token_count);
 
 //parser/
-t_token			**parser(char **input);
+t_token			*parser(char **input);
 
 //parser/parser_utils.c
 int				ft_strcmp(const char *s1, const char *s2);
@@ -99,7 +99,7 @@ void			destroy_token_array(char **token_array);
 void			destroy_token_list(t_token **token_list);
 
 // parser/parser_syntax_error.c
-bool			check_for_syntax_error(t_token **token_list);
+bool			check_for_syntax_error(t_token *token_list);
 
 //environment/get_env_data.c
 t_program		*get_program(void);
@@ -116,6 +116,6 @@ void			print_env(void);
 void			print_pwd(void);
 
 //test_functions
-void			print_token_list(t_token **token_list);
+void			print_token_list(t_token *token_list);
 
 #endif
