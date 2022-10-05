@@ -19,3 +19,9 @@ minishell> echo "'hallo ik ben $USER'"echo "'hallo ik ben $USER'"
 id = 0 - type = 9 : echo
 id = 1 - type = 1 : "'hallo ik ben $USER'"echo
 id = 2 - type = 1 : "'hallo ik ben $USER'"
+
+
+parse de PATH variable uit de env_list met get_next_line
+loop over de line totdat je 1 verder bent dan =
+split die line op de :
+loop over de gesplitte line om te kijken of je er 'acces' op hebt.

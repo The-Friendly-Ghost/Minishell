@@ -1,27 +1,26 @@
-
-
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   test_functions.c                                   :+:    :+:            */
+/*   ls.c                                               :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: cpost <cpost@student.codam.nl>               +#+                     */
+/*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/08/24 16:01:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/24 16:12:11 by cpost         ########   odam.nl         */
+/*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
+/*   Updated: 2022/10/05 15:46:24 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	print_token_list(t_token *token_list)
+void	exec_command(char *command, char *option, char **envp)
 {
-	t_token	*temp;
+	char	*cmd_path;
+	char	*options[3] = {"ls", "-la", NULL};
 
-	temp = token_list;
-	while (temp)
-	{
-		printf("id = %d - type = %d : %s\n", temp->id, temp->type, temp->content);
-		temp = temp->next;
-	}
+	(void)option;
+	cmd_path = get_executable_path(command);
+	if (!cmd_path)
+		return ;
+	execve(cmd_path, options, envp);
+	free(cmd_path);
 }

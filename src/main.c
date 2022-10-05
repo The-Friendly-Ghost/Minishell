@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/05 12:19:10 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/05 15:17:26 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,20 @@ static void	at_exit(void)
 	system("leaks -q minishell");
 }
 
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
 	char		*input;
 	char		**tokens;
 	t_token		*token_list;
 
+	(void)argc;
+	(void)argv;
 	input = NULL;
 	token_list = NULL;
 	atexit(at_exit);
 	get_program();
 	// print_env();
+	exec_command("ls", "", envp);
 	while (1)
 	{
 		if (token_list)

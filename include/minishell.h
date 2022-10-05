@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/05 12:09:11 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/05 15:23:04 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int				ft_strcmp(const char *s1, const char *s2);
 int				determine_token_type(char *token);
 
 //parser/destroy_parser.c
-void			destroy_token_array(char **token_array);
+void			destroy_double_array(char **token_array);
 void			destroy_token_list(t_token **token_list);
 
 // parser/parser_syntax_error.c
@@ -117,5 +117,8 @@ void			print_pwd(void);
 
 //test_functions
 void			print_token_list(t_token *token_list);
+
+char	*get_executable_path(char *command_str);
+void	exec_command(char *command, char *option, char **envp);
 
 #endif
