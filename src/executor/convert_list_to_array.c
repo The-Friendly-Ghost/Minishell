@@ -6,25 +6,48 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 15:14:05 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/05 15:44:41 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/06 15:19:03 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*create_node(t_token *env_var)
+/**
+ * @brief Sub function of get_env_array. This function receives a single node
+ * (struct) and converts it to a char * (string).
+ * @param env_var Pointer to a environment variable node.
+ * @return Char * (The converted string)
+ * @note -
+ */
+static char	*create_env_string(t_env *env_var)
 {
-	
+	int		len;
+	char	*str;
+	int		i;
+	int		x;
+
+	len = ft_strlen(env_var->var_name) + ft_strlen(env_var->value) + 2;
+	str = ft_calloc(len, sizeof(char));
+	i = 0;
+	x = 0;
+	while (env_var->var_name != NULL && env_var->var_name[i])
+		str[x++] = env_var->var_name[i++];
+	str[x++] = '=';
+	i = 0;
+	while (env_var->value != NULL && env_var->value[i])
+		str[x++] = env_var->value[i++];
+	str[x] = '\0';
+	return (str);
 }
 
 /**
- * @brief This function converts the linked list with all the tokens in it to
- * a 2D-array. (This 2D array can be passed as an argument when using execve.)
- * @param nothing
- * @return Pointer to the the 2D array (array filled with env variables)
- * @note -
+ * @brief This function converts the linked list with all the environment in
+ * it to a 2D-array.
+ * @param none
+ * @return Pointer to the 2D array
+ * @note This function can be passed as the envp paramater in execve.
  */
-char	**convert_list_to_array(void)
+char	**get_env_array(void)
 {
 	t_env		**env;
 	t_env		*temp;
@@ -35,8 +58,7 @@ char	**convert_list_to_array(void)
 	env = get_env_list();
 	if (!(*env))
 		return (NULL);
-	else
-		temp = *env;
+	temp = *env;
 	while (temp)
 	{
 		node++;
@@ -47,9 +69,9 @@ char	**convert_list_to_array(void)
 	node = 0;
 	while (temp)
 	{
-		env_list[node] = create_node(temp);
+		env_list[node++] = create_env_string(temp);
 		temp = temp->next;
-		node++;
 	}
+	env_list[node] = NULL;
 	return (env_list);
 }
