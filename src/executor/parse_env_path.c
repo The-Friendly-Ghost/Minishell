@@ -6,11 +6,12 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 13:34:38 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/05 15:44:13 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/06 13:36:58 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <errno.h>
 
 static char	*check_correct_path(char *path_line, char *command)
 {
@@ -45,25 +46,6 @@ static char	*check_correct_path(char *path_line, char *command)
 	return (destroy_double_array(path_list), NULL);
 }
 
-static char	*get_correct_path(char *command)
-{
-	t_env	*env;
-	t_env	*temp;
-
-	env = *get_env_list();
-	if (!env)
-		return (NULL);
-	else
-		temp = env;
-	while (temp)
-	{
-		if (temp->has_value == true && !ft_strcmp(temp->var_name, "PATH"))
-			break ;
-		temp = temp->next;
-	}
-	return (check_correct_path(temp->value, command));
-}
-
 char	*get_executable_path(char *command_str)
 {
 	char	*command;
@@ -74,8 +56,8 @@ char	*get_executable_path(char *command_str)
 	command = ft_strjoin("/", command_str);
 	if (!command)
 		return (NULL);
-	correct_path = get_correct_path(command);
+	correct_path = check_correct_path(ft_getenv("PATH"), command);
 	if (!correct_path)
-		return (NULL);
+		return (free(command), NULL);
 	return (free(command), correct_path);
 }

@@ -6,13 +6,27 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/05 15:17:26 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/06 13:18:48 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <readline/readline.h>
 #include <readline/history.h>
+
+static int	str_is_whitespace(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (!ft_is_whitespace(str[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
 
 static char	*get_input(void)
 {
@@ -30,7 +44,9 @@ static char	*get_input(void)
 		if (!ft_strcmp(input, "exit"))
 			exit(EXIT_SUCCESS);
 		add_history(input);
-		return (input);
+		if (!str_is_whitespace(input))
+			return (input);
+		free(input);
 	}
 }
 
@@ -47,12 +63,11 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	(void)envp;
 	input = NULL;
 	token_list = NULL;
 	atexit(at_exit);
 	get_program();
-	// print_env();
-	exec_command("ls", "", envp);
 	while (1)
 	{
 		if (token_list)
@@ -62,7 +77,9 @@ int	main(int argc, char **argv, char **envp)
 		free(input);
 		token_list = parser(tokens);
 		expander(token_list);
-		print_token_list(token_list);
+		exec_command(token_list->type, tokens, envp);
+		destroy_double_array(tokens);
+		// print_token_list(token_list);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/05 15:23:04 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/06 14:21:48 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,13 +112,15 @@ char			*ft_getenv(const char *name);
 bool			check_if_env_has_value(const char *str);
 
 //builtin/
+void			echo_builtin(char **argv);
 void			print_env(void);
 void			print_pwd(void);
 
 //test_functions
 void			print_token_list(t_token *token_list);
 
-char	*get_executable_path(char *command_str);
-void	exec_command(char *command, char *option, char **envp);
+//executor/
+char			*get_executable_path(char *command_str);
+int				exec_command(int type, char **argv, char **envp);
 
 #endif
