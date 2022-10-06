@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/06 14:56:29 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/06 15:55:28 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ typedef enum e_print_code {
 	pipe_error,
 }	t_print_code;
 
-// executor/convert_list_to_array.c
+// executor/get_env_array.c
 
 char			**get_env_array(void);
 
