@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/06 14:49:22 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/07 14:16:52 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ static void	exec_builtin(int type, char **argv)
 		echo_builtin(argv);
 	else if (type == pwd)
 		print_pwd();
+	else if (type == cd)
+		exec_cd(argv);
 }
 
 int	exec_command(int type, char **argv, char **envp)
