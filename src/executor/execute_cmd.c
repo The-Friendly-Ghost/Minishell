@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/06 14:49:22 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/07 10:59:59 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	exec_builtin(int type, char **argv)
 		print_pwd();
 }
 
-int	exec_command(int type, char **argv, char **envp)
+int	exec_command(int type, char **argv)
 {
 	pid_t	pid;
 	char	*cmd_path;
@@ -38,7 +38,7 @@ int	exec_command(int type, char **argv, char **envp)
 		return (-1);
 	else if (pid == 0)
 	{
-		return_execute = execve(cmd_path, argv, envp);
+		return_execute = execve(cmd_path, argv, get_env_array());
 		if (return_execute == -1)
 			exit (errno);
 		return (0);
