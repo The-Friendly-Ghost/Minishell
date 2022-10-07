@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/07 15:43:31 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/07 15:45:16 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,6 @@ void			print_2d_array(char **array);
 
 //executor/
 char			*get_executable_path(char *command_str);
-int				exec_command(int type, char **argv, char **envp);
+int				exec_command(int type, char **argv);
 
 #endif

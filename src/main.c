@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/07 10:53:36 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/07 11:00:51 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,23 +50,20 @@ static char	*get_input(void)
 	}
 }
 
-// static void	at_exit(void)
-// {
-// 	system("leaks -q minishell");
-// }
+static void	at_exit(void)
+{
+	system("leaks -q minishell");
+}
 
-int	main(int argc, char **argv, char **envp)
+int	main(void)
 {
 	char		*input;
 	char		**tokens;
 	t_token		*token_list;
 
-	(void)argc;
-	(void)argv;
-	(void)envp;
 	input = NULL;
 	token_list = NULL;
-	//atexit(at_exit);
+	atexit(at_exit);
 	get_program();
 	while (1)
 	{
@@ -77,7 +74,7 @@ int	main(int argc, char **argv, char **envp)
 		free(input);
 		token_list = parser(tokens);
 		expander(token_list);
-		exec_command(token_list->type, tokens, envp);
+		exec_command(token_list->type, tokens);
 		destroy_double_array(tokens);
 		// print_token_list(token_list);
 	}
