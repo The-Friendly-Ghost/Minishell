@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/06 15:55:28 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/07 10:53:26 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,7 @@ int				ft_strcmp(const char *s1, const char *s2);
 int				determine_token_type(char *token);
 
 //parser/destroy_parser.c
-
-void			destroy_token_array(char **token_array);
+void			destroy_double_array(char **token_array);
 void			destroy_token_list(t_token **token_list);
 
 // parser/parser_syntax_error.c
@@ -122,7 +121,7 @@ char			*ft_getenv(const char *name);
 bool			check_if_env_has_value(const char *str);
 
 //builtin/
-
+void			echo_builtin(char **argv);
 void			print_env(void);
 void			print_pwd(void);
 
@@ -130,5 +129,9 @@ void			print_pwd(void);
 
 void			print_token_list(t_token *token_list);
 void			print_2d_array(char **array);
+
+//executor/
+char			*get_executable_path(char *command_str);
+int				exec_command(int type, char **argv, char **envp);
 
 #endif

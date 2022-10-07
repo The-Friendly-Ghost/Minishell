@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/17 14:19:55 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/05 13:04:36 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/05 14:25:40 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
  * @return Nothing 
  * @note
  */
-void	destroy_token_array(char **token_array)
+void	destroy_double_array(char **token_array)
 {
 	unsigned int	i;
 

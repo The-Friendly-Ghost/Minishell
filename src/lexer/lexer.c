@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 13:38:21 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/05 13:16:57 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/06 12:44:30 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ static char	*set_whitespace(char *str, int specials_count)
 char	**lexer(char *input)
 {
 	const char	set[] = " \t\n\v\f\r";
-	int			i;
 	int			token_count;
 	char		*line;
 	char		**tokens;
@@ -93,17 +92,8 @@ char	**lexer(char *input)
 	if (!line)
 		return (NULL);
 	token_count = count_whitespace(line, set) + 1;
-//printf("token_count: %i\n", token_count);
 	tokens = tokenizer(line, token_count);
-	if (!tokens)
+	if (!(*tokens))
 		exit(EXIT_FAILURE);
-	i = 0;
-// printf("tokens: ");
-// 	while (tokens[i])
-// 	{
-// 		printf("[%s] ", tokens[i]);
-// 		i++;
-// 	}
-// 	printf("\n");
 	return (free(line), tokens);
 }
