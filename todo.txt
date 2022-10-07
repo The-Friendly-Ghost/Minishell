@@ -21,6 +21,7 @@ id = 1 - type = 1 : "'hallo ik ben $USER'"echo
 id = 2 - type = 1 : "'hallo ik ben $USER'"
 
 OLD_PWD pas toeveogen na de eerste change van directory
+check bij cd HOME of je acces hebt tot die 'directory'
 
 builtins:
     DONE exit
