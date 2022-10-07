@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/07 15:18:54 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/07 15:43:31 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ typedef struct s_token {
 typedef struct s_env {
 	char			*var_name;
 	bool			has_value;
-	bool			unset;
 	char			*value;
 	struct s_env	*next;
 	struct s_env	*previous;
