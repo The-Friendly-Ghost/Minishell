@@ -1,41 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   echo.c                                             :+:    :+:            */
+/*   unset.c                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/10/06 14:18:14 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/07 14:58:46 by pniezen       ########   odam.nl         */
+/*   Created: 2022/10/07 15:06:33 by pniezen       #+#    #+#                 */
+/*   Updated: 2022/10/07 15:30:46 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	echo_builtin(char **argv)
+void	unset_env_var(char **argv)
 {
-	int	i;
-	int	nl;
+	t_env	**env_list;
+	t_env	*temp;
+	int		i;
 
-	i = 0;
-	nl = 0;
-	set_exit_code(0);
-	while (argv[i])
-		i++;
-	if (i > 1 && !ft_strcmp(argv[1], "-n"))
-		nl = 1;
-	if (i == 1)
-		return ((void)printf("\n"));
+	env_list = get_env_list();
 	i = 1;
-	while (argv[i] && i > 2)
+	while (argv[i])
 	{
-		if (i == nl)
-			i++;
-		printf("%s", argv[i]);
+		temp = *env_list;
+		while (temp)
+		{
+			if (temp->has_value && !ft_strcmp(temp->var_name, argv[i]))
+				temp->unset = true;
+			temp = temp->next;
+		}
 		i++;
-		if (argv[i])
-			printf(" ");
 	}
-	if (!nl)
-		printf("\n");
+	set_exit_code(0);
 }

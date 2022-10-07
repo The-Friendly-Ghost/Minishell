@@ -20,8 +20,13 @@ id = 0 - type = 9 : echo
 id = 1 - type = 1 : "'hallo ik ben $USER'"echo
 id = 2 - type = 1 : "'hallo ik ben $USER'"
 
+OLD_PWD pas toeveogen na de eerste change van directory
 
-parse de PATH variable uit de env_list met get_next_line
-loop over de line totdat je 1 verder bent dan =
-split die line op de :
-loop over de gesplitte line om te kijken of je er 'acces' op hebt.
+builtins:
+    DONE exit
+    DONE echo
+    DONE pwd
+    DONE env
+    DONE unset
+    export
+    cd

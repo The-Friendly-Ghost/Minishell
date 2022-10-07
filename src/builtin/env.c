@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/22 12:13:37 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/23 13:38:19 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/07 15:21:49 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@ void	print_env(void)
 
 	env = get_env_list();
 	if (!(*env))
-		return ;
-	else
-		temp = *env;
+		return (set_exit_code(127));
+	temp = *env;
 	while (temp)
 	{
-		if (temp->has_value == true)
+		if (temp->has_value == true && temp->unset == false)
 			printf("%s=%s\n", temp->var_name, temp->value);
 		temp = temp->next;
 	}
+	set_exit_code(0);
 }

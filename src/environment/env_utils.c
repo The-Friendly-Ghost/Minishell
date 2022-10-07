@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/20 21:34:39 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/03 16:23:56 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/07 14:29:59 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,4 +119,12 @@ char	*ft_getenv(const char *name)
 		temp = temp->next;
 	}
 	return (NULL);
+}
+
+void	set_exit_code(int exit_code)
+{
+	t_program	*program;
+
+	program = get_program();
+	program->exit_code = exit_code;
 }

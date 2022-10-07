@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/07 11:00:51 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/07 13:47:45 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static char	*get_input(void)
 			exit(EXIT_FAILURE);
 		}
 		if (!ft_strcmp(input, "exit"))
-			exit(EXIT_SUCCESS);
+			exit(127);
 		add_history(input);
 		if (!str_is_whitespace(input))
 			return (input);
