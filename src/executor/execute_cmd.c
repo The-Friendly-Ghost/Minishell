@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/07 15:23:00 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/10 09:28:37 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 #include <sys/wait.h>
 #include <errno.h>
 
-static void	exec_builtin(int type, char **argv)
+static void	exec_builtin(int type, t_token *token_list, char **argv)
 {
 	if (type == print_exit_code)
 		printf("%i\n", get_program()->exit_code);
 	else if (type == echo)
-		echo_builtin(argv);
+		echo_builtin(token_list);
 	else if (type == cd)
 		printf("Work in progress.\n");
 	else if (type == pwd)
@@ -32,14 +32,14 @@ static void	exec_builtin(int type, char **argv)
 		print_env();
 }
 
-int	exec_command(int type, char **argv)
+int	exec_command(t_token *token_list, int type, char **argv)
 {
 	pid_t	fork_pid;
 	char	*cmd_path;
 	char	**env_array;
 
 	if (type >= print_exit_code)
-		return (exec_builtin(type, argv), 0);
+		return (exec_builtin(type, token_list, argv), 0);
 	cmd_path = get_executable_path(argv[0]);
 	if (!cmd_path)
 		return (free(cmd_path), -1);
