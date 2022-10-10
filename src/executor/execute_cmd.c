@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/10 09:28:37 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/10 10:12:56 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	exec_builtin(int type, t_token *token_list, char **argv)
 	else if (type == pwd)
 		print_pwd();
 	else if (type == export_var)
-		printf("Work in progress.\n");
+		export_env_var(token_list);
 	else if (type == unset)
 		unset_env_var(argv);
 	else if (type == env)
