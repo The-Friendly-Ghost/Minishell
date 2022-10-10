@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   convert_list_to_array.c                            :+:    :+:            */
+/*   get_env_array.c                                    :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 15:14:05 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/06 15:53:46 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/07 13:56:55 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,10 @@ static char	*create_env_string(t_env *env_var)
  */
 char	**get_env_array(void)
 {
-	t_env		**env;
-	t_env		*temp;
-	char		**env_list;
-	int			node;
+	t_env	**env;
+	t_env	*temp;
+	char	**env_list;
+	int		node;
 
 	node = 0;
 	env = get_env_list();

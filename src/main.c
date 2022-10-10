@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/07 11:00:51 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/10 08:27:22 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ static char	*get_input(void)
 		if (!input)
 		{
 			ft_putendl_fd("minishell> exit", 1);
-			exit(EXIT_FAILURE);
+			exit(127);
 		}
 		if (!ft_strcmp(input, "exit"))
-			exit(EXIT_SUCCESS);
+			exit(127);
 		add_history(input);
 		if (!str_is_whitespace(input))
 			return (input);
@@ -74,7 +74,7 @@ int	main(void)
 		free(input);
 		token_list = parser(tokens);
 		expander(token_list);
-		exec_command(token_list->type, tokens);
+		exec_command(token_list, token_list->type, tokens);
 		destroy_double_array(tokens);
 		// print_token_list(token_list);
 	}

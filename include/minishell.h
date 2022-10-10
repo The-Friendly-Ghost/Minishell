@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/07 15:45:16 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/10 13:18:29 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdbool.h>
 # include <unistd.h>
 # include <stdio.h>
+# include <errno.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -33,6 +34,7 @@ typedef struct s_token {
 typedef struct s_env {
 	char			*var_name;
 	bool			has_value;
+	bool			unset;
 	char			*value;
 	struct s_env	*next;
 	struct s_env	*previous;
@@ -86,10 +88,12 @@ char			*expand_env_var(char *name, char *value, char *str,
 					unsigned int i);
 
 // lexer/
+
 char			**lexer(char *input);
 char			**tokenizer(char *input, int token_count);
 
 //parser/
+
 t_token			*parser(char **input);
 
 //parser/parser_utils.c
@@ -101,8 +105,10 @@ int				ft_strcmp(const char *s1, const char *s2);
 int				determine_token_type(char *token);
 
 //parser/destroy_parser.c
+
 void			destroy_double_array(char **token_array);
 void			destroy_token_list(t_token **token_list);
+void			destroy_env_list(t_env **env_list);
 
 // parser/parser_syntax_error.c
 
@@ -115,16 +121,18 @@ t_env			**get_env_list(void);
 
 //environment/env_utils.c
 
+void			set_exit_code(int exit_code);
 char			*ft_strdup_before_char(const char *str, char c);
 char			*ft_strdup_after_char(const char *str, char c);
 char			*ft_getenv(const char *name);
 bool			check_if_env_has_value(const char *str);
 
 //builtin/
-void			echo_builtin(char **argv);
+
+void			echo_builtin(t_token *token_list);
 void			print_env(void);
 void			print_pwd(void);
-void			exec_cd(char **options);
+void			unset_env_var(char **argv);
 
 //test_functions
 
@@ -132,7 +140,8 @@ void			print_token_list(t_token *token_list);
 void			print_2d_array(char **array);
 
 //executor/
+
 char			*get_executable_path(char *command_str);
-int				exec_command(int type, char **argv);
+int				exec_command(t_token *token_list, int type, char **argv);
 
 #endif

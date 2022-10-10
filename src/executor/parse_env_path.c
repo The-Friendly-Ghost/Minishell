@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 13:34:38 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/06 13:36:58 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/07 12:08:11 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,14 @@ static char	*check_correct_path(char *path_line, char *command)
 	int		i;
 
 	if (!path_line)
+	{
 		return (NULL);
+	}
 	path_list = ft_split(path_line, ':');
 	if (!path_list)
+	{
 		return (NULL);
+	}
 	i = 0;
 	while (path_list[i])
 	{

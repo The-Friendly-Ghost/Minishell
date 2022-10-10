@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/19 12:56:50 by cpost         #+#    #+#                 */
-/*   Updated: 2022/08/24 16:42:06 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/07 15:36:32 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,10 @@ static t_env	*create_new_node(char *env_var)
 		return (NULL);
 	new_node->var_name = ft_strdup_before_char(env_var, '=');
 	new_node->has_value = check_if_env_has_value(env_var);
+	if (!ft_strcmp(new_node->var_name, "OLDPWD"))
+		new_node->unset = true;
+	else
+		new_node->unset = false;
 	if (new_node->has_value == true)
 		new_node->value = ft_strdup_after_char(env_var, '=');
 	else
@@ -119,13 +123,11 @@ t_program	*get_program(void)
 	{
 		program.env_list = malloc(sizeof(t_program));
 		if (!program.env_list)
-			printf("MALLOC FAUL\n");
+			exit(12);
 		if (set_environment_variables(program.env_list) == false)
 		{
-			// Write error naar STDERROR
-			// Set error exit code
-			// destroy_program_struct(&program);
-			return (NULL);
+			destroy_env_list(program.env_list);
+			exit(12);
 		}
 		program.exit_code = 0;
 		return (&program);

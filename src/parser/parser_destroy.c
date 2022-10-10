@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/17 14:19:55 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/05 14:25:40 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/07 15:05:54 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,33 @@ void	destroy_token_list(t_token **token_list)
 			temp = temp->next;
 			free(previous_node);
 		}
-		// free(*token_list);
 		*token_list = NULL;
+	}
+}
+
+/**
+ * @brief Receives a pointer to the linked list with tokens
+ * and then frees all the structs in it one by one.
+ * @param **tokens A pointer to the linked list with tokens
+ * @return Nothing 
+ * @note
+ */
+void	destroy_env_list(t_env **env_list)
+{
+	t_env	*temp;
+	t_env	*previous_node;
+
+	if (*env_list)
+	{
+		temp = *env_list;
+		while (temp)
+		{
+			previous_node = temp;
+			free(temp->var_name);
+			free(temp->value);
+			temp = temp->next;
+			free(previous_node);
+		}
+		*env_list = NULL;
 	}
 }
