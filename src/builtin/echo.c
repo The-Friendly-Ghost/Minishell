@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/06 14:18:14 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/07 14:58:46 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/10 08:20:11 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,14 @@ void	echo_builtin(char **argv)
 		nl = 1;
 	if (i == 1)
 		return ((void)printf("\n"));
+	if (i == 2 && !ft_strcmp(argv[1], "-n"))
+		return ;
 	i = 1;
-	while (argv[i] && i > 2)
+	while (argv[i])
 	{
 		if (i == nl)
 			i++;
-		printf("%s", argv[i]);
-		i++;
+		printf("%s", argv[i++]);
 		if (argv[i])
 			printf(" ");
 	}

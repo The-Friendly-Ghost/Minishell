@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/07 13:47:45 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/10 08:03:46 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static char	*get_input(void)
 		if (!input)
 		{
 			ft_putendl_fd("minishell> exit", 1);
-			exit(EXIT_FAILURE);
+			exit(127);
 		}
 		if (!ft_strcmp(input, "exit"))
 			exit(127);
