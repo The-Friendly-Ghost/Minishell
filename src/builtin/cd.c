@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/06 16:08:39 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/10 15:23:26 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/11 15:01:19 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ static bool	set_cd_tilde(t_token *token_list)
 		printf("minishell: cd: %s: No such file or directory\n", joined);
 		return (free(pwd), set_exit_code(1), false);
 	}
-	change_env_var("OLDPWD", pwd);
-	change_env_var("PWD", joined);
+	change_env_var("OLDPWD", pwd, false);
+	change_env_var("PWD", joined, false);
 	return (true);
 }
 
@@ -66,8 +66,8 @@ static void	set_cd_previous(void)
 		printf("minishell: cd: HOME: No such file or directory\n");
 		return (free(pwd), set_exit_code(1));
 	}
-	change_env_var("OLDPWD", pwd);
-	change_env_var("PWD", old_pwd);
+	change_env_var("OLDPWD", pwd, false);
+	change_env_var("PWD", old_pwd, false);
 }
 
 /**
@@ -90,8 +90,8 @@ static void	set_cd_home(void)
 		printf("minishell: cd: HOME: No such file or directory\n");
 		return (free(pwd), set_exit_code(1));
 	}
-	change_env_var("OLDPWD", pwd);
-	change_env_var("PWD", ft_getenv("HOME"));
+	change_env_var("OLDPWD", pwd, false);
+	change_env_var("PWD", ft_getenv("HOME"), false);
 }
 
 /**
@@ -117,8 +117,8 @@ static bool	set_cd_path(t_token *token_list)
 		set_exit_code(1);
 		return (free(pwd), false);
 	}
-	change_env_var("OLDPWD", pwd);
-	change_env_var("PWD", token_list->next->content);
+	change_env_var("OLDPWD", pwd, false);
+	change_env_var("PWD", token_list->next->content, false);
 	return (true);
 }
 

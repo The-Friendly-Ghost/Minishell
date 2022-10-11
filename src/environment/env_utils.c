@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/20 21:34:39 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/07 14:29:59 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/11 14:49:40 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,9 +110,8 @@ char	*ft_getenv(const char *name)
 	env = get_env_list();
 	if (!(*env))
 		return (NULL);
-	else
-		temp = *env;
-	while (temp->next)
+	temp = *env;
+	while (temp)
 	{
 		if (ft_strcmp(temp->var_name, name) == 0)
 			return (temp->value);

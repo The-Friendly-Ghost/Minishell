@@ -6,13 +6,13 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/07 15:15:31 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/10 13:58:52 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/11 15:45:03 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	change_env_var(char *var_name, char *new_value)
+bool	change_env_var(char *var_name, char *new_value, bool export)
 {
 	t_env	**env_list;
 	t_env	*temp;
@@ -23,10 +23,22 @@ void	change_env_var(char *var_name, char *new_value)
 	{
 		if (!ft_strcmp(temp->var_name, var_name))
 		{
+			printf("%s, %s\n", temp->var_name, var_name);
 			free(temp->value);
-			temp->value = ft_strdup(new_value);
-			return ;
+			temp->value = new_value;
+			if (export)
+				temp->has_value = true;
+			else
+			{
+				if (new_value == NULL)
+					temp->has_value = false;
+				else
+					temp->has_value = true;
+			}
+			return (true);
 		}
 		temp = temp->next;
 	}
+	printf("false\n");
+	return (false);
 }
