@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/19 12:56:50 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/10 15:07:41 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/11 11:20:05 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,13 @@ static t_env	*create_new_node(char *env_var)
 		return (NULL);
 	new_node->var_name = ft_strdup_before_char(env_var, '=');
 	new_node->has_value = check_if_env_has_value(env_var);
+	new_node->unset = false;
 	if (!ft_strcmp(new_node->var_name, "OLDPWD"))
-		new_node->unset = true;
-	else
-		new_node->unset = false;
-	if (!ft_strcmp(new_node->var_name, "OLDPWD"))
+	{
 		new_node->value = NULL;
-	else if (new_node->has_value == true)
+		new_node->has_value = false;
+	}
+	if (new_node->has_value == true)
 		new_node->value = ft_strdup_after_char(env_var, '=');
 	else
 		new_node->value = NULL;

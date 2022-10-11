@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/06 16:08:39 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/10 15:23:26 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/11 12:05:22 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static void	set_cd_previous(void)
 	char	*pwd;
 
 	env_list = get_env_list();
-	old_pwd = ft_getenv("OLDPWD");
+	old_pwd = ft_strdup(ft_getenv("OLDPWD"));
 	if (old_pwd == NULL)
 	{
 		printf("minishell: cd: OLDPWD not set\n");
@@ -68,6 +68,7 @@ static void	set_cd_previous(void)
 	}
 	change_env_var("OLDPWD", pwd);
 	change_env_var("PWD", old_pwd);
+	printf("%s\n", old_pwd);
 }
 
 /**
@@ -91,7 +92,7 @@ static void	set_cd_home(void)
 		return (free(pwd), set_exit_code(1));
 	}
 	change_env_var("OLDPWD", pwd);
-	change_env_var("PWD", ft_getenv("HOME"));
+	change_env_var("PWD", ft_strdup(ft_getenv("HOME")));
 }
 
 /**
@@ -118,7 +119,10 @@ static bool	set_cd_path(t_token *token_list)
 		return (free(pwd), false);
 	}
 	change_env_var("OLDPWD", pwd);
-	change_env_var("PWD", token_list->next->content);
+	pwd = getcwd(NULL, 0);
+	if (!pwd)
+		return (set_exit_code(errno), false);
+	change_env_var("PWD", pwd);
 	return (true);
 }
 
