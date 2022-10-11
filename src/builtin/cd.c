@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/06 16:08:39 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/11 12:05:22 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/11 16:22:24 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,12 @@ static void	set_cd_previous(void)
 	char	*pwd;
 
 	env_list = get_env_list();
-	old_pwd = ft_strdup(ft_getenv("OLDPWD"));
-	if (old_pwd == NULL)
+	if (ft_getenv("OLDPWD") == NULL)
 	{
 		printf("minishell: cd: OLDPWD not set\n");
 		return (set_exit_code(1));
 	}
+	old_pwd = ft_strdup(ft_getenv("OLDPWD"));
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 		return (set_exit_code(errno));
