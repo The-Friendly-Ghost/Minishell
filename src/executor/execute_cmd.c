@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/10 10:12:56 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/11 11:02:55 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	exec_builtin(int type, t_token *token_list, char **argv)
 	else if (type == echo)
 		echo_builtin(token_list);
 	else if (type == cd)
-		printf("Work in progress.\n");
+		cd_builtin(token_list);
 	else if (type == pwd)
 		print_pwd();
 	else if (type == export_var)

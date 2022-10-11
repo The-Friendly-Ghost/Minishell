@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/10 11:35:55 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/11 11:03:07 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,13 +127,17 @@ char			*ft_strdup_after_char(const char *str, char c);
 char			*ft_getenv(const char *name);
 bool			check_if_env_has_value(const char *str);
 
+//environment/change_env_var.c
+
+void			change_env_var(char *var_name, char *new_value);
+
 //builtin/
 
 void			echo_builtin(t_token *token_list);
 void			print_env(void);
 void			print_pwd(void);
 void			unset_env_var(char **argv);
-void			export_env_var(t_token *token_list);
+void			cd_builtin(t_token *token_list);
 
 //test_functions
 
