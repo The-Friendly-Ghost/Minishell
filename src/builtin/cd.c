@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/06 16:08:39 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/11 16:22:24 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/11 16:28:58 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ static bool	set_cd_tilde(t_token *token_list)
 }
 
 /**
- * @brief Changes the pwd to the previous pwd.
+ * @brief Changes the pwd to the previous pwd. Basically, this function
+ * sets pwd to the old pwd and swaps OLDPWD and PWD env variables.
  * @param none
  * @return none
  * @note
@@ -52,7 +53,7 @@ static void	set_cd_previous(void)
 	char	*pwd;
 
 	env_list = get_env_list();
-	if (ft_getenv("OLDPWD") == NULL)
+	if (old_pwd == NULL)
 	{
 		printf("minishell: cd: OLDPWD not set\n");
 		return (set_exit_code(1));
