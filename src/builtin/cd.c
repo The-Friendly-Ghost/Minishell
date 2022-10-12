@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/06 16:08:39 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/12 11:28:49 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/12 11:41:23 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,13 +145,13 @@ void	cd_builtin(t_token *token_list)
 	else if (!ft_strncmp(temp->next->content, "~", 1))
 	{
 		if (set_cd_tilde(token_list) == false)
-			return (set_exit_code(1));
+			return ();
 		return (set_exit_code(0));
 	}
 	else
 	{
 		if (set_cd_path(token_list) == false)
-			return (set_exit_code(1));
+			return ();
 		return (set_exit_code(0));
 	}
 }
