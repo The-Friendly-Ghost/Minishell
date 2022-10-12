@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/11 12:06:26 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/12 11:26:54 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,13 +129,14 @@ bool			check_if_env_has_value(const char *str);
 
 //environment/change_env_var.c
 
-bool			change_env_var(char *var_name, char *new_value);
+bool			change_env_var(char *var_name, char *new_value, bool export);
 
 //builtin/
 
 void			echo_builtin(t_token *token_list);
 void			print_env(void);
 void			print_pwd(void);
+void			export_env_var(t_token *token_list);
 void			unset_env_var(char **argv);
 void			cd_builtin(t_token *token_list);
 
@@ -148,5 +149,9 @@ void			print_2d_array(char **array);
 
 char			*get_executable_path(char *command_str);
 int				exec_command(t_token *token_list, int type, char **argv);
+
+//utils/
+
+int				ft_tokenlen(t_token *token_list);
 
 #endif

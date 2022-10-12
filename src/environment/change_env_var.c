@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/07 15:15:31 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/11 12:02:06 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/12 11:31:29 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
  * to retain a certain pointer. If pointers have to be freed, it has to be done
  * in another function.
  */
-bool	change_env_var(char *var_name, char *new_value)
+bool	change_env_var(char *var_name, char *new_value, bool export)
 {
 	t_env	**env_list;
 	t_env	*temp;
@@ -36,10 +36,15 @@ bool	change_env_var(char *var_name, char *new_value)
 		{
 			free(temp->value);
 			temp->value = new_value;
-			if (new_value == NULL)
-				temp->has_value = false;
-			else
+			if (export)
 				temp->has_value = true;
+			else
+			{
+				if (new_value == NULL)
+					temp->has_value = false;
+				else
+					temp->has_value = true;
+			}
 			return (true);
 		}
 		temp = temp->next;
