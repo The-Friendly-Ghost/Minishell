@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/06 16:08:39 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/13 10:45:24 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/13 10:46:50 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static void	set_cd_previous(void)
 	char	*pwd;
 
 	env_list = get_env_list();
-	if (old_pwd == NULL)
+	if (ft_getenv("OLDPWD") == NULL)
 	{
 		printf("minishell: cd: OLDPWD not set\n");
 		return (set_exit_code(1));
@@ -93,7 +93,7 @@ static void	set_cd_home(void)
 		return (free(pwd), set_exit_code(1));
 	}
 	change_env_var("OLDPWD", pwd, false);
-	change_env_var("PWD", ft_getenv("HOME"), false);
+	change_env_var("PWD", ft_strdup(ft_getenv("HOME")), false);
 }
 
 /**
@@ -120,6 +120,7 @@ static bool	set_cd_path(t_token *token_list)
 		return (free(pwd), false);
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 	change_env_var("OLDPWD", pwd, false);
 	change_env_var("PWD", token_list->next->content, false);
 =======
@@ -128,6 +129,13 @@ static bool	set_cd_path(t_token *token_list)
 	if (!pwd)
 		return (set_exit_code(errno), false);
 	change_env_var("PWD", pwd);
+>>>>>>> master
+=======
+	change_env_var("OLDPWD", pwd, false);
+	pwd = getcwd(NULL, 0);
+	if (!pwd)
+		return (set_exit_code(errno), false);
+	change_env_var("PWD", pwd, false);
 >>>>>>> master
 	return (true);
 }
@@ -150,13 +158,13 @@ void	cd_builtin(t_token *token_list)
 	else if (!ft_strncmp(temp->next->content, "~", 1))
 	{
 		if (set_cd_tilde(token_list) == false)
-			return (set_exit_code(1));
+			return ;
 		return (set_exit_code(0));
 	}
 	else
 	{
 		if (set_cd_path(token_list) == false)
-			return (set_exit_code(1));
+			return ;
 		return (set_exit_code(0));
 	}
 }
