@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/06 16:08:39 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/11 15:01:19 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/13 10:45:24 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ static bool	set_cd_tilde(t_token *token_list)
 }
 
 /**
- * @brief Changes the pwd to the previous pwd.
+ * @brief Changes the pwd to the previous pwd. Basically, this function
+ * sets pwd to the old pwd and swaps OLDPWD and PWD env variables.
  * @param none
  * @return none
  * @note
@@ -52,12 +53,12 @@ static void	set_cd_previous(void)
 	char	*pwd;
 
 	env_list = get_env_list();
-	old_pwd = ft_getenv("OLDPWD");
 	if (old_pwd == NULL)
 	{
 		printf("minishell: cd: OLDPWD not set\n");
 		return (set_exit_code(1));
 	}
+	old_pwd = ft_strdup(ft_getenv("OLDPWD"));
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 		return (set_exit_code(errno));
@@ -68,6 +69,7 @@ static void	set_cd_previous(void)
 	}
 	change_env_var("OLDPWD", pwd, false);
 	change_env_var("PWD", old_pwd, false);
+	printf("%s\n", old_pwd);
 }
 
 /**
@@ -117,8 +119,16 @@ static bool	set_cd_path(t_token *token_list)
 		set_exit_code(1);
 		return (free(pwd), false);
 	}
+<<<<<<< HEAD
 	change_env_var("OLDPWD", pwd, false);
 	change_env_var("PWD", token_list->next->content, false);
+=======
+	change_env_var("OLDPWD", pwd);
+	pwd = getcwd(NULL, 0);
+	if (!pwd)
+		return (set_exit_code(errno), false);
+	change_env_var("PWD", pwd);
+>>>>>>> master
 	return (true);
 }
 
