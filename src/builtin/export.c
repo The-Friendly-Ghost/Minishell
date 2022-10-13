@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 09:44:35 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/11 15:46:34 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/13 10:58:56 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,23 +32,7 @@ static bool	ft_getenv_bool(const char *name)
 	return (false);
 }
 
-static void	add_node_to_env_list(t_env *new_node, t_env **env_list)
-{
-	t_env	*temp;
-
-	if (!(*env_list))
-		*env_list = new_node;
-	else
-	{
-		temp = *env_list;
-		while (temp->next != NULL)
-			temp = temp->next;
-		temp->next = new_node;
-		new_node->previous = temp;
-	}
-}
-
-static t_env	*create_new_node(char *env_var, char *env_value)
+static t_env	*create_new_node_export(char *env_var, char *env_value)
 {
 	t_env	*new_node;
 
@@ -97,9 +81,28 @@ static void	print_export_env(void)
 	set_exit_code(0);
 }
 
-void	export_env_var(t_token *token_list)
+static void	set_new_variable(t_token *token_list, char **split)
 {
 	t_env	*new_node;
+
+	printf("3\n");
+	if (split[1])
+		new_node = create_new_node_export(split[0], split[1]);
+	else
+		new_node = create_new_node_export(split[0], NULL);
+	printf("4\n");
+	if (!new_node)
+		return (set_exit_code(12));
+	if (ft_strchr(token_list->next->content, '='))
+		new_node->has_value = true;
+	else
+		new_node->has_value = false;
+	add_node_to_env_list(new_node, get_env_list());
+	return (destroy_double_array(split));
+}
+
+void	export_env_var(t_token *token_list)
+{
 	char	**split;
 
 	set_exit_code(0);
@@ -117,23 +120,12 @@ minishell: export: `%s': not a valid identifier\n", token_list->next->content));
 	if (ft_getenv_bool(split[0]) && split[1])
 	{
 		printf("1.5\n");
-		return ((void)change_env_var(split[0], ft_strdup(split[1]), true), destroy_double_array(split));
+		return ((void)change_env_var(split[0], ft_strdup(split[1]), true),
+			destroy_double_array(split));
 	}
 	printf("2\n");
 	if (ft_getenv_bool(split[0]))
-		return ((void)change_env_var(split[0], NULL, true), destroy_double_array(split));
-	printf("3\n");
-	if (split[1])
-		new_node = create_new_node(split[0], split[1]);
-	else
-		new_node = create_new_node(split[0], NULL);
-	printf("4\n");
-	if (!new_node)
-		return (set_exit_code(12));
-	if (ft_strchr(token_list->next->content, '='))
-		new_node->has_value = true;
-	else
-		new_node->has_value = false;
-	add_node_to_env_list(new_node, get_env_list());
-	return (destroy_double_array(split));
+		return ((void)change_env_var(split[0], NULL, true),
+			destroy_double_array(split));
+	set_new_variable(token_list, split);
 }

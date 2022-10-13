@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/19 12:56:50 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/11 11:20:05 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/13 10:51:46 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
  * @return Nothing
  * @note -
  */
-static void	add_node_to_env_list(t_env *new_node, t_env **env_list)
+void	add_node_to_env_list(t_env *new_node, t_env **env_list)
 {
 	t_env	*temp;
 

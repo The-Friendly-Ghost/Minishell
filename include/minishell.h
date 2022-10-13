@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/13 10:46:59 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/13 10:52:12 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ bool			check_for_syntax_error(t_token *token_list);
 //environment/get_env_data.c
 
 t_program		*get_program(void);
+void			add_node_to_env_list(t_env *new_node, t_env **env_list);
 t_env			**get_env_list(void);
 
 //environment/env_utils.c
