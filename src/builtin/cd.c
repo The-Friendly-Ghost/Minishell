@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/06 16:08:39 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/13 10:46:50 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/13 10:47:38 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,24 +119,18 @@ static bool	set_cd_path(t_token *token_list)
 		set_exit_code(1);
 		return (free(pwd), false);
 	}
-<<<<<<< HEAD
-<<<<<<< HEAD
 	change_env_var("OLDPWD", pwd, false);
 	change_env_var("PWD", token_list->next->content, false);
-=======
 	change_env_var("OLDPWD", pwd);
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 		return (set_exit_code(errno), false);
 	change_env_var("PWD", pwd);
->>>>>>> master
-=======
 	change_env_var("OLDPWD", pwd, false);
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 		return (set_exit_code(errno), false);
 	change_env_var("PWD", pwd, false);
->>>>>>> master
 	return (true);
 }
 
