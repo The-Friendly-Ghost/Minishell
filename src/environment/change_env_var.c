@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/07 15:15:31 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/13 10:46:39 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/13 14:29:21 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ bool	change_env_var(char *var_name, char *new_value, bool export)
 			free(temp->value);
 			temp->value = new_value;
 			if (export)
-				temp->has_value = true;
+				temp->export_unset = true;
 			else
 			{
 				if (new_value == NULL)

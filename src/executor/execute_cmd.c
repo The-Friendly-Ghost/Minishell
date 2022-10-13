@@ -6,13 +6,31 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/11 11:02:55 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/13 15:18:47 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <sys/wait.h>
 #include <errno.h>
+
+static void	export_loop(t_token *token_list)
+{
+	t_token	*temp;
+	int		token_len;
+
+	set_exit_code(0);
+	token_len = ft_tokenlen(token_list) - 1;
+	if (token_len == 0)
+		return (print_export_env());
+	temp = token_list;
+	while (token_len > 0 && temp)
+	{
+		export_env_var(temp);
+		temp = temp->next;
+		token_len--;
+	}
+}
 
 static void	exec_builtin(int type, t_token *token_list, char **argv)
 {
@@ -25,7 +43,7 @@ static void	exec_builtin(int type, t_token *token_list, char **argv)
 	else if (type == pwd)
 		print_pwd();
 	else if (type == export_var)
-		export_env_var(token_list);
+		export_loop(token_list);
 	else if (type == unset)
 		unset_env_var(argv);
 	else if (type == env)

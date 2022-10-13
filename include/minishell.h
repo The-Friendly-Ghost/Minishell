@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/13 10:52:12 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/13 15:17:08 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_env {
 	char			*var_name;
 	bool			has_value;
 	bool			unset;
+	bool			export_unset;
 	char			*value;
 	struct s_env	*next;
 	struct s_env	*previous;
@@ -137,6 +138,7 @@ bool			change_env_var(char *var_name, char *new_value, bool export);
 void			echo_builtin(t_token *token_list);
 void			print_env(void);
 void			print_pwd(void);
+void			print_export_env(void);
 void			export_env_var(t_token *token_list);
 void			unset_env_var(char **argv);
 void			cd_builtin(t_token *token_list);

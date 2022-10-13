@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 16:56:17 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/10 08:26:31 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/13 11:23:53 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,14 @@ static unsigned int	skip_single_quotes(char *str, unsigned int i)
 		return (i + 1);
 }
 
+static void	set_double_quote(bool *is_double_quote)
+{
+	if (*is_double_quote == true)
+		*is_double_quote = false;
+	else
+		*is_double_quote = true;
+}
+
 /**
  * @brief Scans for dollar signs inside of the string. If dollar sign is found,
  * @param str The content of the token
@@ -37,19 +45,19 @@ static unsigned int	skip_single_quotes(char *str, unsigned int i)
  * @note ft_getenv > env_utils.c | id_env_var > expander_utils.c |
  * expand_env_var > expander_utils.c
  */
-static char	*search_env_variables(char *str)
+static char	*search_env_variables(char *str, int i, bool is_double_quote)
 {
-	int		i;
 	char	*env_var_name;
 	char	*env_var_value;
 	char	*temp_str;
 
 	if (str == NULL)
 		return (NULL);
-	i = 0;
 	while (str[i])
 	{
-		if (str[i] == '\'')
+		if (str[i] == '\"')
+			set_double_quote(&is_double_quote);
+		if (str[i] == '\'' && is_double_quote == false)
 			i = skip_single_quotes(str, i + 1);
 		if (str[i] == '\0')
 			return (str);
@@ -80,7 +88,7 @@ t_token	*expander(t_token *token_list)
 	while (temp)
 	{
 		if (temp->type == string || temp->type == enviroment_variable)
-			temp->content = search_env_variables(temp->content);
+			temp->content = search_env_variables(temp->content, 0, false);
 		temp = temp->next;
 	}
 	return (token_list);
