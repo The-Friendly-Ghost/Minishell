@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 09:44:35 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/13 10:58:56 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/13 11:00:18 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static bool	ft_getenv_bool(const char *name)
 {
-	t_env		**env;
-	t_env		*temp;
+	t_env	**env;
+	t_env	*temp;
 
 	if (name == NULL)
 		return (false);
@@ -58,8 +58,8 @@ static t_env	*create_new_node_export(char *env_var, char *env_value)
 
 static void	print_export_env(void)
 {
-	t_env		**env;
-	t_env		*temp;
+	t_env	**env;
+	t_env	*temp;
 
 	env = get_env_list();
 	if (!(*env))
@@ -85,12 +85,10 @@ static void	set_new_variable(t_token *token_list, char **split)
 {
 	t_env	*new_node;
 
-	printf("3\n");
 	if (split[1])
 		new_node = create_new_node_export(split[0], split[1]);
 	else
 		new_node = create_new_node_export(split[0], NULL);
-	printf("4\n");
 	if (!new_node)
 		return (set_exit_code(12));
 	if (ft_strchr(token_list->next->content, '='))
@@ -119,11 +117,9 @@ minishell: export: `%s': not a valid identifier\n", token_list->next->content));
 	printf("1\n");
 	if (ft_getenv_bool(split[0]) && split[1])
 	{
-		printf("1.5\n");
 		return ((void)change_env_var(split[0], ft_strdup(split[1]), true),
 			destroy_double_array(split));
 	}
-	printf("2\n");
 	if (ft_getenv_bool(split[0]))
 		return ((void)change_env_var(split[0], NULL, true),
 			destroy_double_array(split));
