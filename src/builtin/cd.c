@@ -6,11 +6,12 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/06 16:08:39 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/13 10:48:33 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/13 15:35:59 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <string.h>
 
 /**
  * @brief Function that changes the pwd if a user typed a '~'..
@@ -18,7 +19,7 @@
  * @return false if cd faled, true if succesful. 
  * @note
  */
-static bool	set_cd_tilde(t_token *token_list)
+static bool	set_cd_tilde(t_token *token_list, int *cd_count)
 {
 	t_env	**env_list;
 	char	*pwd;
@@ -34,6 +35,7 @@ static bool	set_cd_tilde(t_token *token_list)
 		printf("minishell: cd: %s: No such file or directory\n", joined);
 		return (free(pwd), set_exit_code(1), false);
 	}
+	*cd_count += 1;
 	change_env_var("OLDPWD", pwd, false);
 	change_env_var("PWD", joined, false);
 	return (true);
@@ -46,27 +48,28 @@ static bool	set_cd_tilde(t_token *token_list)
  * @return none
  * @note
  */
-static void	set_cd_previous(void)
+static void	set_cd_previous(int *cd_count)
 {
 	t_env	**env_list;
 	char	*old_pwd;
 	char	*pwd;
 
 	env_list = get_env_list();
-	if (ft_getenv("OLDPWD") == NULL)
+	if (ft_getenv("OLDPWD") == NULL && *cd_count == 0)
 	{
 		printf("minishell: cd: OLDPWD not set\n");
 		return (set_exit_code(1));
 	}
+	else if (ft_getenv("OLDPWD") == NULL && *cd_count > 0)
+		return (change_env_var("OLDPWD", getcwd(NULL, 0), false),
+			(void)printf("\n"));
 	old_pwd = ft_strdup(ft_getenv("OLDPWD"));
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 		return (set_exit_code(errno));
 	if (chdir(old_pwd) == -1)
-	{
-		printf("minishell: cd: HOME: No such file or directory\n");
-		return (free(pwd), set_exit_code(1));
-	}
+		return (free(pwd), free(old_pwd), set_exit_code(1));
+	*cd_count += 1;
 	change_env_var("OLDPWD", pwd, false);
 	change_env_var("PWD", old_pwd, false);
 	printf("%s\n", old_pwd);
@@ -78,7 +81,7 @@ static void	set_cd_previous(void)
  * @return none
  * @note
  */
-static void	set_cd_home(void)
+static void	set_cd_home(int *cd_count)
 {
 	t_env	**env_list;
 	char	*pwd;
@@ -88,10 +91,8 @@ static void	set_cd_home(void)
 	if (!pwd)
 		return (set_exit_code(errno));
 	if (chdir(ft_getenv("HOME")) == -1)
-	{
-		printf("minishell: cd: HOME: No such file or directory\n");
-		return (free(pwd), set_exit_code(1));
-	}
+		return (free(pwd), set_exit_code(0));
+	*cd_count += 1;
 	change_env_var("OLDPWD", pwd, false);
 	change_env_var("PWD", ft_strdup(ft_getenv("HOME")), false);
 }
@@ -103,7 +104,7 @@ static void	set_cd_home(void)
  * @return false if cd faled, true if succesful. 
  * @note
  */
-static bool	set_cd_path(t_token *token_list)
+static bool	set_cd_path(t_token *token_list, int *cd_count)
 {
 	t_env	**env_list;
 	char	*pwd;
@@ -114,8 +115,8 @@ static bool	set_cd_path(t_token *token_list)
 		return (set_exit_code(errno), false);
 	if (chdir(token_list->next->content) == -1)
 	{
-		printf("minishell: cd: %s: No such file or directory\n",
-			token_list->next->content);
+		printf("minishell: cd: %s: %s\n",
+			token_list->next->content, strerror(errno));
 		set_exit_code(1);
 		return (free(pwd), false);
 	}
@@ -129,6 +130,7 @@ static bool	set_cd_path(t_token *token_list)
 	if (!pwd)
 		return (set_exit_code(errno), false);
 	change_env_var("PWD", pwd, false);
+	*cd_count += 1;
 	return (true);
 }
 
@@ -140,22 +142,23 @@ static bool	set_cd_path(t_token *token_list)
  */
 void	cd_builtin(t_token *token_list)
 {
-	t_token	*temp;
+	t_token			*temp;
+	static int		cd_count;
 
 	temp = token_list;
 	if (temp->next == NULL || temp->next->type == is_pipe)
-		return (set_cd_home());
+		return (set_cd_home(&cd_count));
 	else if (!ft_strcmp(temp->next->content, "-"))
-		return (set_cd_previous());
+		return (set_cd_previous(&cd_count));
 	else if (!ft_strncmp(temp->next->content, "~", 1))
 	{
-		if (set_cd_tilde(token_list) == false)
+		if (set_cd_tilde(token_list, &cd_count) == false)
 			return ;
 		return (set_exit_code(0));
 	}
 	else
 	{
-		if (set_cd_path(token_list) == false)
+		if (set_cd_path(token_list, &cd_count) == false)
 			return ;
 		return (set_exit_code(0));
 	}
