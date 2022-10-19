@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/17 14:54:42 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/10 14:30:05 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/19 13:54:41 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
  * @note -
  */
 static int	check_if_token_starts_with_dollar_sign(char *token,
-	int *token_type)
+	t_token_type *token_type)
 {
 	*token_type = 0;
 	if (ft_strcmp(token, "$?") == 0)
@@ -43,7 +43,7 @@ static int	check_if_token_starts_with_dollar_sign(char *token,
  * @return int 
  * @note -
  */
-static int	check_if_token_is_redirection(char *token, int *token_type)
+static int	check_if_token_is_redirection(char *token, t_token_type *token_type)
 {
 	*token_type = 0;
 	if (ft_strcmp(token, "<") == 0)
@@ -64,7 +64,7 @@ static int	check_if_token_is_redirection(char *token, int *token_type)
  * @return int 
  * @note -
  */
-static int	check_if_token_is_builtin(char *token, int *token_type)
+static int	check_if_token_is_builtin(char *token, t_token_type *token_type)
 {
 	*token_type = 0;
 	if (ft_strcmp(token, "echo") == 0)
@@ -93,7 +93,7 @@ static int	check_if_token_is_builtin(char *token, int *token_type)
  */
 int	determine_token_type(char *token)
 {
-	int	token_type;
+	t_token_type	token_type;
 
 	if (check_if_token_is_builtin(token, &token_type))
 		return (token_type);

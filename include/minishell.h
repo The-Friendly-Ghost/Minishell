@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/13 15:17:08 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/19 14:03:23 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ typedef enum e_token_type {
 	string = 1,
 	redirect_input,
 	redirect_output,
+	infile,
+	outfile,
 	delimiter,
 	redirect_output_append,
 	is_pipe,
@@ -80,7 +82,7 @@ char			**get_env_array(void);
 
 // expander/expander.c
 
-t_token			*expander(t_token *token_list);
+void			expander(t_token *token_list);
 
 // expander/expander_utils.c
 
@@ -95,7 +97,7 @@ char			**tokenizer(char *input, int token_count);
 
 //parser/
 
-t_token			*parser(char **input);
+bool			parser(char **token_array, t_token **token_list);
 
 //parser/parser_utils.c
 
@@ -151,7 +153,10 @@ void			print_2d_array(char **array);
 //executor/
 
 char			*get_executable_path(char *command_str);
-int				exec_command(t_token *token_list, int type, char **argv);
+void			exec_command(t_token *token_list, t_token_type type,
+					char **argv);
+int				check_redirect(t_token *token_list);
+char			**itterate_redirect(t_token *token_list, char *cmd);
 
 //utils/
 

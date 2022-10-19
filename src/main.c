@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/13 12:06:22 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/19 14:42:43 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ int	main(void)
 		input = get_input();
 		tokens = lexer(input);
 		free(input);
-		token_list = parser(tokens);
+		if (!parser(tokens, &token_list))
+			continue ;
 		expander(token_list);
 		exec_command(token_list, token_list->type, tokens);
 		destroy_double_array(tokens);

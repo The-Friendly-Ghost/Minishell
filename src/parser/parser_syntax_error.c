@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 17:22:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/05 12:07:19 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/18 11:22:12 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
  * @return True if type is a redirect, otherwise false.
  * @note
  */
-bool	is_redirect(unsigned int type)
+bool	is_redirect(t_token_type type)
 {
 	if (type == redirect_input || type == redirect_output
 		|| type == redirect_output_append || type == delimiter)

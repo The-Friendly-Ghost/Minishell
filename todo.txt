@@ -1,0 +1,9 @@
+redirects < in:
+    1. check of er een < in de token_list aanwezig is tot einde list of de pipe
+    2. als we de < tegenkomen moet we controleren of de file bestaat
+        als die niet bestaat printf een error
+        als die wel bestaat, maak er een infile van
+
+redirects > out:
+    loop over de lijst check of elke file bestaat, zo niet maak het aan
+    neem altijd de laatste file van de lijst

@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 16:56:17 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/13 11:23:53 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/18 13:33:09 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static char	*search_env_variables(char *str, int i, bool is_double_quote)
  * @return **token_list - Pointer to the first element of the linked list 
  * @note
  */
-t_token	*expander(t_token *token_list)
+void	expander(t_token *token_list)
 {
 	t_token	*temp;
 
@@ -91,5 +91,4 @@ t_token	*expander(t_token *token_list)
 			temp->content = search_env_variables(temp->content, 0, false);
 		temp = temp->next;
 	}
-	return (token_list);
 }
