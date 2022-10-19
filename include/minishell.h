@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/19 14:03:23 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/19 15:46:14 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,11 @@ typedef struct s_program {
 	int		exit_code;
 	t_env	**env_list;
 }	t_program;
+
+typedef struct s_redirect {
+	int		fd_out;
+	int		fd_in;
+}	t_redirect;
 
 typedef enum e_token_type {
 	string = 1,
@@ -155,7 +160,7 @@ void			print_2d_array(char **array);
 char			*get_executable_path(char *command_str);
 void			exec_command(t_token *token_list, t_token_type type,
 					char **argv);
-int				check_redirect(t_token *token_list);
+int				check_redirect(t_token *token_list, t_redirect *redirect);
 char			**itterate_redirect(t_token *token_list, char *cmd);
 
 //utils/
