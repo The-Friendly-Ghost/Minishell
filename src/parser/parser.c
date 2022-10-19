@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 14:15:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/06 09:37:56 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/19 14:33:56 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,9 @@ static void	add_new_element_to_token_list(t_token **token_list,
  */
 static t_token	*create_new_element(char *token, int id)
 {
-	t_token	*new_element;
+	t_token				*new_element;
+	static t_token_type	temp_type;
+	static int			cur;
 
 	new_element = malloc(sizeof(t_token));
 	if (!new_element)
@@ -55,7 +57,20 @@ static t_token	*create_new_element(char *token, int id)
 		return (free(new_element), NULL);
 	new_element->next = NULL;
 	new_element->previous = NULL;
-	new_element->type = determine_token_type(token);
+	if (cur == (id - 1) && (temp_type == infile || temp_type == outfile))
+	{
+		new_element->type = temp_type;
+		temp_type = 0;
+	}
+	else
+	{
+		new_element->type = determine_token_type(token);
+		if (new_element->type == redirect_input)
+			temp_type = infile;
+		else if (new_element->type == redirect_output)
+			temp_type = outfile;
+	}
+	cur = id;
 	return (new_element);
 }
 
@@ -66,13 +81,11 @@ static t_token	*create_new_element(char *token, int id)
  * @return **token_list - Pointer to the first element of the linked list 
  * @note Destroy functions can be found in parser_destroy.c
  */
-t_token	*parser(char **token_array)
+bool	parser(char **token_array, t_token **token_list)
 {
-	t_token	*token_list;
 	t_token	*new_element;
 	int		i;
 
-	token_list = NULL;
 	i = 0;
 	while (token_array[i])
 	{
@@ -81,13 +94,13 @@ t_token	*parser(char **token_array)
 		{
 			printf("Error Parser Linked List Creation\n");
 			destroy_double_array(token_array);
-			return (destroy_token_list(&token_list), NULL);
+			return (destroy_token_list(token_list), false);
 		}
-		add_new_element_to_token_list(&token_list, new_element);
+		add_new_element_to_token_list(token_list, new_element);
 		i++;
 	}
 	// destroy_double_array(token_array);
-	if (check_for_syntax_error(token_list))
-		return (destroy_token_list(&token_list), NULL);
-	return (token_list);
+	if (check_for_syntax_error(*token_list))
+		return (destroy_token_list(token_list), false);
+	return (true);
 }

@@ -6,11 +6,30 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/06 14:18:14 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/10 15:44:18 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/13 11:47:29 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	print_echo(char *str)
+{
+	char	c;
+	int		i;
+
+	c = '\0';
+	i = 0;
+	while (str[i])
+	{
+		if ((str[i] == '\'' || str[i] == '\"') && c == 0)
+			c = str[i];
+		else if ((str[i] == '\'' && c == '\'') || (str[i] == '\"' && c == '\"'))
+			c = '\0';
+		else
+			write(1, &str[i], 1);
+		i++;
+	}
+}
 
 static bool	is_n_flag(char *str)
 {
@@ -49,11 +68,11 @@ void	echo_builtin(t_token *token_list)
 		temp = temp->next;
 	while (temp)
 	{
-		printf("%s", temp->content);
+		print_echo(temp->content);
 		if (temp->next && temp->content)
-			printf(" ");
+			print_echo(" ");
 		temp = temp->next;
 	}
 	if (nl)
-		printf("\n");
+		print_echo("\n");
 }
