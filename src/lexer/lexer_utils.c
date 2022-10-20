@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/17 08:40:38 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/09/05 09:46:34 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/20 13:47:43 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ bool	in_string(char c, bool reset)
 			return (reset_in_string(&single_q, NULL, true));
 		return (true);
 	}
-	else if (c == '\"' && ! single_q)
+	else if (c == '\"' && !single_q)
 	{
 		double_q++;
 		if (double_q == 2)
