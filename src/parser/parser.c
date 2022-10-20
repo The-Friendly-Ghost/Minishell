@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 14:15:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/19 14:33:56 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/20 14:54:41 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ static t_token	*create_new_element(char *token, int id)
 		if (new_element->type == redirect_input)
 			temp_type = infile;
 		else if (new_element->type == redirect_output)
+			temp_type = outfile;
+		else if (new_element->type == redirect_output_append)
 			temp_type = outfile;
 	}
 	cur = id;

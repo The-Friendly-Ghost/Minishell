@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 17:22:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/18 11:22:12 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/20 14:48:41 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ bool	is_redirect(t_token_type type)
  * @return Always true
  * @note
  */
-bool	print_syntax_error(int *print_code)
+bool	print_syntax_error(t_print_code *print_code)
 {
 	if (*print_code == newline_error)
 		ft_putendl_fd(
@@ -59,7 +59,7 @@ bool	print_syntax_error(int *print_code)
  * @return true if syntax error is found. False if no error found.
  * @note Bash only looks at the token in front for syntax error checking.
  */
-static int	check_pipe_error(t_token *token, int *print_code)
+static int	check_pipe_error(t_token *token, t_print_code *print_code)
 {
 	if (token->previous == NULL)
 		*print_code = pipe_error;
@@ -75,10 +75,13 @@ static int	check_pipe_error(t_token *token, int *print_code)
  * @return true if syntax error is found. False if no error found.
  * @note Bash only looks at the token in front for syntax error checking.
  */
-static int	check_redirect_error(t_token *token, int *print_code)
+static int	check_redirect_error(t_token *token, t_print_code *print_code)
 {
 	if (token->previous != NULL && is_redirect(token->previous->type))
+	{
 		*print_code = token->type;
+printf("%s %i %i\n", token->content, token->type, token->previous->type);
+	}
 	else if (token->next == NULL)
 		*print_code = newline_error;
 	return (*print_code);
@@ -92,8 +95,8 @@ static int	check_redirect_error(t_token *token, int *print_code)
  */
 bool	check_for_syntax_error(t_token *token_list)
 {
-	t_token	*temp;
-	int		print_code;
+	t_token			*temp;
+	t_print_code	print_code;
 
 	temp = token_list;
 	print_code = 0;
@@ -103,7 +106,10 @@ bool	check_for_syntax_error(t_token *token_list)
 			return (print_syntax_error(&print_code));
 		else if (is_redirect(temp->type)
 			&& check_redirect_error(temp, &print_code))
+		{
+printf("hier %i\n", print_code);
 			return (print_syntax_error(&print_code));
+		}
 		temp = temp->next;
 	}
 	return (false);
