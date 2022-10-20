@@ -1,9 +1,33 @@
-redirects < in:
-    1. check of er een < in de token_list aanwezig is tot einde list of de pipe
-    2. als we de < tegenkomen moet we controleren of de file bestaat
-        als die niet bestaat printf een error
-        als die wel bestaat, maak er een infile van
+fix get the whitespace count
+fix get the token count
 
-redirects > out:
-    loop over de lijst check of elke file bestaat, zo niet maak het aan
-    neem altijd de laatste file van de lijst
+<< >> | < >
+
+split alleen op whitespaces als het buiten de str is.
+echo "dit is een str" >> << > < |
+
+env exit "dit is een string"'en nog een string' hallo << >>
+
+
+minishell> halo$USER\$
+id = 0 - type = 1 : halo$
+
+minishell> halo$USER\$PWD
+id = 2 - type = -1879048192 : halo$USER\$PWD
+
+minishell> echo "'hallo ik ben $USER'"echo "'hallo ik ben $USER'"
+id = 0 - type = 9 : echo
+id = 1 - type = 1 : "'hallo ik ben $USER'"echo
+id = 2 - type = 1 : "'hallo ik ben $USER'"
+
+OLD_PWD pas toevoegen na de eerste change van directory
+check bij cd HOME of je acces hebt tot die 'directory'
+
+builtins:
+    DONE exit
+    DONE echo
+    DONE pwd
+    DONE env
+    DONE unset
+    export
+    cd

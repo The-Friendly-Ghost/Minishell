@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/19 16:29:12 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/20 13:19:28 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,10 @@ static void	exec_builtin(t_token_type type, t_token *token_list,
 
 static void	set_dup(t_redirect *redirect)
 {
-	dup2(STDIN_FILENO, redirect->fd_in);
-printf("out: %d in: %d\n", redirect->fd_out, redirect->fd_in);
+	dup2(redirect->fd_in, STDIN_FILENO);
+	close(redirect->fd_in);
 	dup2(redirect->fd_out, STDOUT_FILENO);
+	close(redirect->fd_out);
 	return ;
 }
 
@@ -73,7 +74,6 @@ void	exec_command(t_token *token_list, t_token_type type, char **argv)
 	char		**env_array;
 	t_redirect	redirect;
 	char		*dinges[] = {"cat", "Makefile", NULL};
-	// char		**execute_argv;
 
 	redirect.fd_in = 0;
 	redirect.fd_out = 1;
@@ -81,9 +81,6 @@ void	exec_command(t_token *token_list, t_token_type type, char **argv)
 		return (exec_builtin(type, token_list, argv, &count));
 	if (!check_redirect(token_list, &redirect))
 		return ;
-	cmd_path = get_executable_path(token_list->content);
-	if (!cmd_path)
-		return (free(cmd_path));
 	fork_pid = fork();
 	if (fork_pid == -1)
 		return ;
@@ -93,6 +90,9 @@ void	exec_command(t_token *token_list, t_token_type type, char **argv)
 		env_array = get_env_array();
 		if (!env_array)
 			exit(1);
+		cmd_path = get_executable_path(token_list->content);
+		if (!cmd_path)
+			return (free(cmd_path));
 		execve(cmd_path, dinges, env_array);
 		destroy_double_array(env_array);
 		exit(errno);
