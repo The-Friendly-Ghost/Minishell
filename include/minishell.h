@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/20 14:44:13 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/21 15:14:00 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <errno.h>
+# include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -166,5 +167,9 @@ char			**itterate_redirect(t_token *token_list, char *cmd);
 //utils/
 
 int				ft_tokenlen(t_token *token_list);
+
+//signal_handlers
+
+void			init_signal_handler(void);
 
 #endif

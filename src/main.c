@@ -6,13 +6,14 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/20 14:28:04 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/21 14:29:59 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <readline/readline.h>
 #include <readline/history.h>
+
 
 static int	str_is_whitespace(char *str)
 {
@@ -30,8 +31,8 @@ static int	str_is_whitespace(char *str)
 
 static char	*get_input(void)
 {
-	const char	prompt[] = "minishell> ";
-	char		*input;
+	const char			prompt[] = "minishell> ";
+	char				*input;
 
 	while (1)
 	{
@@ -57,14 +58,15 @@ static char	*get_input(void)
 
 int	main(void)
 {
-	char		*input;
-	char		**tokens;
-	t_token		*token_list;
+	char				*input;
+	char				**tokens;
+	t_token				*token_list;
 
 	input = NULL;
 	token_list = NULL;
 	// atexit(at_exit);
 	get_program();
+	init_signal_handler();
 	while (1)
 	{
 		if (token_list)
