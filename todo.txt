@@ -31,3 +31,17 @@ builtins:
     DONE unset
     export
     cd
+
+
+
+1. Ga langs alle elementen in de token list
+2. Als je langs een infile komt:
+    a. Check of het bestand bestaat. Zo niet, error.
+    b. als het bestand bestaat, zet redirect->fd_in dan naar dit bestand.
+    c. Zet id_last_in naar de id van de huidige infile.
+2. Als je langs een outfile of append komt
+    a. Open het bestand (als niet bestaat, creeer dan nieuw. Doet open
+    automatisch).
+    b. Zet redirect->fd_out naar dit bestand.
+    c. Als het een append is, zet append naar true.
+3. 
