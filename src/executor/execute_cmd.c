@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/21 12:30:01 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/24 15:48:56 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,14 @@ static void	exec_builtin(t_token_type type, t_token *token_list,
 		return (*count = 0, print_env());
 }
 
-static void	set_dup(t_redirect *redirect)
-{
-	dup2(redirect->fd_in, STDIN_FILENO);
-	close(redirect->fd_in);
-	dup2(redirect->fd_out, STDOUT_FILENO);
-	close(redirect->fd_out);
-	return ;
-}
+// static void	set_dup(t_redirect *redirect)
+// {
+// 	dup2(redirect->fd_in, STDIN_FILENO);
+// 	close(redirect->fd_in);
+// 	dup2(redirect->fd_out, STDOUT_FILENO);
+// 	close(redirect->fd_out);
+// 	return ;
+// }
 
 void	exec_command(t_token *token_list, t_token_type type, char **argv)
 {
@@ -72,8 +72,7 @@ void	exec_command(t_token *token_list, t_token_type type, char **argv)
 	pid_t		fork_pid;
 	char		*cmd_path;
 	char		**env_array;
-	t_redirect	redirect;
-	char		*dinges[] = {"cat", "Makefile", NULL};
+	t_redirect	rd;
 
 	if (type >= print_exit_code)
 		return (exec_builtin(type, token_list, argv, &count));
@@ -82,16 +81,16 @@ void	exec_command(t_token *token_list, t_token_type type, char **argv)
 		return ;
 	else if (fork_pid == 0)
 	{
-		if (!check_redirect(token_list, &redirect))
+		if (!check_redirect(token_list, &rd))
 			return ;
-		set_dup(&redirect);
+		// set_dup(&rd);
 		env_array = get_env_array();
 		if (!env_array)
 			exit(1);
 		cmd_path = get_executable_path(token_list->content);
 		if (!cmd_path)
 			return (free(cmd_path));
-		execve(cmd_path, dinges, env_array);
+		execve(cmd_path, rd.arg_str, env_array);
 		destroy_double_array(env_array);
 		exit(errno);
 	}
