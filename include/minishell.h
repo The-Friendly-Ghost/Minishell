@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/24 11:13:31 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/24 14:28:56 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,12 @@ typedef struct s_program {
 typedef struct s_redirect {
 	int		fd_out;
 	int		fd_in;
+	int		id_last_in;
+	bool	append;
+	int		redirects_count;
+	int		arg_count;
+	char	**arg_str;
+	char	**heredoc_stop;
 }	t_redirect;
 
 typedef enum e_token_type {

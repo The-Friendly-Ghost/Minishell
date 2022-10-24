@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/24 13:53:06 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/24 14:29:41 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,17 +70,15 @@ void	exec_command(t_token *token_list, t_token_type type, char **argv)
 	char		*cmd_path;
 	char		**env_array;
 
-	redirect.fd_in = 0;
-	redirect.fd_out = 1;
 	if (type >= print_exit_code)
 		return (exec_builtin(type, token_list, argv));
-	// if (!check_redirect(token_list, &redirect))
-	// 	return ;
 	fork_pid = fork();
 	if (fork_pid == -1)
 		return ;
 	else if (fork_pid == 0)
 	{
+		if (!check_redirect(token_list, &redirect))
+			return ;
 		// set_dup(&redirect);
 		env_array = get_env_array();
 		if (!env_array)
