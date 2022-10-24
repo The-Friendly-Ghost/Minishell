@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/24 14:29:41 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/24 16:13:53 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void	exec_command(t_token *token_list, t_token_type type, char **argv)
 	pid_t		fork_pid;
 	char		*cmd_path;
 	char		**env_array;
+	t_redirect	rd;
 
 	if (type >= print_exit_code)
 		return (exec_builtin(type, token_list, argv));
@@ -77,18 +78,19 @@ void	exec_command(t_token *token_list, t_token_type type, char **argv)
 		return ;
 	else if (fork_pid == 0)
 	{
-		if (!check_redirect(token_list, &redirect))
+		if (!check_redirect(token_list, &rd))
 			return ;
-		// set_dup(&redirect);
+		// set_dup(&rd);
 		env_array = get_env_array();
 		if (!env_array)
 			exit(1);
 		cmd_path = get_executable_path(token_list->content);
 		printf("HIER\n");
 		if (!cmd_path)
-			return (free(cmd_path), destroy_double_array(env_array),
-				set_exit_code(127), exit(127));
-		execve(cmd_path, argv, env_array);
+			return (free(cmd_path));
+		execve(cmd_path, rd.arg_str, env_array);
+		destroy_double_array(env_array);
+		exit(errno);
 	}
 	waitpid(fork_pid, NULL, WUNTRACED);
 	return (set_exit_code(0));

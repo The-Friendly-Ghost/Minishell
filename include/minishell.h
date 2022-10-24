@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/24 14:28:56 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/24 16:13:36 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ typedef struct s_redirect {
 	int		redirects_count;
 	int		arg_count;
 	char	**arg_str;
-	char	**heredoc_stop;
+	int		heredoc_count;
+	char	**heredoc_words;
 }	t_redirect;
 
 typedef enum e_token_type {
@@ -170,6 +171,7 @@ void			exec_command(t_token *token_list, t_token_type type,
 					char **argv);
 int				check_redirect(t_token *token_list, t_redirect *redirect);
 char			**itterate_redirect(t_token *token_list, char *cmd);
+void			create_arg_array_str(t_token *token_list, t_redirect *rd);
 
 //utils/
 
