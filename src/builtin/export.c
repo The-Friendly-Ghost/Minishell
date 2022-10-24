@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 09:44:35 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/13 15:17:15 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/24 14:14:23 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,14 @@ void	print_export_env(void)
 	while (temp)
 	{
 		if (!temp->has_value && !temp->export_unset)
+		{
+			if (!ft_strcmp(temp->var_name, "PATH"))
+			{
+				temp = temp->next;
+				continue ;
+			}
 			printf("declare -x %s\n", temp->var_name);
+		}
 		else
 		{
 			if (!temp->value && temp->export_unset)
@@ -114,13 +121,18 @@ minishell: export: `%s': not a valid identifier\n", token_list->next->content));
 		return (set_exit_code(12));
 	if (ft_getenv_bool(split[0]) && !ft_strchr(token_list->next->content, '='))
 		return (destroy_double_array(split));
-	if (ft_getenv_bool(split[0]) && split[1])
-	{
-		return ((void)change_env_var(split[0], ft_strdup(split[1]), true),
-			destroy_double_array(split));
-	}
+	// if (ft_getenv_bool(split[0]) && split[1])
+	// {
+	// 	return ((void)change_env_var(split[0], ft_strdup(split[1]), true),
+	// 		destroy_double_array(split));
+	// }
 	if (ft_getenv_bool(split[0]))
+	{
+		if (split[1])
+			return ((void)change_env_var(split[0], ft_strdup(split[1]), true),
+				destroy_double_array(split));
 		return ((void)change_env_var(split[0], NULL, true),
 			destroy_double_array(split));
+	}
 	set_new_variable(token_list, split);
 }

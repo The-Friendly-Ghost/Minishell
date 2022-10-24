@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/22 12:13:37 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/07 15:21:49 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/24 11:56:32 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,14 @@ void	print_env(void)
 	env = get_env_list();
 	if (!(*env))
 		return (set_exit_code(127));
+	temp = *env;
+	while (temp)
+	{
+		if (!ft_strcmp(temp->var_name, "PATH") && temp->unset)
+			return (set_exit_code(127),
+				(void)printf("minishel: env: No such file or directory\n"));
+		temp = temp->next;
+	}
 	temp = *env;
 	while (temp)
 	{

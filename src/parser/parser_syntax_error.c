@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 17:22:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/20 14:48:41 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/24 10:05:51 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,7 @@ static int	check_pipe_error(t_token *token, t_print_code *print_code)
 static int	check_redirect_error(t_token *token, t_print_code *print_code)
 {
 	if (token->previous != NULL && is_redirect(token->previous->type))
-	{
 		*print_code = token->type;
-printf("%s %i %i\n", token->content, token->type, token->previous->type);
-	}
 	else if (token->next == NULL)
 		*print_code = newline_error;
 	return (*print_code);
@@ -106,10 +103,7 @@ bool	check_for_syntax_error(t_token *token_list)
 			return (print_syntax_error(&print_code));
 		else if (is_redirect(temp->type)
 			&& check_redirect_error(temp, &print_code))
-		{
-printf("hier %i\n", print_code);
 			return (print_syntax_error(&print_code));
-		}
 		temp = temp->next;
 	}
 	return (false);

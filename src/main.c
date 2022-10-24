@@ -6,14 +6,13 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/21 14:29:59 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/24 14:05:13 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <readline/readline.h>
 #include <readline/history.h>
-
 
 static int	str_is_whitespace(char *str)
 {
@@ -56,6 +55,17 @@ static char	*get_input(void)
 // 	system("leaks -q minishell");
 // }
 
+// static int	is_syntax_error(t_token *token_list)
+// {
+// 	if (token_list->type == string)
+// 	{
+// 		printf("minishell: %s: command not found\n", token_list->content);
+// 		set_exit_code(127);
+// 		return (1);
+// 	}
+// 	return (0);
+// }
+
 int	main(void)
 {
 	char				*input;
@@ -66,9 +76,9 @@ int	main(void)
 	token_list = NULL;
 	// atexit(at_exit);
 	get_program();
-	init_signal_handler();
 	while (1)
 	{
+		init_signal_handler();
 		if (token_list)
 			destroy_token_list(&token_list);
 		input = get_input();
@@ -77,9 +87,10 @@ int	main(void)
 		if (!parser(tokens, &token_list))
 			continue ;
 		expander(token_list);
+		// if (!is_syntax_error(token_list))
 		exec_command(token_list, token_list->type, tokens);
 		destroy_double_array(tokens);
-		print_token_list(token_list);
+		// print_token_list(token_list);
 	}
 	return (0);
 }

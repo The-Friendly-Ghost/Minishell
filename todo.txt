@@ -29,5 +29,5 @@ builtins:
     DONE pwd
     DONE env
     DONE unset
-    export
-    cd
+    DONE export
+    DONE cd

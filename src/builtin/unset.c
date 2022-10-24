@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/07 15:06:33 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/07 15:30:46 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/24 14:06:11 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,16 @@ void	unset_env_var(char **argv)
 		while (temp)
 		{
 			if (temp->has_value && !ft_strcmp(temp->var_name, argv[i]))
+			{
 				temp->unset = true;
+				if (!ft_strcmp(temp->var_name, "PATH"))
+				{
+					free(temp->value);
+					temp->value = NULL;
+					temp->export_unset = false;
+					temp->has_value = false;
+				}
+			}
 			temp = temp->next;
 		}
 		i++;

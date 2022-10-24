@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/21 15:14:00 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/24 11:13:31 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ typedef struct s_redirect {
 }	t_redirect;
 
 typedef enum e_token_type {
-	string = 1,
+	invalid_input,
+	string,
 	redirect_input,
 	redirect_output,
 	delimiter,
@@ -69,7 +70,7 @@ typedef enum e_token_type {
 	export_var,
 	unset,
 	env,
-	exit_program
+	exit_program,
 }	t_token_type;
 
 typedef enum e_print_code {

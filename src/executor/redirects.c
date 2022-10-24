@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/18 13:20:25 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/20 15:26:43 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/24 09:50:53 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,9 @@ int	check_redirect(t_token *token_list, t_redirect *redirect)
 			redirect->fd_in = check_set_infile(temp->content);
 		else if (temp->type == outfile)
 			redirect->fd_out = check_set_outfile(temp->content, fd_out, false);
-		else if (temp->previous && temp->previous->type == redirect_output_append && temp->type == outfile)
+		else if (temp->previous
+			&& temp->previous->type == redirect_output_append
+			&& temp->type == outfile)
 			redirect->fd_out = check_set_outfile(temp->content, fd_out, true);
 		temp = temp->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/21 14:16:31 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/21 16:02:24 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/24 11:22:32 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ static void	handle_crtl_c(int signum)
 	(void)signum;
 	printf("\n");
 	rl_on_new_line();
-	// rl_replace_line("", 0);
+	rl_replace_line("\0", 0);
 	rl_redisplay();
-	printf("ctrl-c\n");
+	set_exit_code(1);
 }
 
 void	init_signal_handler(void)
@@ -28,6 +28,7 @@ void	init_signal_handler(void)
 	struct termios	t;
 
 	tcgetattr(STDIN_FILENO, &t);
-	t.c_cflag = ECHOCTL;
+	t.c_lflag = ~ECHOCTL;
+	tcsetattr(STDIN_FILENO, TCSAFLUSH, &t);
 	signal(SIGINT, handle_crtl_c);
 }
