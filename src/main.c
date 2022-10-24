@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/24 14:05:13 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/24 15:17:44 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,10 @@ static char	*get_input(void)
 	}
 }
 
-// static void	at_exit(void)
-// {
-// 	system("leaks -q minishell");
-// }
+static void	at_exit(void)
+{
+	system("leaks -q minishell");
+}
 
 // static int	is_syntax_error(t_token *token_list)
 // {
@@ -74,7 +74,7 @@ int	main(void)
 
 	input = NULL;
 	token_list = NULL;
-	// atexit(at_exit);
+	atexit(at_exit);
 	get_program();
 	while (1)
 	{

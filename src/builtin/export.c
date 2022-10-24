@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 09:44:35 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/24 14:14:23 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/24 15:01:44 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,8 @@ void	print_export_env(void)
 	{
 		if (!temp->has_value && !temp->export_unset)
 		{
-			if (!ft_strcmp(temp->var_name, "PATH"))
+			if (!ft_strcmp(temp->var_name, "PATH")
+				|| !ft_strcmp(temp->var_name, "HOME"))
 			{
 				temp = temp->next;
 				continue ;

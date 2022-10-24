@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/06 16:08:39 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/13 15:39:28 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/24 15:17:24 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,16 +85,19 @@ static void	set_cd_home(int *cd_count)
 {
 	t_env	**env_list;
 	char	*pwd;
+	char	*cd_path;
 
 	env_list = get_env_list();
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 		return (set_exit_code(errno));
-	if (chdir(ft_getenv("HOME")) == -1)
-		return (free(pwd), set_exit_code(0));
+	cd_path = ft_getenv("HOME");
+	if (chdir(cd_path) == -1)
+		return (free(pwd), set_exit_code(1),
+			(void)printf("minishell: cd: %s: %s\n", cd_path, strerror(errno)));
 	*cd_count += 1;
 	change_env_var("OLDPWD", pwd, false);
-	change_env_var("PWD", ft_strdup(ft_getenv("HOME")), false);
+	change_env_var("PWD", ft_strdup(cd_path), false);
 }
 
 /**
@@ -137,10 +140,13 @@ static bool	set_cd_path(t_token *token_list, int *cd_count)
  */
 void	cd_builtin(t_token *token_list)
 {
-	t_token			*temp;
-	static int		cd_count;
+	t_token		*temp;
+	static int	cd_count;
 
 	temp = token_list;
+	if (!temp->next && !ft_getenv("HOME"))
+		return ((void)printf("minishell: cd: %s not set\n", "HOME"),
+			set_exit_code(1));
 	if (temp->next == NULL || temp->next->type == is_pipe)
 		return (set_cd_home(&cd_count));
 	else if (!ft_strcmp(temp->next->content, "-"))

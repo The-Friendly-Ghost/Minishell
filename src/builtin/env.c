@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/22 12:13:37 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/24 11:56:32 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/24 16:04:14 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
  */
 void	print_env(void)
 {
+	static char	*path;
 	t_env		**env;
 	t_env		*temp;
 
@@ -29,9 +30,20 @@ void	print_env(void)
 	temp = *env;
 	while (temp)
 	{
+		if (!path && !ft_strcmp(temp->var_name, "PATH"))
+			path = ft_strdup(temp->value);
 		if (!ft_strcmp(temp->var_name, "PATH") && temp->unset)
-			return (set_exit_code(127),
-				(void)printf("minishel: env: No such file or directory\n"));
+		{
+			if (!temp->value)
+				return (set_exit_code(127),
+					(void)printf("minishell: env: No such file or directory\n"));
+		}
+		if (!ft_strcmp(temp->var_name, "PATH") && !temp->unset)
+		{
+			if (ft_strcmp(temp->value, path))
+				return (set_exit_code(127),
+					(void)printf("minishell: env: command not found\n"));
+		}
 		temp = temp->next;
 	}
 	temp = *env;
