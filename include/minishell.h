@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/25 11:22:08 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/25 11:38:00 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <errno.h>
+# include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -59,13 +60,15 @@ typedef struct s_redirect {
 }	t_redirect;
 
 typedef enum e_token_type {
-	string = 1,
+	invalid_input,
+	string,
 	redirect_input,
 	redirect_output,
+	delimiter,
 	infile,
 	outfile,
-	delimiter,
 	redirect_output_append,
+	is_heredoc,
 	is_pipe,
 	enviroment_variable,
 	print_exit_code,
@@ -75,7 +78,7 @@ typedef enum e_token_type {
 	export_var,
 	unset,
 	env,
-	exit_program
+	exit_program,
 }	t_token_type;
 
 typedef enum e_print_code {
@@ -175,5 +178,9 @@ void			create_arg_array_str(t_token *token_list, t_redirect *rd);
 
 int				ft_tokenlen(t_token *token_list);
 char			**ft_nulloc(size_t n_point);
+
+//signal_handlers
+
+void			init_signal_handler(void);
 
 #endif

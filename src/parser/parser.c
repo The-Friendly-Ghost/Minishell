@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 14:15:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/19 14:33:56 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/24 16:40:35 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ static t_token	*create_new_element(char *token, int id)
 		return (free(new_element), NULL);
 	new_element->next = NULL;
 	new_element->previous = NULL;
-	if (cur == (id - 1) && (temp_type == infile || temp_type == outfile))
+	if (cur == (id - 1) && (temp_type == infile || temp_type == outfile
+			|| temp_type == is_heredoc))
 	{
 		new_element->type = temp_type;
 		temp_type = 0;
@@ -69,6 +70,10 @@ static t_token	*create_new_element(char *token, int id)
 			temp_type = infile;
 		else if (new_element->type == redirect_output)
 			temp_type = outfile;
+		else if (new_element->type == redirect_output_append)
+			temp_type = outfile;
+		else if (new_element->type == delimiter)
+			temp_type = is_heredoc;
 	}
 	cur = id;
 	return (new_element);

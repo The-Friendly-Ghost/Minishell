@@ -6,13 +6,16 @@
 #    By: pniezen <pniezen@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/08/24 13:48:16 by pniezen       #+#    #+#                  #
-#    Updated: 2022/10/06 15:21:29 by cpost         ########   odam.nl          #
+#    Updated: 2022/10/24 08:40:55 by pniezen       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
+BREW_DIR = $(shell brew --prefix)
+LIBREADLINE = $(BREW_DIR)/opt/readline/lib
+
 SRC_PATH = src
 OBJ_PATH = obj
-INC_PATH = include lib/libft/include
+INC_PATH = include lib/libft/include $(BREW_DIR)/opt/readline/include 
 
 LIBFT_PATH = lib/libft/
 
@@ -25,7 +28,7 @@ SRC = $(shell find $(SRC_PATH) -type f -name '*.c')
 OBJ = $(addprefix $(OBJ_PATH)/,$(SRC:.c=.o))
 
 INC = $(addprefix -I,$(INC_PATH))
-LIB = -lreadline $(LIBFT_PATH)libft.a
+LIB = -L$(LIBREADLINE) -lreadline  $(LIBFT_PATH)libft.a
 
 BOLD = \033[1m
 GREEN = \033[32;1m

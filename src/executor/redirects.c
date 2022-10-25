@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/18 13:20:25 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/24 16:08:52 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/24 16:27:39 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,6 @@ int	check_redirect(t_token *token_list, t_redirect *rd)
 	}
 	set_heredoc(token_list, rd);
 	create_arg_array_str(token_list, rd);
-print_2d_array(rd->arg_str);
+// print_2d_array(rd->heredoc_words);
 	return (1);
 }

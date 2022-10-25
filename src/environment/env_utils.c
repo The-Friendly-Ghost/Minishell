@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/20 21:34:39 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/11 14:49:40 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/25 09:48:42 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,8 @@ char	*ft_strdup_before_char(const char *str, char c)
  */
 char	*ft_getenv(const char *name)
 {
-	t_env		**env;
-	t_env		*temp;
+	t_env	**env;
+	t_env	*temp;
 
 	if (name == NULL)
 		return (NULL);
@@ -124,6 +124,7 @@ void	set_exit_code(int exit_code)
 {
 	t_program	*program;
 
+	errno = exit_code;
 	program = get_program();
-	program->exit_code = exit_code;
+	program->exit_code = errno;
 }

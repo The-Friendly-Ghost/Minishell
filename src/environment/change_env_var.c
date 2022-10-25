@@ -6,11 +6,33 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/07 15:15:31 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/13 14:29:21 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/24 15:23:43 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	set_values(t_env *temp, char *new_value, bool export)
+{
+	if (export)
+	{
+		// if (!ft_strcmp(temp->var_name, "PATH")
+			// || !ft_strcmp(temp->var_name, "HOME"))
+		// {
+			temp->unset = false;
+			temp->export_unset = true;
+			temp->has_value = true;
+		// }
+		temp->export_unset = true;
+	}
+	else
+	{
+		if (new_value == NULL)
+			temp->has_value = false;
+		else
+			temp->has_value = true;
+	}
+}
 
 /**
  * @brief Changes the value of an environment variable. 
@@ -34,17 +56,10 @@ bool	change_env_var(char *var_name, char *new_value, bool export)
 	{
 		if (!ft_strcmp(temp->var_name, var_name))
 		{
-			free(temp->value);
+			if (temp->value)
+				free(temp->value);
 			temp->value = new_value;
-			if (export)
-				temp->export_unset = true;
-			else
-			{
-				if (new_value == NULL)
-					temp->has_value = false;
-				else
-					temp->has_value = true;
-			}
+			set_values(temp, new_value, export);
 			return (true);
 		}
 		temp = temp->next;

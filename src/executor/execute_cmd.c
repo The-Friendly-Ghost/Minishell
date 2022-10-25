@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/24 15:48:56 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/25 10:01:39 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,50 +32,56 @@ static void	export_loop(t_token *token_list)
 	}
 }
 
-static void	exec_builtin(t_token_type type, t_token *token_list,
-		char **argv, int *count)
+static void	exec_builtin(t_token_type type, t_token *token_list, char **argv)
 {
 	if (type == print_exit_code)
-	{
-		if (*count > 0)
-			return ((void)printf("minishell: 127: command not found\n"));
-		(*count)++;
-		printf("minishell: %i: command not found\n",
-			get_program()->exit_code);
-	}
-	else if (type == echo)
-		return (*count = 0, echo_builtin(token_list));
-	else if (type == cd)
-		return (*count = 0, cd_builtin(token_list));
-	else if (type == pwd)
-		return (*count = 0, print_pwd());
-	else if (type == export_var)
-		return (*count = 0, export_loop(token_list));
-	else if (type == unset)
-		return (*count = 0, unset_env_var(argv));
-	else if (type == env)
-		return (*count = 0, print_env());
+		return ((void)printf("minishell: %i: command not found\n",
+				get_program()->exit_code), set_exit_code(127));
+	if (type == echo)
+		return (echo_builtin(token_list));
+	if (type == cd)
+		return (cd_builtin(token_list));
+	if (type == pwd)
+		return (print_pwd());
+	if (type == export_var)
+		return (export_loop(token_list));
+	if (type == unset)
+		return (unset_env_var(argv));
+	if (type == env)
+		return (print_env());
+	if (type == invalid_input)
+		return ((void)printf("minishell: %s: command not found\n",
+				token_list->content));
 }
 
-// static void	set_dup(t_redirect *redirect)
-// {
-// 	dup2(redirect->fd_in, STDIN_FILENO);
-// 	close(redirect->fd_in);
-// 	dup2(redirect->fd_out, STDOUT_FILENO);
-// 	close(redirect->fd_out);
-// 	return ;
-// }
+static void	set_dup(t_redirect *rd)
+{
+	dup2(rd->fd_in, STDIN_FILENO);
+	if (rd->fd_in != STDIN_FILENO)
+		close(rd->fd_in);
+	dup2(rd->fd_out, STDOUT_FILENO);
+	if (rd->fd_out != STDOUT_FILENO)
+		close(rd->fd_out);
+	return ;
+}
 
 void	exec_command(t_token *token_list, t_token_type type, char **argv)
 {
-	static int	count;
 	pid_t		fork_pid;
 	char		*cmd_path;
 	char		**env_array;
 	t_redirect	rd;
 
+	// set_exit_code(0);
 	if (type >= print_exit_code)
-		return (exec_builtin(type, token_list, argv, &count));
+		return (exec_builtin(type, token_list, argv));
+	env_array = get_env_array();
+	if (!env_array)
+		set_exit_code(1);
+	cmd_path = get_executable_path(token_list->content);
+	if (!cmd_path)
+		return (free(cmd_path),
+			destroy_double_array(env_array));
 	fork_pid = fork();
 	if (fork_pid == -1)
 		return ;
@@ -83,17 +89,11 @@ void	exec_command(t_token *token_list, t_token_type type, char **argv)
 	{
 		if (!check_redirect(token_list, &rd))
 			return ;
-		// set_dup(&rd);
-		env_array = get_env_array();
-		if (!env_array)
-			exit(1);
-		cmd_path = get_executable_path(token_list->content);
-		if (!cmd_path)
-			return (free(cmd_path));
+		set_dup(&rd);
 		execve(cmd_path, rd.arg_str, env_array);
 		destroy_double_array(env_array);
 		exit(errno);
 	}
 	waitpid(fork_pid, NULL, WUNTRACED);
-	return (count = 0, set_exit_code(0));
+	return (destroy_double_array(env_array));
 }
