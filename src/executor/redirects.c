@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/18 13:20:25 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/24 16:27:39 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/25 13:38:10 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,14 @@ static void	set_outfile(t_token *token, t_redirect *rd, bool append)
 {
 	if (rd->fd_out != STDOUT_FILENO)
 		close(rd->fd_out);
-	rd->fd_out = open(token->content, O_RDWR | O_CREAT, 0777);
+	if (append == true)
+		rd->fd_out = open(token->content, O_APPEND | O_WRONLY | O_CREAT, 0777);
+	else if (append == false)
+		rd->fd_out = open(token->content, O_TRUNC | O_WRONLY | O_CREAT, 0777);
 	if (rd->fd_out == -1)
 		return ((void)printf(
 				"minishell: %s: %s\n",
 				token->content, strerror(errno)), set_exit_code(errno));
-	rd->append = append;
 	rd->redirects_count++;
 }
 
@@ -103,13 +105,20 @@ static void	set_redirect_starting_values(t_redirect *rd)
 	rd->id_last_in = -1;
 	rd->redirects_count = 0;
 	rd->arg_count = 0;
-	rd->append = false;
 	rd->arg_str = NULL;
 	rd->heredoc_count = 0;
 	rd->heredoc_words = NULL;
 }
 
-int	check_redirect(t_token *token_list, t_redirect *rd)
+/**
+ * @brief Checks for redirects. If redirects are found, other functions
+ * are called that will handle the redirects.
+ * @param token_list A pointer to the first token of the token list
+ * @param rd Pointer to the redirect struct
+ * @return Nothing
+ * @note
+ */
+void	check_redirect(t_token *token_list, t_redirect *rd)
 {
 	t_token	*token;
 
@@ -135,6 +144,4 @@ int	check_redirect(t_token *token_list, t_redirect *rd)
 	}
 	set_heredoc(token_list, rd);
 	create_arg_array_str(token_list, rd);
-// print_2d_array(rd->heredoc_words);
-	return (1);
 }

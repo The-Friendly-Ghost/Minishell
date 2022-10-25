@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/25 11:45:39 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/25 13:30:06 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,15 @@ static void	export_loop(t_token *token_list)
 	}
 }
 
+/**
+ * @brief Checks what type of builtin has to be executed. After that, a builtin
+ * function gets called that executes the builtin.
+ * @param type The type of the current token
+ * @param token_list A pointer to the first token of the token list
+ * @param argv Array of environment variables
+ * @return Nothing
+ * @note
+ */
 static void	exec_builtin(t_token_type type, t_token *token_list, char **argv)
 {
 	if (type == print_exit_code)
@@ -54,6 +63,12 @@ static void	exec_builtin(t_token_type type, t_token *token_list, char **argv)
 				token_list->content));
 }
 
+/**
+ * @brief Changes STDOUT and STDIN to another file descriptor if there is an
+ * outfile or infile in the command line.
+ * @param rd Struct with redirect information in it
+ * @return Nothing
+ */
 static void	set_dup(t_redirect *rd)
 {
 	dup2(rd->fd_in, STDIN_FILENO);
@@ -72,28 +87,26 @@ void	exec_command(t_token *token_list, t_token_type type, char **argv)
 	char		**env_array;
 	t_redirect	rd;
 
-	// set_exit_code(0);
 	if (type >= print_exit_code)
 		return (exec_builtin(type, token_list, argv));
-	env_array = get_env_array();
-	if (!env_array)
-		set_exit_code(1);
 	fork_pid = fork();
 	if (fork_pid == -1)
 		return ;
 	else if (fork_pid == 0)
 	{
-		if (!check_redirect(token_list, &rd))
-			return ;
-	cmd_path = get_executable_path(token_list->content);
-	if (!cmd_path)
-		return (free(cmd_path),
-			destroy_double_array(env_array));
+		check_redirect(token_list, &rd);
 		set_dup(&rd);
+		env_array = get_env_array();
+		if (!env_array)
+			exit(1);
+		cmd_path = get_executable_path(token_list->content);
+		if (!cmd_path)
+			return (free(cmd_path),
+				destroy_double_array(env_array), exit(errno));
 		execve(cmd_path, rd.arg_str, env_array);
 		destroy_double_array(env_array);
 		exit(errno);
 	}
 	waitpid(fork_pid, NULL, WUNTRACED);
-	return (destroy_double_array(env_array));
+	return ;
 }

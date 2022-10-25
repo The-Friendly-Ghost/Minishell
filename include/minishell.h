@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/25 11:42:33 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/25 13:38:15 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ typedef struct s_redirect {
 	int		fd_out;
 	int		fd_in;
 	int		id_last_in;
-	bool	append;
 	int		redirects_count;
 	int		arg_count;
 	char	**arg_str;
@@ -170,7 +169,7 @@ void			print_2d_array(char **array);
 char			*get_executable_path(char *command_str);
 void			exec_command(t_token *token_list, t_token_type type,
 					char **argv);
-int				check_redirect(t_token *token_list, t_redirect *redirect);
+void			check_redirect(t_token *token_list, t_redirect *rd);
 char			**itterate_redirect(t_token *token_list, char *cmd);
 void			create_arg_array_str(t_token *token_list, t_redirect *rd);
 
