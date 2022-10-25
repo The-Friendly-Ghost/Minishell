@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/25 10:01:39 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/25 11:46:07 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,16 +72,8 @@ void	exec_command(t_token *token_list, t_token_type type, char **argv)
 	char		**env_array;
 	t_redirect	rd;
 
-	// set_exit_code(0);
 	if (type >= print_exit_code)
 		return (exec_builtin(type, token_list, argv));
-	env_array = get_env_array();
-	if (!env_array)
-		set_exit_code(1);
-	cmd_path = get_executable_path(token_list->content);
-	if (!cmd_path)
-		return (free(cmd_path),
-			destroy_double_array(env_array));
 	fork_pid = fork();
 	if (fork_pid == -1)
 		return ;
@@ -90,10 +82,17 @@ void	exec_command(t_token *token_list, t_token_type type, char **argv)
 		if (!check_redirect(token_list, &rd))
 			return ;
 		set_dup(&rd);
+		env_array = get_env_array();
+		if (!env_array)
+			exit(1);
+		cmd_path = get_executable_path(token_list->content);
+		if (!cmd_path)
+			return (free(cmd_path),
+				destroy_double_array(env_array), exit(errno));
 		execve(cmd_path, rd.arg_str, env_array);
 		destroy_double_array(env_array);
 		exit(errno);
 	}
 	waitpid(fork_pid, NULL, WUNTRACED);
-	return (destroy_double_array(env_array));
+	return ;
 }
