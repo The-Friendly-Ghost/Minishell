@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/24 16:13:36 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/25 09:18:46 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,11 @@ typedef enum e_token_type {
 	redirect_input,
 	redirect_output,
 	delimiter,
-	redirect_output_append,
-	is_pipe,
 	infile,
 	outfile,
+	redirect_output_append,
+	is_heredoc,
+	is_pipe,
 	enviroment_variable,
 	print_exit_code,
 	echo,

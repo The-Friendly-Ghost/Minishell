@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/24 14:23:37 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/24 16:08:47 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/24 18:14:14 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,20 @@ void	create_arg_array_str(t_token *token_list, t_redirect *rd)
 
 	token = token_list;
 	i = 0;
-	rd->arg_str = ft_calloc((rd->arg_count + rd->redirects_count),
-			sizeof(char *));
+	rd->arg_str = malloc(sizeof(char *) * (rd->arg_count
+				+ rd->redirects_count + 1));
+	if (!rd->arg_str)
+		return ;
 	while (token && token->type != is_pipe)
 	{
 		if (token->id == 0)
-			rd->arg_str[i++] = token->content;
+			rd->arg_str[i] = ft_strdup(token->content);
 		else if (rd->arg_count <= 1 && token->id == rd->id_last_in)
-			rd->arg_str[i++] = token->content;
-		else if (token->type != redirect_input
-			&& token->type != redirect_output && token->type != delimiter
-			&& token->type != redirect_output_append
-			&& token->type != infile && token->type != outfile)
-			rd->arg_str[i++] = token->content;
-printf("%d: %d\n", token->id, token->type);
+			rd->arg_str[i] = ft_strdup(token->content);
+		else if (token->type < redirect_input || token->type > is_heredoc)
+			rd->arg_str[i] = ft_strdup(token->content);
+		i++;
 		token = token->next;
 	}
+	rd->arg_str[i] = NULL;
 }
