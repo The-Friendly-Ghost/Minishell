@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/24 14:23:37 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/24 16:08:47 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/25 11:21:10 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,7 @@ void	create_arg_array_str(t_token *token_list, t_redirect *rd)
 
 	token = token_list;
 	i = 0;
-	rd->arg_str = ft_calloc((rd->arg_count + rd->redirects_count),
-			sizeof(char *));
+	rd->arg_str = ft_nulloc(rd->arg_count + rd->redirects_count);
 	while (token && token->type != is_pipe)
 	{
 		if (token->id == 0)
@@ -42,7 +41,6 @@ void	create_arg_array_str(t_token *token_list, t_redirect *rd)
 			&& token->type != redirect_output_append
 			&& token->type != infile && token->type != outfile)
 			rd->arg_str[i++] = token->content;
-printf("%d: %d\n", token->id, token->type);
 		token = token->next;
 	}
 }
