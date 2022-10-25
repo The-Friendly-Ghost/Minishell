@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 11:35:19 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/25 11:23:39 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/25 11:42:11 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,16 @@ int	ft_tokenlen(t_token *token_list)
  * @return Pointer to the newly created array of NULL pointers
  * @note
  */
-char	*ft_nulloc(size_t n_point)
+char	**ft_nulloc(int n_point)
 {
-	char	*ptr;
+	char	**ptr;
 	int		i;
 
 	ptr = malloc(n_point * sizeof(char *));
-	if (ptr)
-	{
-		i = 0;
-		while (i < n_point)
-			ptr[i++] = NULL;
-	}
+	if (!ptr)
+		return (NULL);
+	i = 0;
+	while (i < n_point)
+		ptr[i++] = NULL;
 	return (ptr);
 }
