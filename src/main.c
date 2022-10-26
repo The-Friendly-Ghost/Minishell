@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/25 11:44:38 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/26 13:13:16 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ static int	str_is_whitespace(char *str)
 
 static char	*get_input(void)
 {
-	const char			prompt[] = "minishell> ";
-	char				*input;
+	const char	prompt[] = "minishell> ";
+	char		*input;
 
 	while (1)
 	{
@@ -39,7 +39,7 @@ static char	*get_input(void)
 		if (!input)
 		{
 			ft_putendl_fd("minishell> exit", 1);
-			exit(127);
+			exit(errno);
 		}
 		if (!ft_strcmp(input, "exit"))
 			exit(127);
@@ -78,6 +78,7 @@ int	main(void)
 	get_program();
 	while (1)
 	{
+		// set_exit_code(0);
 		init_signal_handler();
 		if (token_list)
 			destroy_token_list(&token_list);

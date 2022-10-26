@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/25 13:38:15 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/26 13:36:12 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,9 +177,11 @@ void			create_arg_array_str(t_token *token_list, t_redirect *rd);
 
 int				ft_tokenlen(t_token *token_list);
 char			**ft_nulloc(int n_point);
+void			err_msg(char *cmd, char *arg, char *content);
 
 //signal_handlers
 
 void			init_signal_handler(void);
+void			executor_signal_handler(int signum);
 
 #endif

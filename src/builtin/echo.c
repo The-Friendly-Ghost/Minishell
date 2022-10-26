@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/06 14:18:14 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/13 11:47:29 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/26 10:24:54 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ void	echo_builtin(t_token *token_list)
 	int		nl;
 
 	nl = 1;
-	set_exit_code(0);
 	temp = token_list;
 	if (temp->next && is_n_flag(temp->next->content))
 	{

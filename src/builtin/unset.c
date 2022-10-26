@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/07 15:06:33 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/25 12:49:34 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/26 10:25:25 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,4 @@ void	unset_env_var(char **argv)
 		}
 		i++;
 	}
-	set_exit_code(0);
 }

@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/06 16:08:39 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/24 15:17:24 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/26 13:43:23 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static bool	set_cd_tilde(t_token *token_list, int *cd_count)
 	joined = ft_strjoin(ft_getenv("HOME"), token_list->next->content + 1);
 	if (chdir(joined) == -1)
 	{
-		printf("minishell: cd: %s: No such file or directory\n", joined);
+		err_msg("cd: ", joined, ": No such file or directory");
 		return (free(pwd), set_exit_code(1), false);
 	}
 	*cd_count += 1;
@@ -56,13 +56,10 @@ static void	set_cd_previous(int *cd_count)
 
 	env_list = get_env_list();
 	if (ft_getenv("OLDPWD") == NULL && *cd_count == 0)
-	{
-		printf("minishell: cd: OLDPWD not set\n");
-		return (set_exit_code(1));
-	}
+		return (err_msg("cd: ", "OLDPWD", " not set"), set_exit_code(1));
 	else if (ft_getenv("OLDPWD") == NULL && *cd_count > 0)
 		return (change_env_var("OLDPWD", getcwd(NULL, 0), false),
-			(void)printf("\n"));
+			ft_putchar_fd('\n', 1));
 	old_pwd = ft_strdup(ft_getenv("OLDPWD"));
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
@@ -72,7 +69,7 @@ static void	set_cd_previous(int *cd_count)
 	*cd_count += 1;
 	change_env_var("OLDPWD", pwd, false);
 	change_env_var("PWD", old_pwd, false);
-	printf("%s\n", old_pwd);
+	ft_putendl_fd(old_pwd, 1);
 }
 
 /**

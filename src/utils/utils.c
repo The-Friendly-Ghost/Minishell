@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 11:35:19 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/25 11:42:11 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/26 13:35:59 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,28 @@ char	**ft_nulloc(int n_point)
 	while (i < n_point)
 		ptr[i++] = NULL;
 	return (ptr);
+}
+
+void	err_msg(char *cmd, char *arg, char *content)
+{
+	char		*err_promt;
+	char		*err_msg;
+	char		*temp;
+
+	if (cmd)
+	{
+		err_promt = ft_strjoin("minishell: ", cmd);
+		temp = ft_strjoin(err_promt, arg);
+	}
+	else
+		temp = ft_strjoin("minishell: ", arg);
+	err_msg = ft_strjoin(temp, content);
+	if (!err_msg)
+	{
+		ft_putendl_fd("Fatal error", 2);
+		exit(ENOMEM);
+	}
+	ft_putendl_fd(err_msg, 2);
+	free(temp);
+	free(err_msg);
 }

@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/20 21:34:39 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/25 09:48:42 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/26 10:19:28 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ void	set_exit_code(int exit_code)
 {
 	t_program	*program;
 
-	errno = exit_code;
+	errno = exit_code % 256;
 	program = get_program();
 	program->exit_code = errno;
 }

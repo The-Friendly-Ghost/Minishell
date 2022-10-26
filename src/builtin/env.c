@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/22 12:13:37 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/24 16:04:14 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/26 10:25:01 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,4 @@ void	print_env(void)
 			printf("%s=%s\n", temp->var_name, temp->value);
 		temp = temp->next;
 	}
-	set_exit_code(0);
 }

@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/25 13:30:06 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/26 13:36:36 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ static void	exec_builtin(t_token_type type, t_token *token_list, char **argv)
 	if (type == print_exit_code)
 		return ((void)printf("minishell: %i: command not found\n",
 				get_program()->exit_code), set_exit_code(127));
+	set_exit_code(0);
 	if (type == echo)
 		return (echo_builtin(token_list));
 	if (type == cd)
@@ -59,8 +60,7 @@ static void	exec_builtin(t_token_type type, t_token *token_list, char **argv)
 	if (type == env)
 		return (print_env());
 	if (type == invalid_input)
-		return ((void)printf("minishell: %s: command not found\n",
-				token_list->content));
+		return (err_msg(NULL, token_list->content, ": command not found"));
 }
 
 /**
@@ -86,19 +86,24 @@ void	exec_command(t_token *token_list, t_token_type type, char **argv)
 	char		*cmd_path;
 	char		**env_array;
 	t_redirect	rd;
+	int			child_state;
 
+	signal(SIGINT, executor_signal_handler);
+	signal(SIGQUIT, executor_signal_handler);
 	if (type >= print_exit_code)
 		return (exec_builtin(type, token_list, argv));
+	set_exit_code(0);
 	fork_pid = fork();
 	if (fork_pid == -1)
 		return ;
 	else if (fork_pid == 0)
 	{
+		signal(SIGINT, SIG_DFL);
 		check_redirect(token_list, &rd);
 		set_dup(&rd);
 		env_array = get_env_array();
 		if (!env_array)
-			exit(1);
+			exit(127);
 		cmd_path = get_executable_path(token_list->content);
 		if (!cmd_path)
 			return (free(cmd_path),
@@ -107,6 +112,6 @@ void	exec_command(t_token *token_list, t_token_type type, char **argv)
 		destroy_double_array(env_array);
 		exit(errno);
 	}
-	waitpid(fork_pid, NULL, WUNTRACED);
-	return ;
+	waitpid(fork_pid, &child_state, WUNTRACED);
+	return (set_exit_code(WEXITSTATUS(child_state)));
 }
