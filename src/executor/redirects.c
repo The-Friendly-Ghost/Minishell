@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/18 13:20:25 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/25 13:38:10 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/26 11:36:53 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,10 @@ static void	set_infile(t_token *token, t_redirect *rd)
 				token->content, strerror(errno)), set_exit_code(errno));
 	if (rd->fd_in != STDIN_FILENO)
 		close(rd->fd_in);
-	rd->fd_in = open(token->content, O_RDWR, 0777);
+	rd->fd_in = open(token->content, O_RDONLY, 0777);
 	rd->id_last_in = token->id;
 	rd->redirects_count++;
+	rd->in_is_heredoc = false;
 }
 
 /**
@@ -46,13 +47,13 @@ static void	set_infile(t_token *token, t_redirect *rd)
  * @note This function does not yet replace the STDOUT for the outfile. This is
  * done in another function (with dup2).
  */
-static void	set_outfile(t_token *token, t_redirect *rd, bool append)
+static void	set_outfile(t_token *token, t_redirect *rd, t_token_type type)
 {
 	if (rd->fd_out != STDOUT_FILENO)
 		close(rd->fd_out);
-	if (append == true)
+	if (type == redirect_output_append)
 		rd->fd_out = open(token->content, O_APPEND | O_WRONLY | O_CREAT, 0777);
-	else if (append == false)
+	else if (type == redirect_output)
 		rd->fd_out = open(token->content, O_TRUNC | O_WRONLY | O_CREAT, 0777);
 	if (rd->fd_out == -1)
 		return ((void)printf(
@@ -83,7 +84,7 @@ static void	set_heredoc(t_token *token_list, t_redirect *rd)
 		rd->heredoc_words = NULL;
 		return ;
 	}
-	rd->heredoc_words = ft_calloc(rd->heredoc_count, sizeof(char *));
+	rd->heredoc_words = ft_nulloc(rd->heredoc_count);
 	while (token && token->type != is_pipe)
 	{
 		if (token->previous && token->previous->type == delimiter)
@@ -103,6 +104,7 @@ static void	set_redirect_starting_values(t_redirect *rd)
 	rd->fd_in = 0;
 	rd->fd_out = 1;
 	rd->id_last_in = -1;
+	rd->in_is_heredoc = false;
 	rd->redirects_count = 0;
 	rd->arg_count = 0;
 	rd->arg_str = NULL;
@@ -128,14 +130,13 @@ void	check_redirect(t_token *token_list, t_redirect *rd)
 	{
 		if (token->type == infile)
 			set_infile(token, rd);
-		else if (token->type == outfile
-			&& token->previous->type == redirect_output)
-			set_outfile(token, rd, false);
-		else if (token->type == outfile
-			&& token->previous->type == redirect_output_append)
-			set_outfile(token, rd, true);
+		else if (token->type == outfile)
+			set_outfile(token, rd, token->previous->type);
 		else if (token->previous && token->previous->type == delimiter)
+		{
 			rd->heredoc_count++;
+			rd->in_is_heredoc = true;
+		}
 		else if (token->type != redirect_input
 			&& token->type != redirect_output && token->type != delimiter
 			&& token->type != redirect_output_append)
