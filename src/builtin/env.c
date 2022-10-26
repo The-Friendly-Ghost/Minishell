@@ -6,11 +6,31 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/22 12:13:37 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/26 14:54:43 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/26 15:13:36 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	env_error_check(t_env *temp)
+{
+	static char	*path;
+
+	if (!path && !ft_strcmp(temp->var_name, "PATH"))
+		path = ft_strdup(temp->value);
+	if (!ft_strcmp(temp->var_name, "PATH") && temp->unset)
+	{
+		if (!temp->value)
+			return (set_exit_code(127),
+				err_msg("env: ", "No such file or directory", NULL));
+	}
+	if (!ft_strcmp(temp->var_name, "PATH") && !temp->unset)
+	{
+		if (ft_strcmp(temp->value, path))
+			return (set_exit_code(127),
+				err_msg("env: ", "command not found", NULL));
+	}
+}
 
 /**
  * @brief Prints all environment variables
@@ -20,7 +40,6 @@
  */
 void	print_env(void)
 {
-	static char	*path;
 	t_env		**env;
 	t_env		*temp;
 
@@ -30,20 +49,7 @@ void	print_env(void)
 	temp = *env;
 	while (temp)
 	{
-		if (!path && !ft_strcmp(temp->var_name, "PATH"))
-			path = ft_strdup(temp->value);
-		if (!ft_strcmp(temp->var_name, "PATH") && temp->unset)
-		{
-			if (!temp->value)
-				return (set_exit_code(127),
-					err_msg("env: ", "No such file or directory", NULL));
-		}
-		if (!ft_strcmp(temp->var_name, "PATH") && !temp->unset)
-		{
-			if (ft_strcmp(temp->value, path))
-				return (set_exit_code(127),
-					err_msg("env: ", "command not found", NULL));
-		}
+		env_error_check(temp);
 		temp = temp->next;
 	}
 	temp = *env;

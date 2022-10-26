@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 13:34:38 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/26 13:36:55 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/26 15:15:47 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ char	*get_executable_path(char *command_str)
 		set_exit_code(127);
 		free(command);
 		if (command_str[1] == '/')
-			return (err_msg(NULL, command_str, ": No such file or directory"), NULL);
-		return (err_msg(NULL, command_str, ": command not found"), NULL);
+			return (err_msg(command_str, ": No such file or directory", NULL), NULL);
+		return (err_msg(command_str, ": command not found", NULL), NULL);
 	}
 	return (free(command), correct_path);
 }

@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 11:35:19 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/26 14:47:23 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/26 15:22:02 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ char	**ft_nulloc(int n_point)
 	return (ptr);
 }
 
-// void	err_msg(char *cmd, char *arg, char *content)
-	// printf("%s %s %s\n", cmd, arg, content);
 void	err_msg(char *str1, char *str2, char *str3)
 {
 	char	*err_promt;
