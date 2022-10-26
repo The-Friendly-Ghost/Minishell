@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/26 15:16:32 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/26 15:59:38 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,12 @@ static void	export_loop(t_token *token_list)
  */
 static void	exec_builtin(t_token_type type, t_token *token_list, char **argv)
 {
+	char	*char_exit_code;
+
+	char_exit_code = ft_itoa(get_program()->exit_code);
 	if (type == print_exit_code)
-		return (err_msg(
-				ft_itoa(get_program()->exit_code), ": command not found", NULL),
-			set_exit_code(127));
+		return (err_msg(char_exit_code, ": command not found", NULL),
+			set_exit_code(127), free(char_exit_code));
 	set_exit_code(0);
 	if (type == echo)
 		return (echo_builtin(token_list));
