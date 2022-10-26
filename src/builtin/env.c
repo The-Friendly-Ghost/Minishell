@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/22 12:13:37 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/26 10:25:01 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/26 14:54:43 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,13 @@ void	print_env(void)
 		{
 			if (!temp->value)
 				return (set_exit_code(127),
-					(void)printf("minishell: env: No such file or directory\n"));
+					err_msg("env: ", "No such file or directory", NULL));
 		}
 		if (!ft_strcmp(temp->var_name, "PATH") && !temp->unset)
 		{
 			if (ft_strcmp(temp->value, path))
 				return (set_exit_code(127),
-					(void)printf("minishell: env: command not found\n"));
+					err_msg("env: ", "command not found", NULL));
 		}
 		temp = temp->next;
 	}

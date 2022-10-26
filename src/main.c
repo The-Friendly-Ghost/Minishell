@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/26 13:13:16 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/26 14:50:08 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static char	*get_input(void)
 // {
 // 	if (token_list->type == string)
 // 	{
-// 		printf("minishell: %s: command not found\n", token_list->content);
+// 		err_msg(token_list->conten, ": command not found");
 // 		set_exit_code(127);
 // 		return (1);
 // 	}

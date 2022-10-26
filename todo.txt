@@ -45,3 +45,7 @@ builtins:
     b. Zet redirect->fd_out naar dit bestand.
     c. Als het een append is, zet append naar true.
 3. 
+
+Paul:
+    DONE replace printf error messages for err_msg.
+    protect all NULL returning functions.

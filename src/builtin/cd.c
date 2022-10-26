@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/06 16:08:39 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/26 13:43:23 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/26 14:08:02 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ static void	set_cd_home(int *cd_count)
 	t_env	**env_list;
 	char	*pwd;
 	char	*cd_path;
+	char	*err_str;
 
 	env_list = get_env_list();
 	pwd = getcwd(NULL, 0);
@@ -90,8 +91,11 @@ static void	set_cd_home(int *cd_count)
 		return (set_exit_code(errno));
 	cd_path = ft_getenv("HOME");
 	if (chdir(cd_path) == -1)
-		return (free(pwd), set_exit_code(1),
-			(void)printf("minishell: cd: %s: %s\n", cd_path, strerror(errno)));
+	{
+		err_str = ft_strjoin(" ", strerror(errno));
+		return (free(pwd), set_exit_code(errno),
+			err_msg("cd: ", cd_path, err_str));
+	}
 	*cd_count += 1;
 	change_env_var("OLDPWD", pwd, false);
 	change_env_var("PWD", ft_strdup(cd_path), false);
@@ -108,6 +112,7 @@ static bool	set_cd_path(t_token *token_list, int *cd_count)
 {
 	t_env	**env_list;
 	char	*pwd;
+	char	*err_str;
 
 	env_list = get_env_list();
 	pwd = getcwd(NULL, 0);
@@ -115,8 +120,8 @@ static bool	set_cd_path(t_token *token_list, int *cd_count)
 		return (set_exit_code(errno), false);
 	if (chdir(token_list->next->content) == -1)
 	{
-		printf("minishell: cd: %s: %s\n",
-			token_list->next->content, strerror(errno));
+		err_str = ft_strjoin(" ", strerror(errno));
+		err_msg("cd: ", token_list->next->content, err_str);
 		set_exit_code(1);
 		return (free(pwd), false);
 	}
@@ -142,8 +147,7 @@ void	cd_builtin(t_token *token_list)
 
 	temp = token_list;
 	if (!temp->next && !ft_getenv("HOME"))
-		return ((void)printf("minishell: cd: %s not set\n", "HOME"),
-			set_exit_code(1));
+		return (err_msg("cd: ", "HOME", " not set"), set_exit_code(1));
 	if (temp->next == NULL || temp->next->type == is_pipe)
 		return (set_cd_home(&cd_count));
 	else if (!ft_strcmp(temp->next->content, "-"))

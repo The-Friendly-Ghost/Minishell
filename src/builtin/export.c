@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 09:44:35 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/26 10:25:13 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/26 14:59:40 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,20 +112,19 @@ static void	set_new_variable(t_token *token_list, char **split)
 void	export_env_var(t_token *token_list)
 {
 	char	**split;
+	char	*msg;
 
 	if (token_list->next->content[0] == '=')
-		return (set_exit_code(1), (void)printf("\
-minishell: export: `%s': not a valid identifier\n", token_list->next->content));
+	{
+		msg = ft_strjoin("`", token_list->next->content);
+		set_exit_code(1);
+		return (err_msg(msg, "': not a valid indentifier", NULL));
+	}
 	split = ft_split(token_list->next->content, '=');
 	if (!split)
 		return (set_exit_code(12));
 	if (ft_getenv_bool(split[0]) && !ft_strchr(token_list->next->content, '='))
 		return (destroy_double_array(split));
-	// if (ft_getenv_bool(split[0]) && split[1])
-	// {
-	// 	return ((void)change_env_var(split[0], ft_strdup(split[1]), true),
-	// 		destroy_double_array(split));
-	// }
 	if (ft_getenv_bool(split[0]))
 	{
 		if (split[1])
