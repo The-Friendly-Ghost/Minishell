@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/24 14:23:37 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/27 11:58:06 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/27 16:18:42 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,7 @@ void	create_arg_array_str(t_token *token_list, t_redirect *rd)
 	{
 		if (token->id == 0)
 			rd->arg_str[i++] = ft_strdup(token->content);
-		else if (rd->arg_count <= 1 && token->id == rd->id_last_in
-			&& rd->in_is_heredoc == false)
+		else if (rd->arg_count <= 1 && token->id == rd->id_last_in)
 			rd->arg_str[i++] = ft_strdup(token->content);
 		else if (token->type < redirect_input || token->type > is_heredoc)
 			rd->arg_str[i++] = ft_strdup(token->content);
@@ -56,12 +55,8 @@ void	set_redirect_starting_values(t_redirect *rd)
 	char	*pid;
 
 	pid = ft_itoa(getpid());
-	rd->heredoc_name = ft_strjoin("heredoc", pid);
 	free(pid);
 	rd->arg_str = NULL;
-	rd->heredoc_words = NULL;
-	rd->heredoc_count = 0;
-	rd->in_is_heredoc = false;
 	rd->fd_in = 0;
 	rd->fd_out = 1;
 	rd->id_last_in = -1;
