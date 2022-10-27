@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 14:15:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/24 16:40:35 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/27 14:50:12 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ static t_token	*create_new_element(char *token, int id)
 		return (NULL);
 	new_element->id = id;
 	new_element->content = ft_strdup(token);
+	new_element->heredoc_file = NULL;
 	if (!new_element->content)
 		return (free(new_element), NULL);
 	new_element->next = NULL;
@@ -107,5 +108,6 @@ bool	parser(char **token_array, t_token **token_list)
 	// destroy_double_array(token_array);
 	if (check_for_syntax_error(*token_list))
 		return (destroy_token_list(token_list), false);
+	expand_heredocs(*token_list);
 	return (true);
 }

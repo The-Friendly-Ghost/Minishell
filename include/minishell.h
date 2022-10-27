@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/26 11:30:39 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/27 14:57:16 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct s_token {
 	int				id;
 	int				type;
 	char			*content;
+	char			*heredoc_file;
 	struct s_token	*next;
 	struct s_token	*previous;
 }	t_token;
@@ -51,12 +52,9 @@ typedef struct s_redirect {
 	int		fd_out;
 	int		fd_in;
 	int		id_last_in;
-	bool	in_is_heredoc;
 	int		redirects_count;
 	int		arg_count;
 	char	**arg_str;
-	int		heredoc_count;
-	char	**heredoc_words;
 }	t_redirect;
 
 typedef enum e_token_type {
@@ -173,6 +171,9 @@ void			exec_command(t_token *token_list, t_token_type type,
 void			check_redirect(t_token *token_list, t_redirect *rd);
 char			**itterate_redirect(t_token *token_list, char *cmd);
 void			create_arg_array_str(t_token *token_list, t_redirect *rd);
+void			set_heredoc(t_token *token_list, t_redirect *rd);
+void			set_redirect_starting_values(t_redirect *rd);
+void			expand_heredocs(t_token *token_list);
 
 //utils/
 
