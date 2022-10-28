@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/18 13:20:25 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/27 14:57:58 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/28 13:41:08 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,54 @@ static void	set_outfile(t_token *token, t_redirect *rd, t_token_type type)
 				"minishell: %s: %s\n",
 				token->content, strerror(errno)), set_exit_code(errno));
 	rd->redirects_count++;
+}
+
+/**
+ * @brief Creates a array of strings with all irrelevant redirects removed from
+ * it. Each string is an argument that will be passed on the execve.
+ * @param token_list Pointer to the first token of the token_list
+ * @param rd Pointer to the redirect struct
+ * @return Nothing
+ * @note The rd->arg_str get malloced, but the strings inside do not get
+ * malloced. It uses pointers to token->content. These pointers already 
+ * exist in the token list.
+ */
+static void	create_arg_array_str(t_token *token_list, t_redirect *rd)
+{
+	t_token	*token;
+	int		i;
+
+	token = token_list;
+	i = 0;
+	rd->arg_str = ft_nulloc(rd->arg_count + rd->redirects_count + 1);
+	if (!rd->arg_str)
+		return ;
+	while (token && token->type != is_pipe)
+	{
+		if (token->id == 0)
+			rd->arg_str[i++] = ft_strdup(token->content);
+		else if (rd->arg_count <= 1 && token->id == rd->id_last_in)
+			rd->arg_str[i++] = ft_strdup(token->content);
+		else if (token->type < redirect_input || token->type > is_heredoc)
+			rd->arg_str[i++] = ft_strdup(token->content);
+		token = token->next;
+	}
+}
+
+/**
+ * @brief Sets all values inside the redirect struct.
+ * @param rd Pointer to the redirect struct
+ * @return Nothing
+ * @note
+ */
+static void	set_redirect_starting_values(t_redirect *rd)
+{
+	rd->arg_str = NULL;
+	rd->fd_in = 0;
+	rd->fd_out = 1;
+	rd->id_last_in = -1;
+	rd->redirects_count = 0;
+	rd->arg_count = 0;
 }
 
 /**
