@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/27 09:44:34 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/28 13:08:29 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/28 15:38:36 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,42 @@ static void	edit_token(t_token *token, char *new_content,
 		free(token->content);
 	token->content = new_content;
 	token->type = new_type;
+}
+
+/**
+ * @brief Changes the content and the token type of a token.
+ * @param token A pointer to a token.
+ * @param new_content The new content that has to be set to token->content
+ * @param new_type The new token type that the token has to be set to
+ * @return Nothing
+ */
+static char	*trim_quote(char *content)
+{
+	int		i;
+	int		len;
+	char	*trimmed_str;
+
+	i = 0;
+	len = 0;
+	while (content[i] != '\0')
+	{
+		if (content[i] != '"' && content[i] != '\'')
+			len++;
+		i++;
+	}
+	trimmed_str = ft_calloc((len + 1), sizeof(char));
+	i = 0;
+	len = 0;
+	while (content[i] != '\0')
+	{
+		if (content[i] != '"' && content[i] != '\'')
+		{
+			trimmed_str[len] = content[i];
+			len++;
+		}
+		i++;
+	}
+	return (trimmed_str);
 }
 
 /**
@@ -53,7 +89,7 @@ static void	get_heredoc_input(t_token *token, char *token_id)
 	while (1)
 	{
 		input = readline(prompt);
-		if (!input || !ft_strcmp(input, token->content))
+		if (!input || !ft_strcmp(input, trim_quote(token->content)))
 		{
 			edit_token(token, ft_strdup(token->heredoc_file), infile);
 			edit_token(token->previous, ft_strdup("<"), redirect_input);
