@@ -1,47 +1,9 @@
-fix get the whitespace count
-fix get the token count
 
-<< >> | < >
-
-split alleen op whitespaces als het buiten de str is.
-echo "dit is een str" >> << > < |
-
-env exit "dit is een string"'en nog een string' hallo << >>
-
-
-minishell> halo$USER\$
-id = 0 - type = 1 : halo$
-
-minishell> halo$USER\$PWD
-id = 2 - type = -1879048192 : halo$USER\$PWD
-
-minishell> echo "'hallo ik ben $USER'"echo "'hallo ik ben $USER'"
-id = 0 - type = 9 : echo
-id = 1 - type = 1 : "'hallo ik ben $USER'"echo
-id = 2 - type = 1 : "'hallo ik ben $USER'"
-
-OLD_PWD pas toevoegen na de eerste change van directory
-check bij cd HOME of je acces hebt tot die 'directory'
-
-builtins:
-    DONE exit
-    DONE echo
-    DONE pwd
-    DONE env
-    DONE unset
-    export
-    cd
-
-
-
-1. Ga langs alle elementen in de token list
-2. Als je langs een infile komt:
-    a. Check of het bestand bestaat. Zo niet, error.
-    b. als het bestand bestaat, zet redirect->fd_in dan naar dit bestand.
-    c. Zet id_last_in naar de id van de huidige infile.
-2. Als je langs een outfile of append komt
-    a. Open het bestand (als niet bestaat, creeer dan nieuw. Doet open
-    automatisch).
-    b. Zet redirect->fd_out naar dit bestand.
-    c. Als het een append is, zet append naar true.
-3. 
+Todo:
+- Pipes
+- Heredoc ctrl+c
+- Moet er bij ctrl+c niet ook free worden gebruikt op de token_list enzo?
+- 'Exit [exit_code]' moet ook werken.
+- Minishell moet minishell kunnen runnen. Let op, zet SHLV +1 bij het openen van nieuwe minishell
+- Reads, writes, mallocs, opens, etc protecten.
+- Cleanup Norm

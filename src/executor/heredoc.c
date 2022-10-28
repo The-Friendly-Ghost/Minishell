@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/27 09:44:34 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/27 15:12:42 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/28 13:08:29 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	get_heredoc_input(t_token *token, char *token_id)
 	char		*input;
 	int			fd;
 
-	token->heredoc_file = ft_strjoin("Heredoc_temp", token_id);
+	token->heredoc_file = ft_strjoin("/tmp/Heredoc_temp", token_id);
 	free(token_id);
 	fd = open(token->heredoc_file, O_TRUNC | O_WRONLY | O_CREAT, 0777);
 	while (1)
