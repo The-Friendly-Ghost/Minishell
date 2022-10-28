@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 11:35:19 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/25 11:42:11 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/28 13:47:03 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,26 @@ char	**ft_nulloc(int n_point)
 	while (i < n_point)
 		ptr[i++] = NULL;
 	return (ptr);
+}
+
+/**
+ * @brief Compares two strings that are given as parameters. 
+ * @param s1 First string
+ * @param s2 Second string
+ * @return 0 if strings are the same. Any other number if strings are
+ * not the same.
+ * @note
+ */
+int	ft_strcmp(const char *s1, const char *s2)
+{
+	unsigned long long	i;
+
+	i = 0;
+	while (s1[i] && s2[i])
+	{
+		if (s1[i] != s2[i])
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		i++;
+	}
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
