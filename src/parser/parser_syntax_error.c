@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 17:22:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/24 10:05:51 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/31 11:24:54 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ bool	print_syntax_error(t_print_code *print_code)
 		ft_putendl_fd("minishell: syntax error near unexpected token `>'", 2);
 	else if (*print_code == delimiter_error)
 		ft_putendl_fd("minishell: syntax error near unexpected token `<<'", 2);
-	else if (*print_code == redirect_append_error)
+	else if (*print_code == redirect_output_append)
 		ft_putendl_fd("minishell: syntax error near unexpected token `>>'", 2);
 	else if (*print_code == pipe_error)
 		ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
