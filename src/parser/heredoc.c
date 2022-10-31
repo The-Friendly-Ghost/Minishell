@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/27 09:44:34 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/28 15:38:36 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/31 10:39:33 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ static void	get_heredoc_input(t_token *token, char *token_id)
 {
 	const char	prompt[] = "> ";
 	char		*input;
+	char		*p_input;
 	int			fd;
 
 	token->heredoc_file = ft_strjoin("/tmp/Heredoc_temp", token_id);
@@ -89,16 +90,16 @@ static void	get_heredoc_input(t_token *token, char *token_id)
 	while (1)
 	{
 		input = readline(prompt);
-		if (!input || !ft_strcmp(input, trim_quote(token->content)))
+		p_input = search_env_variables(input, 0, false);
+		if (!p_input || !ft_strcmp(p_input, trim_quote(token->content)))
 		{
 			edit_token(token, ft_strdup(token->heredoc_file), infile);
 			edit_token(token->previous, ft_strdup("<"), redirect_input);
 			close(fd);
 			return ;
 		}
-		write(fd, input, ft_strlen(input));
-		write(fd, "\n", 1);
-		free(input);
+		ft_putendl_fd(p_input, fd);
+		free(p_input);
 	}
 }
 

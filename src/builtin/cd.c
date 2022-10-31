@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/06 16:08:39 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/24 15:17:24 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/26 16:08:11 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,14 @@ static bool	set_cd_tilde(t_token *token_list, int *cd_count)
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 		return (set_exit_code(errno), false);
+	(void)token_list;
 	joined = ft_strjoin(ft_getenv("HOME"), token_list->next->content + 1);
+	if (!joined)
+		return (free(pwd), err_msg(NULL, NULL, NULL), false);
 	if (chdir(joined) == -1)
 	{
-		printf("minishell: cd: %s: No such file or directory\n", joined);
-		return (free(pwd), set_exit_code(1), false);
+		err_msg("cd: ", joined, ": No such file or directory");
+		return (free(pwd), free(joined), set_exit_code(1), false);
 	}
 	*cd_count += 1;
 	change_env_var("OLDPWD", pwd, false);
@@ -56,14 +59,17 @@ static void	set_cd_previous(int *cd_count)
 
 	env_list = get_env_list();
 	if (ft_getenv("OLDPWD") == NULL && *cd_count == 0)
-	{
-		printf("minishell: cd: OLDPWD not set\n");
-		return (set_exit_code(1));
-	}
+		return (err_msg("cd: ", "OLDPWD", " not set"), set_exit_code(1));
 	else if (ft_getenv("OLDPWD") == NULL && *cd_count > 0)
 		return (change_env_var("OLDPWD", getcwd(NULL, 0), false),
-			(void)printf("\n"));
+			ft_putchar_fd('\n', 1));
+	/* wat gebeurd hier als ft_strdup NULL returned?
+	moeten we een error message naar stderr schrijven?
+	err_msg(NULL, NULL, NULL) zorgt voor een Fatal error
+	errno 12 -> `man errno`*/
 	old_pwd = ft_strdup(ft_getenv("OLDPWD"));
+	if (!old_pwd)
+		return (err_msg(NULL, NULL, NULL));
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 		return (set_exit_code(errno));
@@ -72,7 +78,7 @@ static void	set_cd_previous(int *cd_count)
 	*cd_count += 1;
 	change_env_var("OLDPWD", pwd, false);
 	change_env_var("PWD", old_pwd, false);
-	printf("%s\n", old_pwd);
+	ft_putendl_fd(old_pwd, 1);
 }
 
 /**
@@ -86,15 +92,26 @@ static void	set_cd_home(int *cd_count)
 	t_env	**env_list;
 	char	*pwd;
 	char	*cd_path;
+	char	*err_str;
 
 	env_list = get_env_list();
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 		return (set_exit_code(errno));
+	/* wat gebeurd hier als ft_getenv NULL returned?
+	moeten we een error message naar stderr schrijven?
+	err_msg(NULL, NULL, NULL) zorgt voor een Fatal error
+	errno 12 -> `man errno`*/
 	cd_path = ft_getenv("HOME");
+	if (!cd_path)
+		return (err_msg(NULL, NULL, NULL));
 	if (chdir(cd_path) == -1)
-		return (free(pwd), set_exit_code(1),
-			(void)printf("minishell: cd: %s: %s\n", cd_path, strerror(errno)));
+	{
+		err_str = ft_strjoin(" ", strerror(errno));
+		return (set_exit_code(errno),
+			err_msg("cd: ", cd_path, err_str),
+			free(pwd), free(err_str));
+	}
 	*cd_count += 1;
 	change_env_var("OLDPWD", pwd, false);
 	change_env_var("PWD", ft_strdup(cd_path), false);
@@ -111,6 +128,7 @@ static bool	set_cd_path(t_token *token_list, int *cd_count)
 {
 	t_env	**env_list;
 	char	*pwd;
+	char	*err_str;
 
 	env_list = get_env_list();
 	pwd = getcwd(NULL, 0);
@@ -118,10 +136,10 @@ static bool	set_cd_path(t_token *token_list, int *cd_count)
 		return (set_exit_code(errno), false);
 	if (chdir(token_list->next->content) == -1)
 	{
-		printf("minishell: cd: %s: %s\n",
-			token_list->next->content, strerror(errno));
+		err_str = ft_strjoin(" ", strerror(errno));
+		err_msg("cd: ", token_list->next->content, err_str);
 		set_exit_code(1);
-		return (free(pwd), false);
+		return (free(pwd), free(err_str), false);
 	}
 	change_env_var("OLDPWD", pwd, false);
 	pwd = getcwd(NULL, 0);
@@ -145,22 +163,13 @@ void	cd_builtin(t_token *token_list)
 
 	temp = token_list;
 	if (!temp->next && !ft_getenv("HOME"))
-		return ((void)printf("minishell: cd: %s not set\n", "HOME"),
-			set_exit_code(1));
+		return (err_msg("cd: ", "HOME", " not set"), set_exit_code(1));
 	if (temp->next == NULL || temp->next->type == is_pipe)
 		return (set_cd_home(&cd_count));
 	else if (!ft_strcmp(temp->next->content, "-"))
 		return (set_cd_previous(&cd_count));
 	else if (!ft_strncmp(temp->next->content, "~", 1))
-	{
-		if (set_cd_tilde(token_list, &cd_count) == false)
-			return ;
-		return (set_exit_code(0));
-	}
+		return ((void)set_cd_tilde(token_list, &cd_count));
 	else
-	{
-		if (set_cd_path(token_list, &cd_count) == false)
-			return ;
-		return (set_exit_code(0));
-	}
+		return ((void)set_cd_path(token_list, &cd_count));
 }

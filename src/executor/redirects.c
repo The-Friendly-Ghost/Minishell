@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/18 13:20:25 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/28 13:41:08 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/31 10:41:09 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,14 @@
  */
 static void	set_infile(t_token *token, t_redirect *rd)
 {
+	char	*msg;
+
 	if (access(token->content, F_OK | R_OK | W_OK) == -1)
-		return ((void)printf(
-				"minishell: %s: %s\n",
-				token->content, strerror(errno)), set_exit_code(errno));
+	{
+		msg = ft_strjoin(token->content, ": ");
+		return (err_msg(msg, strerror(errno), NULL),
+			set_exit_code(errno), exit(1));
+	}
 	if (rd->fd_in != STDIN_FILENO)
 		close(rd->fd_in);
 	rd->fd_in = open(token->content, O_RDONLY, 0777);
@@ -48,6 +52,8 @@ static void	set_infile(t_token *token, t_redirect *rd)
  */
 static void	set_outfile(t_token *token, t_redirect *rd, t_token_type type)
 {
+	char	*msg;
+
 	if (rd->fd_out != STDOUT_FILENO)
 		close(rd->fd_out);
 	if (type == redirect_output_append)
@@ -55,9 +61,11 @@ static void	set_outfile(t_token *token, t_redirect *rd, t_token_type type)
 	else if (type == redirect_output)
 		rd->fd_out = open(token->content, O_TRUNC | O_WRONLY | O_CREAT, 0777);
 	if (rd->fd_out == -1)
-		return ((void)printf(
-				"minishell: %s: %s\n",
-				token->content, strerror(errno)), set_exit_code(errno));
+	{
+		msg = ft_strjoin(token->content, ": ");
+		return (err_msg(msg, strerror(errno), NULL),
+			set_exit_code(errno), exit(1));
+	}
 	rd->redirects_count++;
 }
 

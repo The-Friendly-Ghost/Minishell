@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/27 14:49:41 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/31 09:41:56 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,13 @@ static void	export_loop(t_token *token_list)
  */
 static void	exec_builtin(t_token_type type, t_token *token_list, char **argv)
 {
+	char	*char_exit_code;
+
+	char_exit_code = ft_itoa(get_program()->exit_code);
 	if (type == print_exit_code)
-		return ((void)printf("minishell: %i: command not found\n",
-				get_program()->exit_code), set_exit_code(127));
+		return (err_msg(char_exit_code, ": command not found", NULL),
+			set_exit_code(127), free(char_exit_code));
+	set_exit_code(0);
 	if (type == echo)
 		return (echo_builtin(token_list));
 	if (type == cd)
@@ -59,8 +63,7 @@ static void	exec_builtin(t_token_type type, t_token *token_list, char **argv)
 	if (type == env)
 		return (print_env());
 	if (type == invalid_input)
-		return ((void)printf("minishell: %s: command not found\n",
-				token_list->content));
+		return (err_msg(token_list->content, ": command not found", NULL));
 }
 
 /**
@@ -86,27 +89,34 @@ void	exec_command(t_token *token_list, t_token_type type, char **argv)
 	char		*cmd_path;
 	char		**env_array;
 	t_redirect	rd;
+	int			child_state;
 
+	signal(SIGINT, executor_signal_handler);
+	signal(SIGQUIT, executor_signal_handler);
 	if (type >= print_exit_code)
 		return (exec_builtin(type, token_list, argv));
+	set_exit_code(0);
 	fork_pid = fork();
 	if (fork_pid == -1)
 		return ;
 	else if (fork_pid == 0)
 	{
+		signal(SIGINT, SIG_DFL);
 		check_redirect(token_list, &rd);
 		set_dup(&rd);
 		env_array = get_env_array();
 		if (!env_array)
-			exit(1);
+			exit(127);
 		cmd_path = get_executable_path(token_list->content);
 		if (!cmd_path)
 			return (free(cmd_path),
 				destroy_double_array(env_array), exit(errno));
+		for (int i = 0; rd.arg_str[i]; i++)
+			printf("[%s]\n", rd.arg_str[i]);
 		execve(cmd_path, rd.arg_str, env_array);
 		destroy_double_array(env_array);
 		exit(errno);
 	}
-	waitpid(fork_pid, NULL, WUNTRACED);
-	return ;
+	waitpid(fork_pid, &child_state, WUNTRACED);
+	return (set_exit_code(WEXITSTATUS(child_state)));
 }

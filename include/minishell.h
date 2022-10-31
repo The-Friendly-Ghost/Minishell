@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/28 13:41:48 by cpost         ########   odam.nl         */
+/*   Updated: 2022/10/31 10:36:33 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ char			**get_env_array(void);
 // expander/expander.c
 
 void			expander(t_token *token_list);
+char			*search_env_variables(char *str, int i, bool is_double_quote);
 
 // expander/expander_utils.c
 
@@ -177,9 +178,11 @@ void			expand_heredocs(t_token *token_list);
 
 int				ft_tokenlen(t_token *token_list);
 char			**ft_nulloc(int n_point);
+void			err_msg(char *str1, char *str2, char *str3);
 
 //signal_handlers
 
 void			init_signal_handler(void);
+void			executor_signal_handler(int signum);
 
 #endif

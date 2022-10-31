@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/22 12:13:37 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/07 14:17:58 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/26 10:25:21 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
  */
 void	print_pwd(void)
 {
-	char		*pwd;
+	char	*pwd;
 
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
