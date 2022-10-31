@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/31 10:36:33 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/31 16:05:55 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,7 @@ void			print_export_env(void);
 void			export_env_var(t_token *token_list);
 void			unset_env_var(char **argv);
 void			cd_builtin(t_token *token_list);
+void			exit_minishell(t_token *token_list);
 
 //test_functions
 
@@ -179,6 +180,7 @@ void			expand_heredocs(t_token *token_list);
 int				ft_tokenlen(t_token *token_list);
 char			**ft_nulloc(int n_point);
 void			err_msg(char *str1, char *str2, char *str3);
+bool			str_is_num(char *num);
 
 //signal_handlers
 

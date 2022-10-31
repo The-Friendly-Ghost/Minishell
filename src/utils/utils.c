@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 11:35:19 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/31 08:58:52 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/31 16:18:57 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,19 @@ char	**ft_nulloc(int n_point)
 	while (i < n_point)
 		ptr[i++] = NULL;
 	return (ptr);
+}
+
+bool	str_is_num(char *num)
+{
+	int	i;
+
+	i = 0;
+	while (num[i])
+	{
+		if (!ft_isdigit(num[i++]))
+			return (false);
+	}
+	return (true);
 }
 
 /**
