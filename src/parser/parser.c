@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 14:15:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/26 14:48:55 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/31 08:24:16 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,39 +44,35 @@ static void	add_new_element_to_token_list(t_token **token_list,
  */
 static t_token	*create_new_element(char *token, int id)
 {
-	t_token				*new_element;
+	t_token				*new;
 	static t_token_type	temp_type;
 	static int			cur;
 
-	new_element = malloc(sizeof(t_token));
-	if (!new_element)
+	new = malloc(sizeof(t_token));
+	if (!new)
 		return (NULL);
-	new_element->id = id;
-	new_element->content = ft_strdup(token);
-	if (!new_element->content)
-		return (free(new_element), NULL);
-	new_element->next = NULL;
-	new_element->previous = NULL;
-	if (cur == (id - 1) && (temp_type == infile || temp_type == outfile
-			|| temp_type == is_heredoc))
+	new->id = id;
+	new->content = ft_strdup(token);
+	if (!new->content)
+		return (free(new), NULL);
+	new->heredoc_file = NULL;
+	new->next = NULL;
+	new->previous = NULL;
+	if (cur == (id - 1) && (temp_type == infile || temp_type == outfile))
 	{
-		new_element->type = temp_type;
+		new->type = temp_type;
 		temp_type = 0;
 	}
 	else
 	{
-		new_element->type = determine_token_type(token);
-		if (new_element->type == redirect_input)
+		new->type = determine_token_type(token);
+		if (new->type == redirect_input)
 			temp_type = infile;
-		else if (new_element->type == redirect_output)
+		else if (new->type == redirect_output
+			|| new->type == redirect_output_append)
 			temp_type = outfile;
-		else if (new_element->type == redirect_output_append)
-			temp_type = outfile;
-		else if (new_element->type == delimiter)
-			temp_type = is_heredoc;
 	}
-	cur = id;
-	return (new_element);
+	return (cur = id, new);
 }
 
 /**
@@ -106,5 +102,7 @@ bool	parser(char **token_array, t_token **token_list)
 	}
 	if (check_for_syntax_error(*token_list))
 		return (destroy_token_list(token_list), false);
+	expand_heredocs(*token_list);
+// print_token_list(*token_list);
 	return (true);
 }

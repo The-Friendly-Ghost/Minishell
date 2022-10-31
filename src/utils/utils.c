@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 11:35:19 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/26 15:22:02 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/31 08:24:29 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,31 +47,24 @@ char	**ft_nulloc(int n_point)
 	return (ptr);
 }
 
-void	err_msg(char *str1, char *str2, char *str3)
+/**
+ * @brief Compares two strings that are given as parameters. 
+ * @param s1 First string
+ * @param s2 Second string
+ * @return 0 if strings are the same. Any other number if strings are
+ * not the same.
+ * @note
+ */
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	char	*err_promt;
-	char	*err_msg;
-	char	*temp;
+	unsigned long long	i;
 
-	if (str1 && str2 && str3)
+	i = 0;
+	while (s1[i] && s2[i])
 	{
-		temp = ft_strjoin("minishell: ", str1);
-		err_promt = ft_strjoin(temp, str2);
-		err_msg = ft_strjoin(err_promt, str3);
-		free(err_promt);
+		if (s1[i] != s2[i])
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		i++;
 	}
-	else if (str1 && str2)
-	{
-		temp = ft_strjoin("minishell: ", str1);
-		err_msg = ft_strjoin(temp, str2);
-	}
-	else
-		err_msg = ft_strjoin("minishell: ", str1);
-	if (!err_msg)
-	{
-		ft_putendl_fd("Fatal error", 2);
-		exit(ENOMEM);
-	}
-	ft_putendl_fd(err_msg, 2);
-	return (free(temp), free(err_msg));
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }

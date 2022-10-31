@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/17 14:19:55 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/07 15:05:54 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/27 15:15:12 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,12 @@ void	destroy_token_list(t_token **token_list)
 		temp = *token_list;
 		while (temp)
 		{
+			if (temp->heredoc_file)
+			{
+				unlink(temp->heredoc_file);
+				free(temp->heredoc_file);
+				temp->heredoc_file = NULL;
+			}
 			previous_node = temp;
 			free(temp->content);
 			temp = temp->next;

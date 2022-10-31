@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/18 13:20:25 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/26 14:47:31 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/31 08:24:12 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	set_infile(t_token *token, t_redirect *rd)
 	}
 	if (rd->fd_in != STDIN_FILENO)
 		close(rd->fd_in);
-	rd->fd_in = open(token->content, O_RDWR, 0777);
+	rd->fd_in = open(token->content, O_RDONLY, 0777);
 	rd->id_last_in = token->id;
 	rd->redirects_count++;
 }
@@ -50,15 +50,15 @@ static void	set_infile(t_token *token, t_redirect *rd)
  * @note This function does not yet replace the STDOUT for the outfile. This is
  * done in another function (with dup2).
  */
-static void	set_outfile(t_token *token, t_redirect *rd, bool append)
+static void	set_outfile(t_token *token, t_redirect *rd, t_token_type type)
 {
 	char	*msg;
 
 	if (rd->fd_out != STDOUT_FILENO)
 		close(rd->fd_out);
-	if (append == true)
+	if (type == redirect_output_append)
 		rd->fd_out = open(token->content, O_APPEND | O_WRONLY | O_CREAT, 0777);
-	else if (append == false)
+	else if (type == redirect_output)
 		rd->fd_out = open(token->content, O_TRUNC | O_WRONLY | O_CREAT, 0777);
 	if (rd->fd_out == -1)
 	{
@@ -70,32 +70,33 @@ static void	set_outfile(t_token *token, t_redirect *rd, bool append)
 }
 
 /**
- * @brief Creates a array of strings. Each string is a delimiter.
- * (I think a 'heredoc stopping word' is called a delimiter.) This function
- * only sets the delimiters. It does not yet start the heredoc append mode.
+ * @brief Creates a array of strings with all irrelevant redirects removed from
+ * it. Each string is an argument that will be passed on the execve.
  * @param token_list Pointer to the first token of the token_list
  * @param rd Pointer to the redirect struct
  * @return Nothing
- * @note The heredoc_words array does not get new pointers/strings assigned to
- * it. It uses pointers to certain tokens that are already in the token_list.
+ * @note The rd->arg_str get malloced, but the strings inside do not get
+ * malloced. It uses pointers to token->content. These pointers already 
+ * exist in the token list.
  */
-static void	set_heredoc(t_token *token_list, t_redirect *rd)
+static void	create_arg_array_str(t_token *token_list, t_redirect *rd)
 {
 	t_token	*token;
 	int		i;
 
-	i = 0;
 	token = token_list;
-	if (rd->heredoc_count == 0)
-	{
-		rd->heredoc_words = NULL;
+	i = 0;
+	rd->arg_str = ft_nulloc(rd->arg_count + rd->redirects_count + 1);
+	if (!rd->arg_str)
 		return ;
-	}
-	rd->heredoc_words = ft_calloc(rd->heredoc_count, sizeof(char *));
 	while (token && token->type != is_pipe)
 	{
-		if (token->previous && token->previous->type == delimiter)
-			rd->heredoc_words[i++] = token->content;
+		if (token->id == 0)
+			rd->arg_str[i++] = ft_strdup(token->content);
+		else if (rd->arg_count <= 1 && token->id == rd->id_last_in)
+			rd->arg_str[i++] = ft_strdup(token->content);
+		else if (token->type < redirect_input || token->type > is_heredoc)
+			rd->arg_str[i++] = ft_strdup(token->content);
 		token = token->next;
 	}
 }
@@ -108,14 +109,12 @@ static void	set_heredoc(t_token *token_list, t_redirect *rd)
  */
 static void	set_redirect_starting_values(t_redirect *rd)
 {
+	rd->arg_str = NULL;
 	rd->fd_in = 0;
 	rd->fd_out = 1;
 	rd->id_last_in = -1;
 	rd->redirects_count = 0;
 	rd->arg_count = 0;
-	rd->arg_str = NULL;
-	rd->heredoc_count = 0;
-	rd->heredoc_words = NULL;
 }
 
 /**
@@ -136,20 +135,13 @@ void	check_redirect(t_token *token_list, t_redirect *rd)
 	{
 		if (token->type == infile)
 			set_infile(token, rd);
-		else if (token->type == outfile
-			&& token->previous->type == redirect_output)
-			set_outfile(token, rd, false);
-		else if (token->type == outfile
-			&& token->previous->type == redirect_output_append)
-			set_outfile(token, rd, true);
-		else if (token->previous && token->previous->type == delimiter)
-			rd->heredoc_count++;
+		else if (token->type == outfile)
+			set_outfile(token, rd, token->previous->type);
 		else if (token->type != redirect_input
 			&& token->type != redirect_output && token->type != delimiter
 			&& token->type != redirect_output_append)
 			rd->arg_count++;
 		token = token->next;
 	}
-	set_heredoc(token_list, rd);
 	create_arg_array_str(token_list, rd);
 }
