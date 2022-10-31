@@ -8,3 +8,4 @@ Todo:
 - Minishell moet minishell kunnen runnen. Let op, zet SHLV +1 bij het openen van nieuwe minishell
 - Reads, writes, mallocs, opens, etc protecten.
 - Cleanup Norm 
+- EXIT code fixen
