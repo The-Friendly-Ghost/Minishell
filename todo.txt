@@ -1,7 +1,7 @@
 
 Todo:
 - Pipes
-- Heredoc ctrl+c
+DONE - Heredoc ctrl+c
 - Heredoc met quotes als delimiter testen
 - Moet er bij ctrl+c niet ook free worden gebruikt op de token_list enzo?
 - 'Exit [exit_code]' moet ook werken.

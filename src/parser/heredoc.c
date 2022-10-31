@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/27 09:44:34 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/31 10:39:33 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/31 14:45:36 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,30 +77,42 @@ static char	*trim_quote(char *content)
  * @note A newline has to be written after every write call, because readline
  * does not read a newline when 'enter' is pressed.
  */
-static void	get_heredoc_input(t_token *token, char *token_id)
+static bool	get_heredoc_input(t_token *token, char *token_id)
 {
 	const char	prompt[] = "> ";
 	char		*input;
 	char		*p_input;
 	int			fd;
+	int			child_state;
 
 	token->heredoc_file = ft_strjoin("/tmp/Heredoc_temp", token_id);
 	free(token_id);
-	fd = open(token->heredoc_file, O_TRUNC | O_WRONLY | O_CREAT, 0777);
-	while (1)
+	get_program()->hd_pid = fork();
+	if (get_program()->hd_pid == -1)
+		return ((void)printf("start niet\n"), false);
+	else if (get_program()->hd_pid == 0)
 	{
-		input = readline(prompt);
-		p_input = search_env_variables(input, 0, false);
-		if (!p_input || !ft_strcmp(p_input, trim_quote(token->content)))
+		fd = open(token->heredoc_file, O_TRUNC | O_WRONLY | O_CREAT, 0777);
+		while (1)
 		{
-			edit_token(token, ft_strdup(token->heredoc_file), infile);
-			edit_token(token->previous, ft_strdup("<"), redirect_input);
-			close(fd);
-			return ;
+			input = readline(prompt);
+			p_input = search_env_variables(input, 0, false);
+			if (!p_input || !ft_strcmp(p_input, trim_quote(token->content)))
+			{
+				exit(0);
+				close(fd);
+			}
+			ft_putendl_fd(p_input, fd);
+			free(p_input);
 		}
-		ft_putendl_fd(p_input, fd);
-		free(p_input);
 	}
+	signal(SIGINT, kill_heredoc);
+	waitpid(get_program()->hd_pid, &child_state, 0);
+	if (child_state)
+		return (false);
+	edit_token(token, ft_strdup(token->heredoc_file), infile);
+	edit_token(token->previous, ft_strdup("<"), redirect_input);
+	return (true);
 }
 
 /**
@@ -110,7 +122,7 @@ static void	get_heredoc_input(t_token *token, char *token_id)
  * @param token_list A pointer to the first token of the token list
  * @return Nothing
  */
-void	expand_heredocs(t_token *token_list)
+bool	expand_heredocs(t_token *token_list)
 {
 	t_token		*token;
 
@@ -118,7 +130,10 @@ void	expand_heredocs(t_token *token_list)
 	while (token)
 	{
 		if (token->previous && token->previous->type == delimiter)
-			get_heredoc_input(token, ft_itoa(token->id));
+			if (!get_heredoc_input(token, ft_itoa(token->id)))
+				return (false);
 		token = token->next;
 	}
+	init_signal_handler();
+	return (true);
 }

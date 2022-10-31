@@ -6,12 +6,20 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/21 14:16:31 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/26 09:33:50 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/31 15:05:07 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <termios.h>
+
+void	kill_heredoc(int signum)
+{
+	(void)signum;
+	ft_putchar_fd('\n', 1);
+	kill(get_program()->hd_pid, SIGTERM);
+	set_exit_code(1);
+}
 
 void	executor_signal_handler(int signum)
 {
@@ -42,7 +50,7 @@ void	init_signal_handler(void)
 	struct termios	t;
 
 	tcgetattr(STDIN_FILENO, &t);
-	t.c_lflag = ~ECHOCTL;
+	t.c_lflag &= ~(ECHOCTL);
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &t);
 	signal(SIGINT, handle_crtl_c);
 	signal(SIGQUIT, SIG_IGN);
