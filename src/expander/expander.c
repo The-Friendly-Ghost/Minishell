@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 16:56:17 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/26 10:47:45 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/31 10:36:20 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static void	set_double_quote(bool *is_double_quote)
  * @note ft_getenv > env_utils.c | id_env_var > expander_utils.c |
  * expand_env_var > expander_utils.c
  */
-static char	*search_env_variables(char *str, int i, bool is_double_quote)
+char	*search_env_variables(char *str, int i, bool is_double_quote)
 {
 	char	*env_var_name;
 	char	*env_var_value;

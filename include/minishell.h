@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/31 08:23:55 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/31 10:36:33 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ char			**get_env_array(void);
 // expander/expander.c
 
 void			expander(t_token *token_list);
+char			*search_env_variables(char *str, int i, bool is_double_quote);
 
 // expander/expander_utils.c
 

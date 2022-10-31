@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/31 08:24:08 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/31 09:41:56 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,8 @@ void	exec_command(t_token *token_list, t_token_type type, char **argv)
 		if (!cmd_path)
 			return (free(cmd_path),
 				destroy_double_array(env_array), exit(errno));
+		for (int i = 0; rd.arg_str[i]; i++)
+			printf("[%s]\n", rd.arg_str[i]);
 		execve(cmd_path, rd.arg_str, env_array);
 		destroy_double_array(env_array);
 		exit(errno);
