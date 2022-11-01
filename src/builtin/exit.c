@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/31 14:42:20 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/31 16:25:06 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/01 10:42:21 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	exit_minishell(t_token *token_list)
 		&& temp->next->next->content)
 	{
 		ft_putendl_fd("exit", 2);
-		ft_putendl_fd("minishell: exit: too many arguments", 2);
+		err_msg("exit: ", "too many arguments", NULL);
 		set_exit_code(1);
 	}
 	else if (temp->next && temp->next->content
