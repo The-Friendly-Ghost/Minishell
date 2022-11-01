@@ -9,3 +9,11 @@ DONE - Heredoc ctrl+c
 - Reads, writes, mallocs, opens, etc protecten.
 - Cleanup Norm 
 - EXIT code fixen
+
+- Export B= geeft wel een waarde als je env typt.
+- Export += moet concetenation doen 
+- Export +A moet niet kunnen (er mag geen enkele special character in de var naam staan).
+- Export unset variables niet printen.
+- Export A=1 B=1 C=1
+V Node skippen bij meegeven naar execve en shell als unset 'true' is.
+- pwd aan path toevoegen

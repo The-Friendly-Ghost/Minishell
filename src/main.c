@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/31 15:52:39 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/01 14:56:57 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int	main(void)
 	token_list = NULL;
 	// atexit(at_exit);
 	get_program();
+	get_env_array();
 	while (1)
 	{
 		// set_exit_code(0);

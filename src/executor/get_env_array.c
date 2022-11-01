@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 15:14:05 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/20 14:10:33 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/01 14:59:07 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,19 @@ static char	*create_env_string(t_env *env_var)
 	return (str);
 }
 
+static int	ft_envsize(t_env *lst)
+{
+	int	count;
+
+	count = 0;
+	while (lst != NULL)
+	{
+		lst = lst->next;
+		count++;
+	}
+	return (count);
+}
+
 /**
  * @brief This function converts the linked list with all the environment in
  * it to a 2D-array.
@@ -60,18 +73,14 @@ char	**get_env_array(void)
 	if (!(*env))
 		return (NULL);
 	temp = *env;
-	while (temp)
-	{
-		node++;
-		temp = temp->next;
-	}
-	env_list = malloc(sizeof(char *) * (node + 1));
-//PROTECTEN
+	env_list = malloc(sizeof(char *) * (ft_envsize(temp) + 1));
+	if (!env_list)
+		return (NULL);
 	temp = *env;
-	node = 0;
 	while (temp)
 	{
-		env_list[node++] = create_env_string(temp);
+		if (temp->unset == false && temp->has_value)
+			env_list[node++] = create_env_string(temp);
 		temp = temp->next;
 	}
 	env_list[node] = NULL;
