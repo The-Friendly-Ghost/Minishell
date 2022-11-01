@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/31 10:33:06 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/10/31 15:52:39 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,6 @@ static char	*get_input(void)
 			ft_putendl_fd("minishell> exit", 1);
 			exit(errno);
 		}
-		if (!ft_strcmp(input, "exit"))
-			exit(127);
 		add_history(input);
 		if (!str_is_whitespace(input))
 			return (input);

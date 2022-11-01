@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/31 14:09:49 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/01 10:50:09 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ static void	exec_builtin(t_token_type type, t_token *token_list, char **argv)
 		return (print_env());
 	if (type == invalid_input)
 		return (err_msg(token_list->content, ": command not found", NULL));
+	if (type == exit_program)
+		return (exit_minishell(token_list));
 }
 
 /**

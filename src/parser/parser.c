@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 14:15:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/31 13:23:13 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/01 10:51:17 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,49 @@ static void	add_new_element_to_token_list(t_token **token_list,
 }
 
 /**
+ * @brief Checks if a token is a pipe or a redirect.
+ * @param *token A pointer to a char * (the token)
+ * @return True if token is a pipe or redirect. False if not.
+ * @note
+ */
+static bool	is_pipe_or_redirect(char *token)
+{
+	if (!ft_strcmp(token, "|"))
+		return (true);
+	if (!ft_strcmp(token, ">"))
+		return (true);
+	if (!ft_strcmp(token, "<"))
+		return (true);
+	if (!ft_strcmp(token, ">>"))
+		return (true);
+	if (!ft_strcmp(token, "<<"))
+		return (true);
+	return (false);
+}
+
+static void	get_token_type(t_token *new, t_token_type *temp_type, int cur,
+		int id)
+{
+	if (cur == (id - 1) && (*temp_type == infile || *temp_type == outfile)
+		&& !is_pipe_or_redirect(new->content))
+	{
+		new->type = *temp_type;
+		*temp_type = 0;
+	}
+	else
+	{
+		new->type = determine_token_type(new->content);
+		if (*temp_type == infile || *temp_type == outfile)
+			*temp_type = 0;
+		if (new->type == redirect_input)
+			*temp_type = infile;
+		else if (new->type == redirect_output
+			|| new->type == redirect_output_append)
+			*temp_type = outfile;
+	}
+}
+
+/**
  * @brief Creates a struct for a single token.
  * @param *token A pointer to a char * (the token)
  * @return *t_token (pointer to the new token element) 
@@ -58,21 +101,9 @@ static t_token	*create_new_element(char *token, int id)
 	new->heredoc_file = NULL;
 	new->next = NULL;
 	new->previous = NULL;
-	if (cur == (id - 1) && (temp_type == infile || temp_type == outfile))
-	{
-		new->type = temp_type;
-		temp_type = 0;
-	}
-	else
-	{
-		new->type = determine_token_type(token);
-		if (new->type == redirect_input)
-			temp_type = infile;
-		else if (new->type == redirect_output
-			|| new->type == redirect_output_append)
-			temp_type = outfile;
-	}
-	return (cur = id, new);
+	get_token_type(new, &temp_type, cur, id);
+	cur = id;
+	return (new);
 }
 
 /**
