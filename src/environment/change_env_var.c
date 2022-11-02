@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/07 15:15:31 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/24 15:23:43 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/02 13:46:32 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,64 @@ bool	change_env_var(char *var_name, char *new_value, bool export)
 		temp = temp->next;
 	}
 	return (false);
+}
+
+/**
+ * @brief Adds a new env_var to the env_var list
+ * @param env_list
+ * @return 
+ */
+void	new_env_var(t_env **env_list, char *new_var, char *new_value)
+{
+	t_env	*temp;
+	t_env	*new_node;
+
+	temp = *env_list;
+	while (temp->next)
+		temp = temp->next;
+	new_node = malloc(sizeof(t_env));
+	temp->next = new_node;
+	new_node->previous = temp;
+	new_node->next = NULL;
+	new_node->var_name = new_var;
+	new_node->value = new_value;
+	new_node->unset = false;
+	new_node->export_unset = false;
+	if (new_value)
+		new_node->has_value = true;
+	else
+		new_node->has_value = false;
+}
+
+/**
+ * @brief Sets the correct SHLVL in the env vars. Basically, if SHLVL exists,
+ * SHLVL gets incremented by 1. If SHLVL doesn't exist, a new SHLVL will be
+ * set to 1.
+ * @param env_list
+ * @return 
+ */
+void	set_shlvl(t_env **env_list)
+{
+	t_env	*temp;
+	int		num;
+
+	temp = *env_list;
+	while (temp)
+	{
+		if (ft_strcmp(temp->var_name, "SHLVL") == 0)
+			break ;
+		temp = temp->next;
+	}
+	if (temp == NULL)
+		new_env_var(env_list, ft_strdup("SHLVL"), ft_strdup("1"));
+	else
+	{
+		if (temp->has_value && str_is_num(temp->value))
+		{
+			num = ft_atoi(temp->value);
+			free(temp->value);
+			num += 1;
+			temp->value = ft_itoa(num);
+		}
+	}
 }
