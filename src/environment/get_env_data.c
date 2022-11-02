@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/19 12:56:50 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/24 09:41:28 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/02 11:48:46 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ t_program	*get_program(void)
 			destroy_env_list(program.env_list);
 			exit(12);
 		}
+		set_shlvl(program.env_list);
 		program.exit_code = 0;
 		return (&program);
 	}
