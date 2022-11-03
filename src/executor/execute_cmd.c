@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/02 11:26:18 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/03 12:18:38 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void	export_loop(t_token *token_list)
  * @return Nothing
  * @note
  */
-static void	exec_builtin(t_token_type type, t_token *token_list, char **argv)
+static void	exec_builtin(t_token_type type, t_token *token_list)
 {
 	char	*char_exit_code;
 
@@ -59,7 +59,7 @@ static void	exec_builtin(t_token_type type, t_token *token_list, char **argv)
 	if (type == export_var)
 		return (export_loop(token_list));
 	if (type == unset)
-		return (unset_env_var(argv));
+		return (unset_env_var(token_list));
 	if (type == env)
 		return (print_env());
 	if (type == invalid_input)
@@ -85,18 +85,25 @@ static void	set_dup(t_redirect *rd)
 	return ;
 }
 
-void	exec_command(t_token *token_list, t_token_type type, char **argv)
+// void	execute_child(t_token *token_list)
+// {
+	
+// }
+
+void	exec_command(t_token *token_list)
 {
 	pid_t		fork_pid;
 	char		*cmd_path;
 	char		**env_array;
 	t_redirect	rd;
 	int			child_state;
+	t_program	*program;
 
+	program = get_program();
 	signal(SIGINT, executor_signal_handler);
 	signal(SIGQUIT, executor_signal_handler);
-	if (type >= print_exit_code)
-		return (exec_builtin(type, token_list, argv));
+	if (program->amount_commands == 1 && token_list->type >= print_exit_code)
+		return (exec_builtin(token_list->type, token_list));
 	set_exit_code(0);
 	fork_pid = fork();
 	if (fork_pid == -1)

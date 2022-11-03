@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/02 11:50:34 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/03 12:19:46 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_env {
 typedef struct s_program {
 	int		exit_code;
 	pid_t	hd_pid;
+	int		amount_commands;
 	t_env	**env_list;
 }	t_program;
 
@@ -132,6 +133,10 @@ void			destroy_env_list(t_env **env_list);
 
 bool			check_for_syntax_error(t_token *token_list);
 
+//parser/set_pipe_amount.c
+
+void			set_amount_of_commands(t_token **token_list);
+
 //environment/get_env_data.c
 
 t_program		*get_program(void);
@@ -158,7 +163,7 @@ void			print_env(void);
 void			print_pwd(void);
 void			print_export_env(void);
 void			export_env_var(t_token *token_list);
-void			unset_env_var(char **argv);
+void			unset_env_var(t_token *token_list);
 void			cd_builtin(t_token *token_list);
 void			exit_minishell(t_token *token_list);
 
@@ -170,8 +175,7 @@ void			print_2d_array(char **array);
 //executor/
 
 char			*get_executable_path(char *command_str);
-void			exec_command(t_token *token_list, t_token_type type,
-					char **argv);
+void			exec_command(t_token *token_list);
 void			check_redirect(t_token *token_list, t_redirect *rd);
 char			**itterate_redirect(t_token *token_list, char *cmd);
 void			set_heredoc(t_token *token_list, t_redirect *rd);

@@ -6,39 +6,56 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/07 15:06:33 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/26 10:25:25 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/03 16:47:52 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	unset_env_var(char **argv)
+static t_env	*delete_env_var(t_env *env_temp)
+{
+	t_env	*next;
+	t_env	*prev;
+
+	prev = env_temp->previous;
+	next = env_temp->next;
+	if (prev != NULL)
+		prev->next = next;
+	if (next != NULL)
+		next->previous = prev;
+	if (env_temp->value != NULL)
+		free(env_temp->value);
+	if (env_temp->var_name != NULL)
+		free(env_temp->var_name);
+	free(env_temp);
+	if (prev == NULL)
+		return (next);
+	while (prev->previous)
+		prev = prev->previous;
+	return (prev);
+}
+
+void	unset_env_var(t_token *token_list)
 {
 	t_env	**env_list;
-	t_env	*temp;
-	int		i;
+	t_env	*env_temp;
+	t_token	*tok_temp;
 
 	env_list = get_env_list();
-	i = 1;
-	while (argv[i])
+	tok_temp = token_list->next;
+	while (tok_temp && tok_temp->type != is_pipe)
 	{
-		temp = *env_list;
-		while (temp)
+		env_temp = *env_list;
+		while (env_temp)
 		{
-			if (temp->has_value && !ft_strcmp(temp->var_name, argv[i]))
+			if (env_temp->var_name && !ft_strcmp(env_temp->var_name,
+					tok_temp->content))
 			{
-				temp->unset = true;
-				if (!ft_strcmp(temp->var_name, "PATH")
-					|| !ft_strcmp(temp->var_name, "HOME"))
-				{
-					free(temp->value);
-					temp->value = NULL;
-					temp->export_unset = false;
-					temp->has_value = false;
-				}
+				*env_list = delete_env_var(env_temp);
+				break ;
 			}
-			temp = temp->next;
+			env_temp = env_temp->next;
 		}
-		i++;
+		tok_temp = tok_temp->next;
 	}
 }
