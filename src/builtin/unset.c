@@ -6,35 +6,18 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/07 15:06:33 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/03 16:47:52 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/04 11:22:08 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_env	*delete_env_var(t_env *env_temp)
-{
-	t_env	*next;
-	t_env	*prev;
-
-	prev = env_temp->previous;
-	next = env_temp->next;
-	if (prev != NULL)
-		prev->next = next;
-	if (next != NULL)
-		next->previous = prev;
-	if (env_temp->value != NULL)
-		free(env_temp->value);
-	if (env_temp->var_name != NULL)
-		free(env_temp->var_name);
-	free(env_temp);
-	if (prev == NULL)
-		return (next);
-	while (prev->previous)
-		prev = prev->previous;
-	return (prev);
-}
-
+/**
+ * @brief Searches for variables passed from the command line. If a variable
+ * is found, it will be removed from the environment variable list.
+ * @param token_list A pointer to the first node of the token list.
+ * @return Nothing
+ */
 void	unset_env_var(t_token *token_list)
 {
 	t_env	**env_list;
