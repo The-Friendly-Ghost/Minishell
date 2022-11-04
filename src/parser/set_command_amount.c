@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   set_pipe_amount.c                                  :+:    :+:            */
+/*   set_command_amount.c                               :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/03 11:07:45 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/03 12:05:00 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/04 14:57:39 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,9 @@ void	set_amount_of_commands(t_token **token_list)
 	t_program	*program;
 	t_token		*temp;
 
-	program = get_program();
 	temp = *token_list;
+	program = get_program();
+	program->amount_commands = 1;
 	while (temp)
 	{
 		if (temp->type == is_pipe)

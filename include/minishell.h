@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/04 11:10:29 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/04 13:16:04 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 typedef struct s_token {
 	int				id;
 	int				type;
+	int				fd_in;
 	char			*content;
 	char			*heredoc_file;
 	struct s_token	*next;

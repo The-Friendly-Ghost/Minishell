@@ -21,3 +21,6 @@ V pwd aan path toevoegen
 
 - 'unset PWD > hello' zou moeten werken, maar werkt niet. Functie 'Check redirect' moet ook 
 gerund worden voor builtins
+
+
+- OLDPWD staat er niet in
