@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/04 14:58:12 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/08 11:56:23 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,9 +121,7 @@ void	exec_command(t_token *token_list)
 	t_redirect	rd;
 	int			child_state;
 
-	signal(SIGINT, executor_signal_handler);
-	signal(SIGQUIT, executor_signal_handler);
-	set_exit_code(0);
+	backup_std_and_set_signals();
 	while (token_list)
 	{
 		if (token_list->type >= print_exit_code
@@ -135,11 +133,9 @@ void	exec_command(t_token *token_list)
 			break ;
 		}
 		execute_child(token_list, &fork_pid, &rd);
-		//Delete command from token_list
+		token_list = destroy_command(token_list);
 	}
 	waitpid(fork_pid, &child_state, WUNTRACED);
-	rd.fd_in = STDIN_FILENO;
-	rd.fd_out = STDOUT_FILENO;
-	set_dup(&rd);
+	restore_std();
 	return (set_exit_code(WEXITSTATUS(child_state)));
 }

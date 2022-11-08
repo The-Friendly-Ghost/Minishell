@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/04 13:16:04 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/08 14:14:25 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_env {
 typedef struct s_program {
 	int		exit_code;
 	pid_t	hd_pid;
+	int		std_backup[2];
 	int		amount_commands;
 	t_env	**env_list;
 }	t_program;
@@ -183,6 +184,9 @@ void			check_redirect(t_token *token_list, t_redirect *rd);
 char			**itterate_redirect(t_token *token_list, char *cmd);
 void			set_heredoc(t_token *token_list, t_redirect *rd);
 bool			expand_heredocs(t_token *token_list);
+void			backup_std_and_set_signals(void);
+void			restore_std(void);
+t_token			*destroy_command(t_token *token_list);
 
 //utils/
 
