@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/06 14:18:14 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/08 14:10:15 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/10 11:14:12 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	echo_builtin(t_token *token_list)
 	}
 	else
 		temp = temp->next;
-	while (temp)
+	while (temp && temp->type != is_pipe)
 	{
 		print_echo(temp->content);
 		if (temp->next && temp->content)

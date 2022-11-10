@@ -6,11 +6,42 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/08 11:10:19 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/08 14:30:45 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/10 13:07:10 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/**
+ * @brief Changes STDOUT and STDIN to another file descriptor if there is an
+ * outfile or infile in the command line.
+ * @param rd Struct with redirect information in it
+ * @return Nothing
+ */
+void	set_dup(t_redirect *rd)
+{
+	dup2(rd->fd_in, STDIN_FILENO);
+	if (rd->fd_in != STDIN_FILENO)
+		close(rd->fd_in);
+	dup2(rd->fd_out, STDOUT_FILENO);
+	if (rd->fd_out != STDOUT_FILENO)
+		close(rd->fd_out);
+	return ;
+}
+
+bool	is_last_command(t_token *token_list)
+{
+	t_token	*temp;
+
+	temp = token_list;
+	while (temp)
+	{
+		if (temp->type == is_pipe)
+			return (false);
+		temp = temp->next;
+	}
+	return (true);
+}
 
 void	backup_std_and_set_signals(void)
 {
@@ -58,9 +89,10 @@ t_token	*destroy_command(t_token *token_list)
 		if (temp_prev->type == is_pipe)
 		{
 			free(temp_prev);
-			temp->previous = NULL;
+			if (temp)
+				temp->previous = NULL;
 			return (temp);
 		}
-		free(temp_prev);
 	}
+	return (NULL);
 }

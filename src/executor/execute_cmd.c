@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/08 11:56:23 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/10 14:46:38 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,39 +68,29 @@ static void	exec_builtin(t_token_type type, t_token *token_list)
 		return (exit_minishell(token_list));
 }
 
-/**
- * @brief Changes STDOUT and STDIN to another file descriptor if there is an
- * outfile or infile in the command line.
- * @param rd Struct with redirect information in it
- * @return Nothing
- */
-static void	set_dup(t_redirect *rd)
-{
-	dup2(rd->fd_in, STDIN_FILENO);
-	if (rd->fd_in != STDIN_FILENO)
-		close(rd->fd_in);
-	dup2(rd->fd_out, STDOUT_FILENO);
-	if (rd->fd_out != STDOUT_FILENO)
-		close(rd->fd_out);
-	return ;
-}
-
 void	execute_child(t_token *token_list, pid_t *fork_pid,
 			t_redirect *rd)
 {
 	char		*cmd_path;
 	char		**ev_arr;
+	int			ends[2];
 
+	if (pipe(ends) == -1)
+		exit(1); // DEZE ERROR NOG AANPASSEN!!
 	*fork_pid = fork();
 	if (*fork_pid == -1)
 		return ;
 	if (*fork_pid == 0)
 	{
+		set_pipes(ends, token_list);
 		check_redirect(token_list, rd);
-		set_dup(rd);
 		signal(SIGINT, SIG_DFL);
 		if (token_list->type >= print_exit_code)
+		{
 			exec_builtin(token_list->type, token_list);
+			close(ends[WRITE_END]);
+			exit(errno);
+		}
 		ev_arr = get_env_array();
 		if (!ev_arr)
 			exit(127);
@@ -113,29 +103,33 @@ void	execute_child(t_token *token_list, pid_t *fork_pid,
 		destroy_double_array(ev_arr);
 		exit(errno);
 	}
+	close(ends[WRITE_END]);
+	dup2(ends[READ_END], STDIN_FILENO);
+	close(ends[READ_END]);
 }
 
-void	exec_command(t_token *token_list)
+void	exec_command(t_token **token_list)
 {
 	pid_t		fork_pid;
 	t_redirect	rd;
 	int			child_state;
 
 	backup_std_and_set_signals();
-	while (token_list)
+	while (*token_list)
 	{
-		if (token_list->type >= print_exit_code
+		if ((*token_list)->type >= print_exit_code
 			&& get_program()->amount_commands == 1)
 		{
-			check_redirect(token_list, &rd);
-			set_dup(&rd);
-			exec_builtin(token_list->type, token_list);
+			check_redirect(*token_list, &rd);
+			exec_builtin((*token_list)->type, *token_list);
 			break ;
 		}
-		execute_child(token_list, &fork_pid, &rd);
-		token_list = destroy_command(token_list);
+		execute_child(*token_list, &fork_pid, &rd);
+		*token_list = destroy_command(*token_list);
 	}
 	waitpid(fork_pid, &child_state, WUNTRACED);
+	while (wait(NULL) > 0)
+		continue ;
 	restore_std();
 	return (set_exit_code(WEXITSTATUS(child_state)));
 }

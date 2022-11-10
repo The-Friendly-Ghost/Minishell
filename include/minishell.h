@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/08 14:14:25 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/10 14:32:04 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# define READ_END 0
+# define WRITE_END 1
 
 typedef struct s_token {
 	int				id;
@@ -179,7 +181,7 @@ void			print_2d_array(char **array);
 //executor/
 
 char			*get_executable_path(char *command_str);
-void			exec_command(t_token *token_list);
+void			exec_command(t_token **token_list);
 void			check_redirect(t_token *token_list, t_redirect *rd);
 char			**itterate_redirect(t_token *token_list, char *cmd);
 void			set_heredoc(t_token *token_list, t_redirect *rd);
@@ -187,6 +189,9 @@ bool			expand_heredocs(t_token *token_list);
 void			backup_std_and_set_signals(void);
 void			restore_std(void);
 t_token			*destroy_command(t_token *token_list);
+void			set_dup(t_redirect *rd);
+void			set_pipes(int *ends, t_token *token);
+bool			is_last_command(t_token *token_list);
 
 //utils/
 

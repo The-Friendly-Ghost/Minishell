@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/18 13:20:25 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/31 14:59:13 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/10 13:52:41 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static void	set_outfile(t_token *token, t_redirect *rd, t_token_type type)
 {
 	char	*msg;
 
-	if (rd->fd_out != STDOUT_FILENO)
+	if (rd->fd_out != -2)
 		close(rd->fd_out);
 	if (type == redirect_output_append)
 		rd->fd_out = open(token->content, O_APPEND | O_WRONLY | O_CREAT, 0777);
@@ -112,7 +112,7 @@ static void	set_redirect_starting_values(t_redirect *rd)
 {
 	rd->arg_str = NULL;
 	rd->fd_in = 0;
-	rd->fd_out = 1;
+	rd->fd_out = -2;
 	rd->id_last_in = -1;
 	rd->redirects_count = 0;
 	rd->arg_count = 0;
@@ -145,4 +145,5 @@ void	check_redirect(t_token *token_list, t_redirect *rd)
 		token = token->next;
 	}
 	create_arg_array_str(token_list, rd);
+	set_dup(rd);
 }
