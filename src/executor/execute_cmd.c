@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/10 14:46:38 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/10 17:29:49 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,34 @@ static void	exec_builtin(t_token_type type, t_token *token_list)
 		return (exit_minishell(token_list));
 }
 
-void	execute_child(t_token *token_list, pid_t *fork_pid,
+static void	execute_child_process(t_token *token_list, int ends[2],
 			t_redirect *rd)
 {
 	char		*cmd_path;
 	char		**ev_arr;
+
+	signal(SIGINT, SIG_DFL);
+	if (token_list->type >= print_exit_code)
+	{
+		exec_builtin(token_list->type, token_list);
+		close(ends[WRITE_END]);
+		exit(errno);
+	}
+	ev_arr = get_env_array();
+	if (!ev_arr)
+		exit(127);
+	cmd_path = get_executable_path(token_list->content);
+	if (!cmd_path)
+		return (destroy_double_array(ev_arr), free(cmd_path), exit(errno));
+	execve(cmd_path, rd->arg_str, ev_arr);
+	if (!ft_strcmp("./minishell", token_list->content))
+		err_msg(token_list->content, ": is a directory", NULL);
+	destroy_double_array(ev_arr);
+}
+
+void	execute_child(t_token *token_list, pid_t *fork_pid,
+			t_redirect *rd)
+{
 	int			ends[2];
 
 	if (pipe(ends) == -1)
@@ -84,23 +107,7 @@ void	execute_child(t_token *token_list, pid_t *fork_pid,
 	{
 		set_pipes(ends, token_list);
 		check_redirect(token_list, rd);
-		signal(SIGINT, SIG_DFL);
-		if (token_list->type >= print_exit_code)
-		{
-			exec_builtin(token_list->type, token_list);
-			close(ends[WRITE_END]);
-			exit(errno);
-		}
-		ev_arr = get_env_array();
-		if (!ev_arr)
-			exit(127);
-		cmd_path = get_executable_path(token_list->content);
-		if (!cmd_path)
-			return (destroy_double_array(ev_arr), free(cmd_path), exit(errno));
-		execve(cmd_path, rd->arg_str, ev_arr);
-		if (!ft_strcmp("./minishell", token_list->content))
-			err_msg(token_list->content, ": is a directory", NULL);
-		destroy_double_array(ev_arr);
+		execute_child_process(token_list, ends, rd);
 		exit(errno);
 	}
 	close(ends[WRITE_END]);

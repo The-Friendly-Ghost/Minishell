@@ -1,6 +1,6 @@
 
 Todo:
-- Pipes
+V Pipes
 V - Heredoc ctrl+c
 - Heredoc met quotes als delimiter testen
 - Moet er bij ctrl+c niet ook free worden gebruikt op de token_list enzo?
@@ -19,8 +19,9 @@ V Node skippen bij meegeven naar execve en shell als unset 'true' is.
 V pwd aan path toevoegen
 
 
-- 'unset PWD > hello' zou moeten werken, maar werkt niet. Functie 'Check redirect' moet ook 
-gerund worden voor builtins
+- 'unset PWD > hello' zou moeten werken, maar werkt niet.
 
 
 - OLDPWD staat er niet in
+
+- minishell> exit | exit 123  Exit niet met code 123
