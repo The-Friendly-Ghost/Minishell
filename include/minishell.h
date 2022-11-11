@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/02 11:50:34 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/02 15:12:42 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,7 @@ bool			check_if_env_has_value(const char *str);
 
 //environment/change_env_var.c
 
+void			new_env_var(t_env **env_list, char *new_var, char *new_value);
 bool			change_env_var(char *var_name, char *new_value, bool export);
 void			set_shlvl(t_env **env_list);
 

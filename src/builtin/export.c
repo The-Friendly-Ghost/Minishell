@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 09:44:35 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/02 13:51:22 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/02 15:24:42 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,30 +30,6 @@ static bool	ft_getenv_bool(const char *name)
 		temp = temp->next;
 	}
 	return (false);
-}
-
-static t_env	*create_new_node_export(char *env_var, char *env_value)
-{
-	t_env	*new_node;
-
-	new_node = malloc(sizeof(t_env));
-	if (!new_node)
-		return (NULL);
-	new_node->var_name = ft_strdup(env_var);
-	if (env_value == NULL)
-		new_node->value = NULL;
-	else
-		new_node->value = ft_strdup(env_value);
-	if (ft_strlen(env_value) == 0)
-		new_node->unset = true;
-	else
-	{
-		new_node->has_value = true;
-		new_node->unset = false;
-	}
-	new_node->next = NULL;
-	new_node->previous = NULL;
-	return (new_node);
 }
 
 void	print_export_env(void)
@@ -88,32 +64,13 @@ void	print_export_env(void)
 	}
 }
 
-static void	set_new_variable(t_token *token_list, char **split)
-{
-	t_env	*new_node;
-
-	if (split[1])
-		new_node = create_new_node_export(split[0], split[1]);
-	else
-		new_node = create_new_node_export(split[0], NULL);
-	if (!new_node)
-		return (set_exit_code(12));
-	if (ft_strchr(token_list->next->content, '=') && !split[1])
-	{
-		new_node->has_value = true;
-		new_node->export_unset = true;
-	}
-	else
-		new_node->has_value = false;
-	add_node_to_env_list(new_node, get_env_list());
-	return (destroy_double_array(split));
-}
-
 void	export_env_var(t_token *token_list)
 {
+	t_env	**env_list;
 	char	**split;
 	char	*msg;
 
+	env_list = get_env_list();
 	if (token_list->next->content[0] == '=')
 	{
 		msg = ft_strjoin("`", token_list->next->content);
@@ -133,5 +90,8 @@ void	export_env_var(t_token *token_list)
 		return ((void)change_env_var(split[0], NULL, true),
 			destroy_double_array(split));
 	}
-	set_new_variable(token_list, split);
+	if (split[1])
+		return (new_env_var(
+				env_list, ft_strdup(split[0]), ft_strdup(split[1])));
+	new_env_var(env_list, ft_strdup(split[0]), NULL);
 }
