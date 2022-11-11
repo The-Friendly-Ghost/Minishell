@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/10 13:53:23 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/10 14:40:19 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/11 11:08:04 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,4 +18,14 @@ void	set_pipes(int ends[2], t_token *token_list)
 	if (is_last_command(token_list) == false)
 		dup2(ends[WRITE_END], STDOUT_FILENO);
 	close(ends[WRITE_END]);
+}
+
+pid_t	ft_getpid(void)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == 0)
+		exit(0);
+	return (pid);
 }

@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/10 17:29:49 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/11 13:03:18 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void	export_loop(t_token *token_list)
  * @return Nothing
  * @note
  */
-static void	exec_builtin(t_token_type type, t_token *token_list)
+static void	exec_builtin(t_token_type type, t_token *token_list, pid_t *pid)
 {
 	char	*char_exit_code;
 
@@ -65,11 +65,11 @@ static void	exec_builtin(t_token_type type, t_token *token_list)
 	if (type == invalid_input)
 		return (err_msg(token_list->content, ": command not found", NULL));
 	if (type == exit_program)
-		return (exit_minishell(token_list));
+		return (exit_minishell(token_list, pid));
 }
 
 static void	execute_child_process(t_token *token_list, int ends[2],
-			t_redirect *rd)
+			t_redirect *rd, pid_t *fork_pid)
 {
 	char		*cmd_path;
 	char		**ev_arr;
@@ -77,7 +77,7 @@ static void	execute_child_process(t_token *token_list, int ends[2],
 	signal(SIGINT, SIG_DFL);
 	if (token_list->type >= print_exit_code)
 	{
-		exec_builtin(token_list->type, token_list);
+		exec_builtin(token_list->type, token_list, fork_pid);
 		close(ends[WRITE_END]);
 		exit(errno);
 	}
@@ -99,7 +99,7 @@ void	execute_child(t_token *token_list, pid_t *fork_pid,
 	int			ends[2];
 
 	if (pipe(ends) == -1)
-		exit(1); // DEZE ERROR NOG AANPASSEN!!
+		exit(1);
 	*fork_pid = fork();
 	if (*fork_pid == -1)
 		return ;
@@ -107,7 +107,7 @@ void	execute_child(t_token *token_list, pid_t *fork_pid,
 	{
 		set_pipes(ends, token_list);
 		check_redirect(token_list, rd);
-		execute_child_process(token_list, ends, rd);
+		execute_child_process(token_list, ends, rd, fork_pid);
 		exit(errno);
 	}
 	close(ends[WRITE_END]);
@@ -117,24 +117,25 @@ void	execute_child(t_token *token_list, pid_t *fork_pid,
 
 void	exec_command(t_token **token_list)
 {
-	pid_t		fork_pid;
+	pid_t		pid;
 	t_redirect	rd;
 	int			child_state;
 
 	backup_std_and_set_signals();
+	pid = ft_getpid();
 	while (*token_list)
 	{
 		if ((*token_list)->type >= print_exit_code
 			&& get_program()->amount_commands == 1)
 		{
 			check_redirect(*token_list, &rd);
-			exec_builtin((*token_list)->type, *token_list);
+			exec_builtin((*token_list)->type, *token_list, &pid);
 			break ;
 		}
-		execute_child(*token_list, &fork_pid, &rd);
+		execute_child(*token_list, &pid, &rd);
 		*token_list = destroy_command(*token_list);
 	}
-	waitpid(fork_pid, &child_state, WUNTRACED);
+	waitpid(pid, &child_state, WUNTRACED);
 	while (wait(NULL) > 0)
 		continue ;
 	restore_std();

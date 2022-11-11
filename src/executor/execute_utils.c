@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/08 11:10:19 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/10 13:07:10 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/11 13:01:50 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ void	backup_std_and_set_signals(void)
 
 	signal(SIGINT, executor_signal_handler);
 	signal(SIGQUIT, executor_signal_handler);
-	set_exit_code(0);
 	program = get_program();
 	program->std_backup[0] = dup(STDIN_FILENO);
 	if (program->std_backup[0] == -1)

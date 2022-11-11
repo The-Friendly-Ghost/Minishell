@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/11 11:01:17 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/11 13:06:34 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@
 typedef struct s_token {
 	int				id;
 	int				type;
-	int				fd_in;
 	char			*content;
 	char			*heredoc_file;
 	struct s_token	*next;
@@ -172,7 +171,7 @@ void			print_export_env(void);
 void			export_env_var(t_token *token_list);
 void			unset_env_var(t_token *token_list);
 void			cd_builtin(t_token *token_list);
-void			exit_minishell(t_token *token_list);
+void			exit_minishell(t_token *token_list, pid_t *pid);
 
 //test_functions
 
@@ -193,6 +192,7 @@ t_token			*destroy_command(t_token *token_list);
 void			set_dup(t_redirect *rd);
 void			set_pipes(int *ends, t_token *token);
 bool			is_last_command(t_token *token_list);
+pid_t			ft_getpid(void);
 
 //utils/
 
