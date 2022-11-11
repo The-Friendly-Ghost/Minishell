@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/11 12:28:13 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/11 13:03:18 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ static void	execute_child_process(t_token *token_list, int ends[2],
 	{
 		exec_builtin(token_list->type, token_list, fork_pid);
 		close(ends[WRITE_END]);
-		printf("ERRNO: %d\n", errno);
 		exit(errno);
 	}
 	ev_arr = get_env_array();
