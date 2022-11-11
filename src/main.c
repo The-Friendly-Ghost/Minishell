@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/11 15:05:19 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/11 15:40:55 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	main(int argc, char **argv)
 		expander(token_list);
 		exec_command(&token_list);
 		if (argc == 3)
-		 exit(get_program()->exit_code);
+			exit(get_program()->exit_code);
 		//destroy_double_array(tokens);
 		// print_token_list(token_list);
 	}

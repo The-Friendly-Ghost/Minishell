@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/31 14:42:20 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/11 12:18:09 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/11 15:27:36 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	exit_minishell(t_token *token_list, pid_t *pid)
 
 	temp = token_list;
 	if (temp->next == NULL || temp->next->type == is_pipe)
-		exit(127);
+		exit(0);
 	else if (temp->next && temp->next->content && temp->next->next
 		&& temp->next->next->content && temp->next->next->type != is_pipe)
 	{
