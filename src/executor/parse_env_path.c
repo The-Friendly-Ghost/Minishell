@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 13:34:38 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/02 11:23:45 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/11 16:54:58 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,4 +88,20 @@ char	*get_executable_path(char *command_str)
 		return (err_msg(command_str, ": command not found", NULL), NULL);
 	}
 	return (free(command), correct_path);
+}
+
+char	*create_executable_path(t_token *token_list)
+{
+	t_token	*temp;
+
+	temp = token_list;
+	if (temp->type < redirect_input || temp->type > is_heredoc)
+		return (get_executable_path(temp->content));
+	while (temp && temp->type != is_pipe)
+	{
+		if (temp->type < redirect_input || temp->type > is_heredoc)
+			return (get_executable_path(temp->content));
+		temp = temp->next;
+	}
+	return (NULL);
 }

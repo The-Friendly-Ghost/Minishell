@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/10 13:53:23 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/11 11:08:04 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/11 16:39:29 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	set_pipes(int ends[2], t_token *token_list)
 	close(ends[WRITE_END]);
 }
 
-pid_t	ft_getpid(void)
+pid_t	ft_get_a_pid(void)
 {
 	pid_t	pid;
 
@@ -28,4 +28,31 @@ pid_t	ft_getpid(void)
 	if (pid == 0)
 		exit(0);
 	return (pid);
+}
+
+t_token	*move_command_in_front(t_token *token_list)
+{
+	t_token	*temp;
+	t_token	*prev;
+	t_token	*next;
+
+	temp = token_list;
+	if (temp->type < redirect_input || temp->type > is_heredoc)
+		return (token_list);
+	while (temp && temp->type != is_pipe)
+	{
+		if (temp->type < redirect_input || temp->type > is_heredoc)
+		{
+			prev = temp->previous;
+			next = temp->next;
+			prev->next = next;
+			next->previous = prev;
+			temp->next = token_list;
+			temp->previous = NULL;
+			return (temp);
+		}
+		temp = temp->next;
+	}
+	destroy_token_list(&token_list);
+	return (NULL);
 }

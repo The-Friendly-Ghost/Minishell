@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/18 13:20:25 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/10 13:52:41 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/11 16:09:11 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,7 @@ static void	create_arg_array_str(t_token *token_list, t_redirect *rd)
 		return ;
 	while (token && token->type != is_pipe)
 	{
-		if (token->id == 0)
-			rd->arg_str[i++] = ft_strdup(token->content);
-		else if (rd->arg_count <= 1 && token->id == rd->id_last_in
+		if (rd->arg_count <= 1 && token->id == rd->id_last_in
 			&& !ft_strcmp(token_list->content, "cat"))
 			rd->arg_str[i++] = ft_strdup(token->content);
 		else if (token->type < redirect_input || token->type > is_heredoc)

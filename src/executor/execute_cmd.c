@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/11 13:03:18 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/11 16:51:53 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,8 @@ static void	execute_child_process(t_token *token_list, int ends[2],
 	ev_arr = get_env_array();
 	if (!ev_arr)
 		exit(127);
-	cmd_path = get_executable_path(token_list->content);
+	// cmd_path = get_executable_path(token_list->content);
+	cmd_path = create_executable_path(token_list);
 	if (!cmd_path)
 		return (destroy_double_array(ev_arr), free(cmd_path), exit(errno));
 	execve(cmd_path, rd->arg_str, ev_arr);
@@ -122,7 +123,7 @@ void	exec_command(t_token **token_list)
 	int			child_state;
 
 	backup_std_and_set_signals();
-	pid = ft_getpid();
+	pid = ft_get_a_pid();
 	while (*token_list)
 	{
 		if ((*token_list)->type >= print_exit_code
