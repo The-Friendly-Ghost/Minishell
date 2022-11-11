@@ -4,3 +4,4 @@ obj
 lib/libft/obj
 lib/libft/libft.a
 minishell
+minishell_test.log
