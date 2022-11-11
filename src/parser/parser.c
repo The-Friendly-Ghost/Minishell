@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 14:15:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/01 10:51:17 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/03 12:20:01 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,9 +109,10 @@ static t_token	*create_new_element(char *token, int id)
 /**
  * @brief Receives a 2D array with all the tokens in it. Returns A pointer 
  * to a linked list or NULL if the creation of the linked list failed. 
- * @param **tokens A pointer to a 2D-array with the tokens in it
- * @return **token_list - Pointer to the first element of the linked list 
- * @note Destroy functions can be found in parser_destroy.c
+ * @param token_array A pointer to a 2D-array with the tokens in it
+ * @param token_list - Pointer to the first element of the linked list
+ * @return True if parsing succesfully. False if parsing failed somewhere. 
+ * @note
  */
 bool	parser(char **token_array, t_token **token_list)
 {
@@ -135,5 +136,6 @@ bool	parser(char **token_array, t_token **token_list)
 		return (destroy_token_list(token_list), false);
 	if (!expand_heredocs(*token_list))
 		return (false);
+	set_amount_of_commands(token_list);
 	return (true);
 }

@@ -6,55 +6,39 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/07 15:06:33 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/02 14:52:35 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/11 11:01:27 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	delete_node(t_env *curr, char *str)
-{
-	t_env	*prev;
-	t_env	*temp;
-
-	while (curr && curr->next)
-	{
-		if (ft_strcmp(curr->var_name, str) == 0)
-		{
-			printf("%s == %s\n", curr->var_name, str);
-			temp = curr->next;
-			prev = curr->previous;
-			prev->next = temp;
-			temp->previous = prev;
-			free(curr);
-			break ;
-		}
-		else
-			curr = curr->next;
-	}
-}
-
-void	unset_env_var(char **argv)
+/**
+ * @brief Searches for variables passed from the command line. If a variable
+ * is found, it will be removed from the environment variable list.
+ * @param token_list A pointer to the first node of the token list.
+ * @return Nothing
+ */
+void	unset_env_var(t_token *token_list)
 {
 	t_env	**env_list;
-	t_env	*curr;
-	int		i;
+	t_env	*env_temp;
+	t_token	*tok_temp;
 
-	if (!argv[1])
-		return ;
-	i = 1;
 	env_list = get_env_list();
-	while (*env_list && ft_strcmp((*env_list)->var_name, argv[i]) == 0)
+	tok_temp = token_list->next;
+	while (tok_temp && tok_temp->type != is_pipe)
 	{
-		curr = *env_list;
-		*env_list = (*env_list)->next;
-		(*env_list)->previous = NULL;
-		free(curr);
-	}
-	while (argv[i])
-	{
-		curr = *env_list;
-		delete_node(curr, argv[i]);
-		i++;
+		env_temp = *env_list;
+		while (env_temp)
+		{
+			if (env_temp->var_name && !ft_strcmp(env_temp->var_name,
+					tok_temp->content))
+			{
+				*env_list = delete_env_var(env_temp);
+				break ;
+			}
+			env_temp = env_temp->next;
+		}
+		tok_temp = tok_temp->next;
 	}
 }

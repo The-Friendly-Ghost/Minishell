@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/07 15:15:31 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/02 13:46:32 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/04 11:20:30 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,41 @@ bool	change_env_var(char *var_name, char *new_value, bool export)
 		temp = temp->next;
 	}
 	return (false);
+}
+
+/**
+ * @brief Deletes a environment variable from the environment list.
+ * @param env_temp Pointer to the node (env var) that has to be deleted
+ * @return Pointer to the first node of the env_list.
+ * @note 
+ * 1. This function returns a pointer to the first node of the env_list.
+ * This means that in the calling function, the function has to be called as
+ * follows : "*env_list = delete_env_var(env_temp);" . Where env_list is
+ * a double pointer (**env_list).
+ * 2. If a NULL is passed as parameter, this function segfaults. So only a
+ * valid node can be passed as parameter.
+ */
+t_env	*delete_env_var(t_env *env_temp)
+{
+	t_env	*next;
+	t_env	*prev;
+
+	prev = env_temp->previous;
+	next = env_temp->next;
+	if (prev != NULL)
+		prev->next = next;
+	if (next != NULL)
+		next->previous = prev;
+	if (env_temp->value != NULL)
+		free(env_temp->value);
+	if (env_temp->var_name != NULL)
+		free(env_temp->var_name);
+	free(env_temp);
+	if (prev == NULL)
+		return (next);
+	while (prev->previous)
+		prev = prev->previous;
+	return (prev);
 }
 
 /**
