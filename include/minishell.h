@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/12 10:05:18 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/12 13:54:19 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,7 @@ void			echo_builtin(t_token *token_list);
 void			print_env(void);
 void			print_pwd(void);
 void			print_export_env(void);
+void			sort_env_list(t_env **begin_list);
 void			export_env_var(t_token *token_list);
 void			unset_env_var(t_token *token_list);
 void			cd_builtin(t_token *token_list);

@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 09:44:35 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/12 10:41:01 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/12 14:15:16 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	print_export_env(void)
 	t_env	*temp;
 
 	env = get_env_list();
+	sort_env_list(env);
 	if (!(*env))
 		return (set_exit_code(127));
 	temp = *env;
@@ -62,6 +63,22 @@ void	print_export_env(void)
 	}
 }
 
+static bool	valid_var_name(char *var_name)
+{
+	int	i;
+
+	i = 0;
+	while (var_name[i])
+	{
+		if ((var_name[i] >= 58 && var_name[i] < 61)
+			|| (var_name[i] > 61 && var_name[i] <= 64) || var_name[i] >= 123)
+			return (err_msg("export: `", var_name, ": not a valid idenfitier"),
+				set_exit_code(1), false);
+		i++;
+	}
+	return (true);
+}
+
 void	export_env_var(t_token *token_list)
 {
 	t_env	**env_list;
@@ -78,6 +95,8 @@ void	export_env_var(t_token *token_list)
 	split = ft_split(token_list->next->content, '=');
 	if (!split)
 		return (set_exit_code(12));
+	if (!valid_var_name(split[0]))
+		return (destroy_double_array(split));
 	if (ft_getenv_bool(split[0]) && !ft_strchr(token_list->next->content, '='))
 		return (destroy_double_array(split));
 	if (ft_getenv_bool(split[0]))

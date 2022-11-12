@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/12 10:04:47 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/12 14:26:59 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ static void	export_loop(t_token *token_list)
 	t_token	*temp;
 	int		token_len;
 
-	set_exit_code(0);
 	token_len = ft_tokenlen(token_list) - 1;
 	if (token_len == 0)
 		return (print_export_env());
@@ -79,14 +78,15 @@ static void	execute_child_process(t_token *token_list, int ends[2],
 	{
 		exec_builtin(token_list->type, token_list, fork_pid);
 		close(ends[WRITE_END]);
-		exit(errno);
+		exit(get_program()->exit_code);
 	}
 	ev_arr = get_env_array();
 	if (!ev_arr)
 		exit(127);
 	cmd_path = create_executable_path(token_list);
 	if (!cmd_path)
-		return (destroy_double_array(ev_arr), free(cmd_path), exit(errno));
+		return (destroy_double_array(ev_arr), free(cmd_path),
+			exit(get_program()->exit_code));
 	execve(cmd_path, rd->arg_str, ev_arr);
 	if (!ft_strcmp("./minishell", token_list->content))
 		err_msg(token_list->content, ": is a directory", NULL);
@@ -139,5 +139,6 @@ void	exec_command(t_token **token_list)
 	while (wait(NULL) > 0)
 		continue ;
 	restore_std();
-	return (set_exit_code(WEXITSTATUS(child_state)));
+	if (child_state)
+		return (set_exit_code(WEXITSTATUS(child_state)));
 }
