@@ -6,12 +6,18 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 09:44:35 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/02 15:24:42 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/12 10:41:01 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Checks if the given name is in the env.
+ * If it is in the env, it returns true, else false.
+ * @param name The given variable name.
+ * @return bool
+ */
 static bool	ft_getenv_bool(const char *name)
 {
 	t_env	**env;
@@ -43,16 +49,8 @@ void	print_export_env(void)
 	temp = *env;
 	while (temp)
 	{
-		if (!temp->has_value && !temp->export_unset)
-		{
-			if (!ft_strcmp(temp->var_name, "PATH")
-				|| !ft_strcmp(temp->var_name, "HOME"))
-			{
-				temp = temp->next;
-				continue ;
-			}
+		if (!temp->value && !temp->export_unset)
 			printf("declare -x %s\n", temp->var_name);
-		}
 		else
 		{
 			if (!temp->value && temp->export_unset)

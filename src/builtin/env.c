@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/22 12:13:37 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/09 16:32:39 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/12 11:19:16 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,10 @@ void	print_env(void)
 	temp = *env;
 	while (temp)
 	{
-		if (temp->has_value == true && temp->unset == false)
+		if (temp->has_value && !temp->unset)
 			printf("%s=%s\n", temp->var_name, temp->value);
+		else if (!temp->has_value && temp->export_unset)
+			printf("%s=\n", temp->var_name);
 		temp = temp->next;
 	}
 }

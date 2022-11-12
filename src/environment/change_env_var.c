@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/07 15:15:31 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/04 11:20:30 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/12 11:17:35 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,11 @@ static void	set_values(t_env *temp, char *new_value, bool export)
 {
 	if (export)
 	{
-		// if (!ft_strcmp(temp->var_name, "PATH")
-			// || !ft_strcmp(temp->var_name, "HOME"))
-		// {
-			temp->unset = false;
-			temp->export_unset = true;
-			temp->has_value = true;
-		// }
 		temp->export_unset = true;
+		if (new_value == NULL)
+			temp->has_value = false;
+		else
+			temp->has_value = true;
 	}
 	else
 	{
