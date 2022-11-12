@@ -6,11 +6,12 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 09:44:35 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/12 14:15:16 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/12 16:25:54 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "lexer_utils.h"
 
 /**
  * @brief Checks if the given name is in the env.
@@ -63,17 +64,35 @@ void	print_export_env(void)
 	}
 }
 
-static bool	valid_var_name(char *var_name)
+bool	valid_var_name(char *var_name, char *var_name2, char *equal_sign)
 {
-	int	i;
+	char	*var;
+	char	*var2;
+	char	*joined;
+	int		i;
 
 	i = 0;
 	while (var_name[i])
 	{
-		if ((var_name[i] >= 58 && var_name[i] < 61)
-			|| (var_name[i] > 61 && var_name[i] <= 64) || var_name[i] >= 123)
-			return (err_msg("export: `", var_name, ": not a valid idenfitier"),
+		if (!is_quote(var_name[i]) && (var_name[i] <= 47 || (var_name[i] >= 58 && var_name[i] < 61)
+			|| (var_name[i] > 61 && var_name[i] <= 64) || var_name[i] >= 123))
+		{
+			var = ft_strtrim(var_name, "\'\"");
+			if (var_name2)
+			{
+				var2 = ft_strjoin("=", var_name2);
+				joined = ft_strjoin(var, var2);
+			}
+			else
+			{
+				if (ft_strchr(equal_sign, '='))
+					joined = ft_strjoin(var, "=");
+				else
+					joined = var;
+			}
+			return (err_msg("export: `", joined, "': not a valid idenfitier"),
 				set_exit_code(1), false);
+		}
 		i++;
 	}
 	return (true);
@@ -93,10 +112,10 @@ void	export_env_var(t_token *token_list)
 		return (err_msg(msg, "': not a valid indentifier", NULL));
 	}
 	split = ft_split(token_list->next->content, '=');
+	if (!valid_var_name(token_list->next->content, NULL, "="))
+		return ;
 	if (!split)
 		return (set_exit_code(12));
-	if (!valid_var_name(split[0]))
-		return (destroy_double_array(split));
 	if (ft_getenv_bool(split[0]) && !ft_strchr(token_list->next->content, '='))
 		return (destroy_double_array(split));
 	if (ft_getenv_bool(split[0]))
