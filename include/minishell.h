@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/12 09:57:08 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/12 10:05:18 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,6 @@ void			print_2d_array(char **array);
 
 //executor/
 
-char			*get_executable_path(char *command_str);
 void			exec_command(t_token **token_list);
 void			check_redirect(t_token *token_list, t_redirect *rd);
 char			**itterate_redirect(t_token *token_list, char *cmd);

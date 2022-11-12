@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/11 16:51:53 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/12 10:04:47 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ static void	execute_child_process(t_token *token_list, int ends[2],
 	ev_arr = get_env_array();
 	if (!ev_arr)
 		exit(127);
-	// cmd_path = get_executable_path(token_list->content);
 	cmd_path = create_executable_path(token_list);
 	if (!cmd_path)
 		return (destroy_double_array(ev_arr), free(cmd_path), exit(errno));

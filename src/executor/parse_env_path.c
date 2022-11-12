@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 13:34:38 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/11 16:54:58 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/12 10:05:12 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static char	*check_correct_path(char *path_line, char *command)
 	return (get_correct_path(path_line, command));
 }
 
-char	*get_executable_path(char *command_str)
+static char	*get_executable_path(char *command_str)
 {
 	char	*command;
 	char	*correct_path;
@@ -95,8 +95,6 @@ char	*create_executable_path(t_token *token_list)
 	t_token	*temp;
 
 	temp = token_list;
-	if (temp->type < redirect_input || temp->type > is_heredoc)
-		return (get_executable_path(temp->content));
 	while (temp && temp->type != is_pipe)
 	{
 		if (temp->type < redirect_input || temp->type > is_heredoc)
