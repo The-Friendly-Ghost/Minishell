@@ -6,33 +6,73 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/13 12:04:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/13 12:04:21 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/13 13:28:48 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static int	env_array_size(char **env_array)
+{
+	int	i;
+
+	i = 0;
+	while (env_array[i])
+		i++;
+	return (i);
+}
+
+static void	swap(char **arr, int str1, int str2)
+{
+	char	*temp;
+
+	temp = arr[str1];
+	arr[str1] = arr[str2];
+	arr[str2] = temp;
+}
+
+void	sort_env_array(char **env_array, int array_size)
+{
+	int		i;
+	int		j;
+
+	while (array_size-- >= 0)
+	{
+		i = 0;
+		while (env_array[i] && env_array[i + 1])
+		{
+			j = 0;
+			while (env_array[i][j] && env_array[i + 1][j])
+			{
+				if (env_array[i][j] == '=' || env_array[i + 1][j] == '='
+					|| env_array[i][j] < env_array[i + 1][j])
+					break ;
+				else if (env_array[i][j] > env_array[i + 1][j])
+				{
+					swap(env_array, i, i + 1);
+					break ;
+				}
+				j++;
+			}
+			i++;
+		}
+	}
+}
+
 void	print_export_env(void)
 {
-	t_env	**env;
-	t_env	*temp;
+	char	**env_array;
+	int		i;
 
-	env = get_env_list();
-	sort_env_list(env);
-	if (!(*env))
+	env_array = get_env_array();
+	if (!env_array)
 		return (set_exit_code(127));
-	temp = *env;
-	while (temp)
+	sort_env_array(env_array, env_array_size(env_array));
+	i = 0;
+	while (env_array[i])
 	{
-		if (!temp->value && !temp->export_unset)
-			printf("declare -x %s\n", temp->var_name);
-		else
-		{
-			if (!temp->value && temp->export_unset)
-				printf("declare -x %s=\"\"\n", temp->var_name);
-			else
-				printf("declare -x %s=\"%s\"\n", temp->var_name, temp->value);
-		}
-		temp = temp->next;
+		printf("%s\n", env_array[i]);
+		i++;
 	}
+	destroy_double_array(env_array);
 }

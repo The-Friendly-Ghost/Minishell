@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 15:14:05 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/01 14:59:07 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/13 13:31:59 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,24 @@ static char	*create_env_string(t_env *env_var)
 	int		i;
 	int		x;
 
-	len = ft_strlen(env_var->var_name) + ft_strlen(env_var->value) + 2;
+	len = ft_strlen(env_var->var_name) + ft_strlen(env_var->value) + 4;
 	str = malloc(len * sizeof(char));
-//PROTECTEN
+	if (!str)
+		return (NULL);
 	i = 0;
 	x = 0;
 	while (env_var->var_name != NULL && env_var->var_name[i])
 		str[x++] = env_var->var_name[i++];
-	str[x++] = '=';
+	if (env_var->value)
+	{
+		str[x++] = '=';
+		str[x++] = '\"';
+	}
 	i = 0;
 	while (env_var->value != NULL && env_var->value[i])
 		str[x++] = env_var->value[i++];
+	if (env_var->value)
+		str[x++] = '\"';
 	str[x] = '\0';
 	return (str);
 }
@@ -65,7 +72,7 @@ char	**get_env_array(void)
 {
 	t_env	**env;
 	t_env	*temp;
-	char	**env_list;
+	char	**env_array;
 	int		node;
 
 	node = 0;
@@ -73,16 +80,19 @@ char	**get_env_array(void)
 	if (!(*env))
 		return (NULL);
 	temp = *env;
-	env_list = malloc(sizeof(char *) * (ft_envsize(temp) + 1));
-	if (!env_list)
+	env_array = malloc(sizeof(char *) * (ft_envsize(temp) + 1));
+	if (!env_array)
 		return (NULL);
 	temp = *env;
 	while (temp)
 	{
-		if (temp->unset == false && temp->has_value)
-			env_list[node++] = create_env_string(temp);
+		// if (temp->unset == false && temp->has_value)
+		env_array[node++] = create_env_string(temp);
+		if (!env_array[node - 1])
+			return (destroy_double_array(env_array), err_msg(NULL, NULL, NULL),
+				NULL);
 		temp = temp->next;
 	}
-	env_list[node] = NULL;
-	return (env_list);
+	env_array[node] = NULL;
+	return (env_array);
 }

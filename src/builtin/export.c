@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 09:44:35 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/13 12:03:31 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/13 13:43:05 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,32 @@ bool	valid_var_name(char *var_name, char *var_name2, char *equal_sign)
 	return (true);
 }
 
-void	export_env_var(t_token *token_list)
+static void	add_change_env_var(char **split, t_token *token_list)
 {
 	t_env	**env_list;
+
+	env_list = get_env_list();
+	if (ft_getenv_bool(split[0]) && !ft_strchr(token_list->next->content, '='))
+		return ;
+	if (ft_getenv_bool(split[0]))
+	{
+		if (split[1])
+			return ((void)change_env_var(split[0], ft_strdup(split[1]), true));
+		return ((void)change_env_var(split[0], NULL, true));
+	}
+	if (split[1])
+		return (new_env_var(
+				env_list, ft_strdup(split[0]), ft_strdup(split[1])));
+	if (ft_strchr(token_list->next->content, '='))
+		return (new_env_var(env_list, ft_strdup(split[0]), ft_strdup("")));
+	new_env_var(env_list, ft_strdup(split[0]), NULL);
+}
+
+void	export_env_var(t_token *token_list)
+{
 	char	**split;
 	char	*msg;
 
-	env_list = get_env_list();
 	if (token_list->next->content[0] == '=')
 	{
 		msg = ft_strjoin("`", token_list->next->content);
@@ -89,22 +108,10 @@ void	export_env_var(t_token *token_list)
 		return (err_msg(msg, "': not a valid indentifier", NULL));
 	}
 	split = ft_split(token_list->next->content, '=');
+	if (!split)
+		return (set_exit_code(12), err_msg(NULL, NULL, NULL));
 	if (!valid_var_name(token_list->next->content, NULL, "="))
 		return ;
-	if (!split)
-		return (set_exit_code(12));
-	if (ft_getenv_bool(split[0]) && !ft_strchr(token_list->next->content, '='))
-		return (destroy_double_array(split));
-	if (ft_getenv_bool(split[0]))
-	{
-		if (split[1])
-			return ((void)change_env_var(split[0], ft_strdup(split[1]), true),
-				destroy_double_array(split));
-		return ((void)change_env_var(split[0], NULL, true),
-			destroy_double_array(split));
-	}
-	if (split[1])
-		return (new_env_var(
-				env_list, ft_strdup(split[0]), ft_strdup(split[1])));
-	new_env_var(env_list, ft_strdup(split[0]), NULL);
+	add_change_env_var(split, token_list);
+	destroy_double_array(split);
 }
