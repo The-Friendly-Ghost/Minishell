@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 09:44:35 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/12 16:25:54 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/13 12:03:31 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,31 +39,6 @@ static bool	ft_getenv_bool(const char *name)
 	return (false);
 }
 
-void	print_export_env(void)
-{
-	t_env	**env;
-	t_env	*temp;
-
-	env = get_env_list();
-	sort_env_list(env);
-	if (!(*env))
-		return (set_exit_code(127));
-	temp = *env;
-	while (temp)
-	{
-		if (!temp->value && !temp->export_unset)
-			printf("declare -x %s\n", temp->var_name);
-		else
-		{
-			if (!temp->value && temp->export_unset)
-				printf("declare -x %s=\"\"\n", temp->var_name);
-			else
-				printf("declare -x %s=\"%s\"\n", temp->var_name, temp->value);
-		}
-		temp = temp->next;
-	}
-}
-
 bool	valid_var_name(char *var_name, char *var_name2, char *equal_sign)
 {
 	char	*var;
@@ -74,8 +49,10 @@ bool	valid_var_name(char *var_name, char *var_name2, char *equal_sign)
 	i = 0;
 	while (var_name[i])
 	{
-		if (!is_quote(var_name[i]) && (var_name[i] <= 47 || (var_name[i] >= 58 && var_name[i] < 61)
-			|| (var_name[i] > 61 && var_name[i] <= 64) || var_name[i] >= 123))
+		if (!is_quote(var_name[i])
+			&& (var_name[i] <= 47 || (var_name[i] >= 58 && var_name[i] < 61)
+				|| (var_name[i] > 61 && var_name[i] <= 64)
+				|| var_name[i] >= 123))
 		{
 			var = ft_strtrim(var_name, "\'\"");
 			if (var_name2)
