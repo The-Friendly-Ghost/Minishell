@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 11:35:19 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/31 16:18:57 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/13 13:46:38 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	err_msg(char *str1, char *str2, char *str3)
 	if (!err_msg)
 	{
 		ft_putendl_fd("Fatal error", 2);
-		exit(ENOMEM);
+		return (set_exit_code(ENOMEM), exit(ENOMEM));
 	}
 	ft_putendl_fd(err_msg, 2);
 	return (free(temp), free(err_msg));
