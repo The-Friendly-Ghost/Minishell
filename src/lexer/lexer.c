@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 13:38:21 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/06 12:44:30 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/13 11:49:19 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,12 @@ static void	add_space_after_quote(char *line, char *str, int *i, int *j)
 	*j += 1;
 }
 
+static void	is_special_add_space(char *line, char *str, int *i, int *j)
+{
+	while (is_special(str, *i))
+		add_space(line, str, i, j);
+}
+
 static char	*set_whitespace(char *str, int specials_count)
 {
 	char	*line;
@@ -66,8 +72,8 @@ static char	*set_whitespace(char *str, int specials_count)
 		return (NULL);
 	while (str[i])
 	{
-		while (is_special(str, i))
-			add_space(line, str, &i, &j);
+		if (!in_string(str[i], false))
+			is_special_add_space(line, str, &i, &j);
 		if (is_s_qoute_d_qoute(str, i))
 		{
 			if ((i > 0 && str[i] == '\"' && str[i - 1] != '\'')
@@ -78,7 +84,7 @@ static char	*set_whitespace(char *str, int specials_count)
 		j++;
 		i++;
 	}
-	return (line);
+	return (in_string('\0', true), line);
 }
 
 char	**lexer(char *input)

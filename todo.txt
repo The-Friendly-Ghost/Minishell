@@ -25,3 +25,11 @@ V pwd aan path toevoegen
 - OLDPWD staat er niet in
 
 - minishell> exit | exit 123  Exit niet met code 123
+
+
+er is een probleem in de lexer wanneer er een whitespace wordt gezet tijdens het zien van een special
+in lexer.c line 69:
+    echo "BONJOUR|JESUIS"
+    echo BONJOUR|JESUIS
+    export "BONJOUR|JESUIS"
+    export BONJOUR|JESUIS
