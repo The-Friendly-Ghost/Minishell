@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 16:56:17 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/31 10:36:20 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/13 14:15:33 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ char	*search_env_variables(char *str, int i, bool is_double_quote)
 	char	*env_var_value;
 	char	*temp_str;
 
-	if (str == NULL)
-		return (NULL);
 	while (str[i])
 	{
 		if (str[i] == '\"')

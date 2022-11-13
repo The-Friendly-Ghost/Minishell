@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/12 09:57:12 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/13 14:21:06 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,15 @@ static int	str_is_whitespace(char *str)
 	return (1);
 }
 
+// verander naar static char	*get_input()
 static char	*get_input(char *outside_input)
 {
 	char		*input;
 
 	while (1)
 	{
+		// verwijder de if else naar
+		// input = readline("minishell> ");
 		if (outside_input)
 			input = outside_input;
 		else
@@ -55,6 +58,8 @@ static char	*get_input(char *outside_input)
 // 	system("leaks -q minishell");
 // }
 
+// IVM de tester:
+// Verander main naar int main(void)
 int	main(int argc, char **argv)
 {
 	char				*input;
@@ -67,10 +72,11 @@ int	main(int argc, char **argv)
 	get_program();
 	while (1)
 	{
-		// set_exit_code(0);
 		init_signal_handler();
 		if (token_list)
 			destroy_token_list(&token_list);
+		// verwander de if else naar
+		// input = get_input();
 		if (argc == 3)
 			input = get_input(argv[2]);
 		else

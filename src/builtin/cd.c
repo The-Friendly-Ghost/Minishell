@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/06 16:08:39 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/04 14:28:44 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/13 14:03:08 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,6 @@ static void	set_cd_previous(int *cd_count)
 	else if (ft_getenv("OLDPWD") == NULL && *cd_count > 0)
 		return (change_env_var("OLDPWD", getcwd(NULL, 0), false),
 			ft_putchar_fd('\n', 1));
-	/* wat gebeurd hier als ft_strdup NULL returned?
-	moeten we een error message naar stderr schrijven?
-	err_msg(NULL, NULL, NULL) zorgt voor een Fatal error
-	errno 12 -> `man errno`*/
 	old_pwd = ft_strdup(ft_getenv("OLDPWD"));
 	if (!old_pwd)
 		return (err_msg(NULL, NULL, NULL));
@@ -98,10 +94,6 @@ static void	set_cd_home(int *cd_count)
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 		return (set_exit_code(errno));
-	/* wat gebeurd hier als ft_getenv NULL returned?
-	moeten we een error message naar stderr schrijven?
-	err_msg(NULL, NULL, NULL) zorgt voor een Fatal error
-	errno 12 -> `man errno`*/
 	cd_path = ft_getenv("HOME");
 	if (!cd_path)
 		return (err_msg(NULL, NULL, NULL));

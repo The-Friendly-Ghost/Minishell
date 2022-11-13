@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 15:14:05 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/13 13:31:59 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/13 14:13:54 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ char	**get_env_array(void)
 	temp = *env;
 	while (temp)
 	{
-		// if (temp->unset == false && temp->has_value)
 		env_array[node++] = create_env_string(temp);
 		if (!env_array[node - 1])
 			return (destroy_double_array(env_array), err_msg(NULL, NULL, NULL),
