@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/12 15:27:56 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/14 08:18:21 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,6 @@ void			print_pwd(void);
 void			print_export_env(void);
 void			sort_env_list(t_env **begin_list);
 void			export_env_var(t_token *token_list);
-bool			valid_var_name(char *var_name, char *var_name2, char *equal_sign);
 void			unset_env_var(t_token *token_list);
 void			cd_builtin(t_token *token_list);
 void			exit_minishell(t_token *token_list, pid_t *pid);
