@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/31 14:42:20 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/14 15:39:14 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/14 17:03:42 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,21 +57,18 @@ void	exit_minishell(t_token *token_list)
 		return (print_fork_exit(), exit(0));
 	if (temp->next && temp->next->content && temp->next->next
 		&& temp->next->next->content && temp->next->next->type != is_pipe)
-		return (print_fork_exit(),
-			err_msg("exit: ", "too many arguments", NULL),
-			set_exit_code(1));
+		return (print_fork_exit(), err_msg("exit: ", "too many arguments",
+				NULL), set_exit_code(1));
+	removed_quotes = temp->next->content;
 	if (temp->next->content[0] == '\'')
 		removed_quotes = ft_strtrim(temp->next->content, "\'");
 	else if (temp->next->content[0] == '\"')
 		removed_quotes = ft_strtrim(temp->next->content, "\"");
-	else
-		removed_quotes = temp->next->content;
 	if (!removed_quotes)
 		return (err_msg(NULL, NULL, NULL));
 	trimmed_str = remove_whitespace(removed_quotes);
 	if (temp->next && temp->next->content && !trimmed_str)
-		return (print_fork_exit(),
-			err_msg("exit: ", removed_quotes,
+		return (print_fork_exit(), err_msg("exit: ", removed_quotes,
 				": numeric argument required"),
 			exit(255));
 	if (temp->next && temp->next->content && str_is_num(trimmed_str))
