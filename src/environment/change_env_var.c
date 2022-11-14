@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/07 15:15:31 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/14 13:18:15 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/14 17:02:01 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,8 @@ void	new_env_var(t_env **env_list, char *new_var, char *new_value)
 	while (temp->next)
 		temp = temp->next;
 	new_node = malloc(sizeof(t_env));
+	if (!new_node)
+		return (err_msg(NULL, NULL, NULL));
 	temp->next = new_node;
 	new_node->previous = temp;
 	new_node->next = NULL;

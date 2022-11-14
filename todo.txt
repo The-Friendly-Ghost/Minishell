@@ -29,3 +29,9 @@ V pwd aan path toevoegen
 - verander het een en ander in de main.c na het testen.
 
 - als PATH veranderd wordt, kijk dan of de var die gereturned wordt niet al gefreed is.
+
+
+DEBUG:
+    zet alleen de -g flag aan in de Makefile
+    valgrind track-origins=yes --leak-check=full --show-leak-kinds=definite,possible --log-file="check_mem.txt" ./minishell
+    valgrind --track-origins=yes --leak-check=full --show-leak-kinds=definite,possible --log-file="check_mem.txt" ./minishell

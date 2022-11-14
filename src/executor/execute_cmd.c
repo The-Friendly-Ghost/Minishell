@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/14 13:55:47 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/14 18:13:45 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ static void	exec_builtin(t_token_type type, t_token *token_list)
 	if (type == print_exit_code)
 		return (err_msg(char_exit_code, ": command not found", NULL),
 			set_exit_code(127), free(char_exit_code));
+	free(char_exit_code);
 	set_exit_code(0);
 	if (type == echo)
 		return (echo_builtin(token_list));
@@ -123,6 +124,8 @@ void	exec_command(t_token **token_list)
 	t_redirect	rd;
 	int			child_state;
 
+	pid = 0;
+	child_state = 0;
 	backup_std_and_set_signals();
 	while (*token_list)
 	{
@@ -140,6 +143,7 @@ void	exec_command(t_token **token_list)
 	while (wait(NULL) > 0)
 		continue ;
 	restore_std();
+	destroy_double_array(rd.arg_str);
 	if (child_state)
 		return (set_exit_code(WEXITSTATUS(child_state)));
 }

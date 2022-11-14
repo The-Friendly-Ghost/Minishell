@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 09:44:35 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/14 09:25:11 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/14 18:19:44 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ void	export_env_var(t_token *token_list)
 	char	*msg;
 	char	*split_1;
 
+	split_1 = NULL;
 	if (token_list->next->content[0] == '=')
 	{
 		msg = ft_strjoin("`", token_list->next->content);
@@ -127,10 +128,9 @@ void	export_env_var(t_token *token_list)
 		split_1 = ft_strtrim(split[1], "\'");
 	if (split[1] && split[1][0] == '\"')
 		split_1 = ft_strtrim(split[1], "\"");
-	if (!split_1)
-		return (err_msg(NULL, NULL, NULL));
-	if (!split[1])
-		split_1 = NULL;
+	else if (split[1])
+		split_1 = ft_strdup(split[1]);
 	add_change_env_var(split[0], split_1, token_list);
+	free(split_1);
 	destroy_double_array(split);
 }
