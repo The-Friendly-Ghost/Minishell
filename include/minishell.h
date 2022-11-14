@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/14 08:18:21 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/14 13:54:24 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,7 @@ void			sort_env_list(t_env **begin_list);
 void			export_env_var(t_token *token_list);
 void			unset_env_var(t_token *token_list);
 void			cd_builtin(t_token *token_list);
-void			exit_minishell(t_token *token_list, pid_t *pid);
+void			exit_minishell(t_token *token_list);
 
 //test_functions
 
@@ -186,7 +186,7 @@ void			check_redirect(t_token *token_list, t_redirect *rd);
 char			**itterate_redirect(t_token *token_list, char *cmd);
 void			set_heredoc(t_token *token_list, t_redirect *rd);
 bool			expand_heredocs(t_token *token_list);
-void			backup_std_and_set_signals(void);
+bool			backup_std_and_set_signals(void);
 void			restore_std(void);
 t_token			*destroy_command(t_token *token_list);
 void			set_dup(t_redirect *rd);

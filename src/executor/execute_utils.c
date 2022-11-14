@@ -6,11 +6,12 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/08 11:10:19 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/11 13:01:50 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/14 12:02:28 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <string.h>
 
 /**
  * @brief Changes STDOUT and STDIN to another file descriptor if there is an
@@ -43,7 +44,7 @@ bool	is_last_command(t_token *token_list)
 	return (true);
 }
 
-void	backup_std_and_set_signals(void)
+bool	backup_std_and_set_signals(void)
 {
 	t_program	*program;
 
@@ -52,11 +53,13 @@ void	backup_std_and_set_signals(void)
 	program = get_program();
 	program->std_backup[0] = dup(STDIN_FILENO);
 	if (program->std_backup[0] == -1)
-		return (err_msg(NULL, NULL, NULL), set_exit_code(1));
+		return (set_exit_code(errno), err_msg(strerror(errno), NULL, NULL),
+			false);
 	program->std_backup[1] = dup(STDOUT_FILENO);
 	if (program->std_backup[1] == -1)
-		return (err_msg(NULL, NULL, NULL), set_exit_code(1));
-//err_msg bij beide dups veranderen!
+		return (set_exit_code(errno), err_msg(strerror(errno), NULL, NULL),
+			false);
+	return (true);
 }
 
 void	restore_std(void)
@@ -65,10 +68,9 @@ void	restore_std(void)
 
 	program = get_program();
 	if (dup2(program->std_backup[0], STDIN_FILENO) == -1)
-		return (err_msg(NULL, NULL, NULL), set_exit_code(1));
+		return (set_exit_code(errno), err_msg(strerror(errno), NULL, NULL));
 	if (dup2(program->std_backup[1], STDOUT_FILENO) == -1)
-		return (err_msg(NULL, NULL, NULL), set_exit_code(1));
-//err_msg bij beide dup2 veranderen!
+		return (set_exit_code(errno), err_msg(strerror(errno), NULL, NULL));
 	close(program->std_backup[0]);
 	close(program->std_backup[1]);
 }

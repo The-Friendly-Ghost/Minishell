@@ -6,43 +6,38 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/31 14:42:20 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/13 14:32:59 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/14 15:39:14 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	print_fork_exit(pid_t *pid)
+static void	print_fork_exit(void)
 {
-	if (*pid)
+	if (get_program()->amount_commands == 1)
 		ft_putendl_fd("exit", 2);
 }
 
-static char	*remove_quotes(char *content)
+static char	*remove_whitespace(char *str)
 {
-	char	*temp;
-	int		len;
+	char	*ret;
 	int		i;
+	bool	num;
 
-	len = ft_strlen(content) + 1;
-	temp = malloc(len * sizeof(char));
-	if (!temp)
-		return (NULL);
-	len = 0;
 	i = 0;
-	while (content[i])
-	{
-		if (content[i] != '"' && content[i] != '\'')
-		{
-			temp[len] = content[i];
-			len++;
-		}
+	num = false;
+	while (str[i] && ft_is_whitespace(str[i]))
 		i++;
-	}
-	temp[len] = '\0';
-	ft_memcpy(content, temp, ft_strlen(temp) + 1);
-	free(temp);
-	return (content);
+	if (str[i] == '-' || str[i] == '+')
+		i++;
+	while (str[i] && ft_isdigit(str[i++]))
+		num = true;
+	while (str[i] && ft_is_whitespace(str[i]))
+		i++;
+	if (str[i] || !num)
+		return (NULL);
+	ret = ft_strtrim(str, " ");
+	return (ret);
 }
 
 /**
@@ -51,27 +46,34 @@ static char	*remove_quotes(char *content)
  * @return 
  * @note
  */
-void	exit_minishell(t_token *token_list, pid_t *pid)
+void	exit_minishell(t_token *token_list)
 {
 	t_token	*temp;
 	char	*removed_quotes;
+	char	*trimmed_str;
 
 	temp = token_list;
 	if (temp->next == NULL || temp->next->type == is_pipe)
-		exit(0);
+		return (print_fork_exit(), exit(0));
 	if (temp->next && temp->next->content && temp->next->next
 		&& temp->next->next->content && temp->next->next->type != is_pipe)
-		return (print_fork_exit(pid),
+		return (print_fork_exit(),
 			err_msg("exit: ", "too many arguments", NULL),
 			set_exit_code(1));
-	removed_quotes = remove_quotes(temp->next->content);
+	if (temp->next->content[0] == '\'')
+		removed_quotes = ft_strtrim(temp->next->content, "\'");
+	else if (temp->next->content[0] == '\"')
+		removed_quotes = ft_strtrim(temp->next->content, "\"");
+	else
+		removed_quotes = temp->next->content;
 	if (!removed_quotes)
 		return (err_msg(NULL, NULL, NULL));
-	if (temp->next && temp->next->content && !str_is_num(removed_quotes))
-		return (print_fork_exit(pid),
-			err_msg("exit: ", temp->next->content,
+	trimmed_str = remove_whitespace(removed_quotes);
+	if (temp->next && temp->next->content && !trimmed_str)
+		return (print_fork_exit(),
+			err_msg("exit: ", removed_quotes,
 				": numeric argument required"),
 			exit(255));
-	if (temp->next && temp->next->content && str_is_num(removed_quotes))
-		return (print_fork_exit(pid), exit(ft_atoi(removed_quotes)));
+	if (temp->next && temp->next->content && str_is_num(trimmed_str))
+		return (print_fork_exit(), exit(ft_atoi(trimmed_str)));
 }

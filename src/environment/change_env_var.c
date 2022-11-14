@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/07 15:15:31 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/12 11:17:35 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/14 13:18:15 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,8 +153,7 @@ void	set_shlvl(t_env **env_list)
 		{
 			num = ft_atoi(temp->value);
 			free(temp->value);
-			num += 1;
-			temp->value = ft_itoa(num);
+			temp->value = ft_itoa(num + 1);
 		}
 	}
 }

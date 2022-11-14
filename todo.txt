@@ -27,3 +27,5 @@ V pwd aan path toevoegen
 - minishell> exit | exit 123  Exit niet met code 123
 
 - verander het een en ander in de main.c na het testen.
+
+- als PATH veranderd wordt, kijk dan of de var die gereturned wordt niet al gefreed is.

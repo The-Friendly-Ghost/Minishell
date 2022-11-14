@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/27 09:44:34 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/31 14:45:36 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/14 11:23:44 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,19 @@ static char	*trim_quote(char *content)
 	return (trimmed_str);
 }
 
+static bool	wait_hd(t_token *token)
+{
+	int	child_state;
+
+	signal(SIGINT, kill_heredoc);
+	waitpid(get_program()->hd_pid, &child_state, 0);
+	if (child_state)
+		return (false);
+	edit_token(token, ft_strdup(token->heredoc_file), infile);
+	edit_token(token->previous, ft_strdup("<"), redirect_input);
+	return (true);
+}
+
 /**
  * @brief First, a filename is created by joining 'Heredoc_temp' and
  * the token_id togheter. This garantuees a unique filename. We then
@@ -79,40 +92,31 @@ static char	*trim_quote(char *content)
  */
 static bool	get_heredoc_input(t_token *token, char *token_id)
 {
-	const char	prompt[] = "> ";
 	char		*input;
 	char		*p_input;
 	int			fd;
-	int			child_state;
 
 	token->heredoc_file = ft_strjoin("/tmp/Heredoc_temp", token_id);
+	if (!token->heredoc_file)
+		return (false);
 	free(token_id);
 	get_program()->hd_pid = fork();
 	if (get_program()->hd_pid == -1)
-		return ((void)printf("start niet\n"), false);
+		return (false);
 	else if (get_program()->hd_pid == 0)
 	{
 		fd = open(token->heredoc_file, O_TRUNC | O_WRONLY | O_CREAT, 0777);
 		while (1)
 		{
-			input = readline(prompt);
+			input = readline("> ");
 			p_input = search_env_variables(input, 0, false);
 			if (!p_input || !ft_strcmp(p_input, trim_quote(token->content)))
-			{
-				exit(0);
-				close(fd);
-			}
+				return (close(fd), exit(0), false);
 			ft_putendl_fd(p_input, fd);
 			free(p_input);
 		}
 	}
-	signal(SIGINT, kill_heredoc);
-	waitpid(get_program()->hd_pid, &child_state, 0);
-	if (child_state)
-		return (false);
-	edit_token(token, ft_strdup(token->heredoc_file), infile);
-	edit_token(token->previous, ft_strdup("<"), redirect_input);
-	return (true);
+	return (wait_hd(token));
 }
 
 /**

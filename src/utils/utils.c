@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 11:35:19 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/13 13:46:38 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/14 15:31:10 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ bool	str_is_num(char *num)
 	int	i;
 
 	i = 0;
+	if (num[i] == '-' || num[i] == '+')
+		i++;
 	while (num[i])
 	{
 		if (!ft_isdigit(num[i++]))
@@ -88,6 +90,7 @@ void	err_msg(char *str1, char *str2, char *str3)
 	char	*err_msg;
 	char	*temp;
 
+	temp = NULL;
 	if (str1 && str2 && str3)
 	{
 		temp = ft_strjoin("minishell: ", str1);
@@ -105,8 +108,7 @@ void	err_msg(char *str1, char *str2, char *str3)
 	if (!err_msg)
 	{
 		ft_putendl_fd("Fatal error", 2);
-		return (set_exit_code(ENOMEM), exit(ENOMEM));
+		return (free(temp), set_exit_code(ENOMEM), exit(ENOMEM));
 	}
-	ft_putendl_fd(err_msg, 2);
-	return (free(temp), free(err_msg));
+	return (ft_putendl_fd(err_msg, 2), free(temp), free(err_msg));
 }

@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 13:34:38 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/12 10:05:12 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/14 13:05:16 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static char	*get_correct_path(char *path_line, char *command)
 			return (destroy_double_array(path_list), NULL);
 		if (access(joined, F_OK | X_OK) == 0)
 		{
-			correct_path = joined;
+			correct_path = ft_strdup(joined);
 			free(joined);
 			return (destroy_double_array(path_list), correct_path);
 		}
