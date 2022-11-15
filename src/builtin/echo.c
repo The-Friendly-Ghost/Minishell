@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/06 14:18:14 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/10 11:14:12 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/15 14:54:24 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,19 +34,23 @@ static void	print_echo(char *str)
 static bool	is_n_flag(char *str)
 {
 	int	i;
+	int	len;
 
 	if (!str)
-		return (0);
+		return (false);
+	len = ft_strlen(str);
 	if (str[0] != '-')
-		return (0);
+		return (false);
+	if (len > 2 && str[2] != 'n')
+		return (false);
 	i = 1;
 	while (str[i])
 	{
-		if (str[i] != 'n')
-			return (0);
+		if (str[i] == 'n')
+			return (true);
 		i++;
 	}
-	return (1);
+	return (false);
 }
 
 void	echo_builtin(t_token *token_list)
