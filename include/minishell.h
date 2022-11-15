@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/14 13:54:24 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/15 10:04:06 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ typedef struct s_redirect {
 	int		id_last_in;
 	int		redirects_count;
 	int		arg_count;
-	char	**arg_str;
+	char	**arg_arr;
 }	t_redirect;
 
 typedef enum e_token_type {
@@ -194,6 +194,7 @@ void			set_pipes(int *ends, t_token *token);
 bool			is_last_command(t_token *token_list);
 pid_t			ft_get_a_pid(void);
 t_token			*move_command_in_front(t_token *token_list);
+void			wait_processes(pid_t pid);
 char			*create_executable_path(t_token *token_list);
 
 //utils/

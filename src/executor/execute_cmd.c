@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/14 18:13:45 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/15 10:28:19 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ static void	execute_child_process(t_token *token_list, int ends[2],
 	if (!cmd_path)
 		return (destroy_double_array(ev_arr), free(cmd_path),
 			exit(get_program()->exit_code));
-	execve(cmd_path, rd->arg_str, ev_arr);
+	execve(cmd_path, rd->arg_arr, ev_arr);
 	if (!ft_strcmp("./minishell", token_list->content))
 		err_msg(token_list->content, ": is a directory", NULL);
 	destroy_double_array(ev_arr);
@@ -122,10 +122,9 @@ void	exec_command(t_token **token_list)
 {
 	pid_t		pid;
 	t_redirect	rd;
-	int			child_state;
 
 	pid = 0;
-	child_state = 0;
+	rd.arg_arr = NULL;
 	backup_std_and_set_signals();
 	while (*token_list)
 	{
@@ -134,16 +133,12 @@ void	exec_command(t_token **token_list)
 		{
 			check_redirect(*token_list, &rd);
 			exec_builtin((*token_list)->type, *token_list);
+			destroy_double_array(rd.arg_arr);
 			break ;
 		}
 		execute_child(*token_list, &pid, &rd);
 		*token_list = destroy_command(*token_list);
 	}
-	waitpid(pid, &child_state, WUNTRACED);
-	while (wait(NULL) > 0)
-		continue ;
+	wait_processes(pid);
 	restore_std();
-	destroy_double_array(rd.arg_str);
-	if (child_state)
-		return (set_exit_code(WEXITSTATUS(child_state)));
 }

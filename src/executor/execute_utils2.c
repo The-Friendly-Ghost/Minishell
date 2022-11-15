@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/10 13:53:23 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/11 16:39:29 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/15 10:03:25 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,16 @@ t_token	*move_command_in_front(t_token *token_list)
 	}
 	destroy_token_list(&token_list);
 	return (NULL);
+}
+
+void	wait_processes(pid_t pid)
+{
+	int	child_state;
+
+	child_state = 0;
+	waitpid(pid, &child_state, WUNTRACED);
+	while (wait(NULL) > 0)
+		continue ;
+	if (WIFEXITED(child_state))
+		set_exit_code(WEXITSTATUS(child_state));
 }

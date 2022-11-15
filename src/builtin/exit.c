@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/31 14:42:20 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/14 15:39:14 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/15 10:32:11 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,34 +46,30 @@ static char	*remove_whitespace(char *str)
  * @return 
  * @note
  */
-void	exit_minishell(t_token *token_list)
+void	exit_minishell(t_token *token)
 {
-	t_token	*temp;
 	char	*removed_quotes;
 	char	*trimmed_str;
 
-	temp = token_list;
-	if (temp->next == NULL || temp->next->type == is_pipe)
-		return (print_fork_exit(), exit(0));
-	if (temp->next && temp->next->content && temp->next->next
-		&& temp->next->next->content && temp->next->next->type != is_pipe)
+	if (token->next == NULL || token->next->type == is_pipe)
+		return (print_fork_exit(), destroy_token_list(&token), exit(0));
+	if (token->next && token->next->content && token->next->next
+		&& token->next->next->content && token->next->next->type != is_pipe)
 		return (print_fork_exit(),
-			err_msg("exit: ", "too many arguments", NULL),
-			set_exit_code(1));
-	if (temp->next->content[0] == '\'')
-		removed_quotes = ft_strtrim(temp->next->content, "\'");
-	else if (temp->next->content[0] == '\"')
-		removed_quotes = ft_strtrim(temp->next->content, "\"");
-	else
-		removed_quotes = temp->next->content;
+			err_msg("exit: ", "too many arguments", NULL), set_exit_code(1));
+	removed_quotes = token->next->content;
+	if (token->next->content[0] == '\'')
+		removed_quotes = ft_strtrim(token->next->content, "\'");
+	else if (token->next->content[0] == '\"')
+		removed_quotes = ft_strtrim(token->next->content, "\"");
 	if (!removed_quotes)
 		return (err_msg(NULL, NULL, NULL));
 	trimmed_str = remove_whitespace(removed_quotes);
-	if (temp->next && temp->next->content && !trimmed_str)
-		return (print_fork_exit(),
-			err_msg("exit: ", removed_quotes,
+	if (token->next && token->next->content && !trimmed_str)
+		return (print_fork_exit(), err_msg("exit: ", removed_quotes,
 				": numeric argument required"),
-			exit(255));
-	if (temp->next && temp->next->content && str_is_num(trimmed_str))
-		return (print_fork_exit(), exit(ft_atoi(trimmed_str)));
+			destroy_token_list(&token), exit(255));
+	if (token->next && token->next->content && str_is_num(trimmed_str))
+		return (print_fork_exit(), destroy_token_list(&token),
+			exit(ft_atoi(trimmed_str)));
 }
