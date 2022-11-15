@@ -35,6 +35,3 @@ DEBUG:
     zet alleen de -g flag aan in de Makefile
     valgrind --track-origins=yes --leak-check=full --show-leak-kinds=definite,possible --log-file="check_mem.txt" ./minishell
     valgrind --track-origins=yes --leak-check=full --show-leak-kinds=definite --log-file="check_mem.txt" ./minishell
-
-/bin/echo "hello world" geeft "hello world"
-zorg ervoor dat de quotes getrimmed worden
