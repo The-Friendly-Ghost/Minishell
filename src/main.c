@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/14 16:42:45 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/15 14:33:38 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,13 @@ static int	str_is_whitespace(char *str)
 	return (1);
 }
 
-// verander naar static char	*get_input()
-static char	*get_input(char *outside_input)
+static char	*get_input(void)
 {
 	char		*input;
 
 	while (1)
 	{
-		// verwijder de if else naar
-		// input = readline("minishell> ");
-		if (outside_input)
-			input = outside_input;
-		else
-			input = readline("minishell> ");
+		input = readline("minishell> ");
 		if (!input)
 		{
 			ft_putendl_fd("minishell> exit", 1);
@@ -53,9 +47,7 @@ static char	*get_input(char *outside_input)
 	}
 }
 
-// IVM de tester:
-// Verander main naar int main(void)
-int	main(int argc, char **argv)
+int	main(void)
 {
 	char	*input;
 	char	**tokens;
@@ -69,21 +61,12 @@ int	main(int argc, char **argv)
 		init_signal_handler();
 		if (token_list)
 			destroy_token_list(&token_list);
-		// verwander de if else naar
-		// input = get_input();
-		if (argc == 3)
-			input = get_input(argv[2]);
-		else
-			input = get_input(NULL);
+		input = get_input();
 		tokens = lexer(input);
-		if (argc == 1)
-			free(input);
 		if (!parser(tokens, &token_list))
 			continue ;
 		expander(token_list);
 		exec_command(&token_list);
-		if (argc == 3)
-			exit(get_program()->exit_code);
 		destroy_double_array(tokens);
 		// print_token_list(token_list);
 	}

@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 16:56:17 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/13 14:15:33 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/15 14:10:08 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,34 @@ static void	set_double_quote(bool *is_double_quote)
 		*is_double_quote = true;
 }
 
+static char	*search_env_variables_extension(char *str, int i)
+{
+	char	*env_var_name;
+	char	*env_var_value;
+	char	*temp_str;
+	char	*tmp_itoa;
+
+	if (str[i] == '$' && str[i + 1] && str[i + 1] == '?')
+	{
+		temp_str = str;
+		tmp_itoa = ft_itoa(get_program()->exit_code);
+		str = expand_env_var(ft_strdup("??"), tmp_itoa, str, i);
+		free(temp_str);
+		free(tmp_itoa);
+	}
+	else if (str[i] == '$')
+	{
+		env_var_name = id_env_var(str + i);
+		env_var_value = ft_getenv(env_var_name + 1);
+		if (!env_var_value && env_var_name[1] == '/')
+			return (str);
+		temp_str = str;
+		str = expand_env_var(env_var_name, env_var_value, str, i);
+		free(temp_str);
+	}
+	return (str);
+}
+
 /**
  * @brief Scans for dollar signs inside of the string. If dollar sign is found,
  * @param str The content of the token
@@ -47,10 +75,6 @@ static void	set_double_quote(bool *is_double_quote)
  */
 char	*search_env_variables(char *str, int i, bool is_double_quote)
 {
-	char	*env_var_name;
-	char	*env_var_value;
-	char	*temp_str;
-
 	while (str[i])
 	{
 		if (str[i] == '\"')
@@ -59,16 +83,7 @@ char	*search_env_variables(char *str, int i, bool is_double_quote)
 			i = skip_single_quotes(str, i + 1);
 		if (str[i] == '\0')
 			return (str);
-		if (str[i] == '$')
-		{
-			env_var_name = id_env_var(str + i);
-			env_var_value = ft_getenv(env_var_name + 1);
-			if (!env_var_value && env_var_name[1] == '/')
-				return (str);
-			temp_str = str;
-			str = expand_env_var(env_var_name, env_var_value, str, i);
-			free(temp_str);
-		}
+		str = search_env_variables_extension(str, i);
 		i++;
 	}
 	return (str);

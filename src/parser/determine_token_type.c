@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/17 14:54:42 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/24 11:16:27 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/15 13:41:41 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,9 @@
 static int	check_if_token_starts_with_dollar_sign(char *token,
 	t_token_type *token_type)
 {
-	if (ft_strcmp(token, "$?") == 0)
-		*token_type = print_exit_code;
+	if (!ft_strcmp(token, "$?") || !ft_strcmp(token, "\"$?\"")
+		|| !ft_strcmp(token, "\'$?\'"))
+		*token_type = string;
 	else if (token[0] == '$' && token[1])
 		*token_type = enviroment_variable;
 	return (*token_type);

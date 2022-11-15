@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/18 13:20:25 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/15 10:22:06 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/15 12:25:19 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,22 +81,30 @@ static void	set_outfile(t_token *token, t_redirect *rd, t_token_type type)
  */
 static void	create_arg_array_str(t_token *token_list, t_redirect *rd)
 {
-	t_token	*token;
+	t_token	*temp;
+	char	*removed_quotes;
 	int		i;
 
-	token = token_list;
 	i = 0;
+	temp = token_list;
 	rd->arg_arr = ft_nulloc(rd->arg_count + rd->redirects_count + 1);
 	if (!rd->arg_arr)
 		return ;
-	while (token && token->type != is_pipe)
+	while (temp && temp->type != is_pipe)
 	{
-		if (rd->arg_count <= 1 && token->id == rd->id_last_in
-			&& !ft_strcmp(token_list->content, "cat"))
-			rd->arg_arr[i++] = ft_strdup(token->content);
-		else if (token->type < redirect_input || token->type > is_heredoc)
-			rd->arg_arr[i++] = ft_strdup(token->content);
-		token = token->next;
+		if (temp->content && temp->content[0] == '\'')
+			removed_quotes = ft_strtrim(temp->content, "\'");
+		else if (temp->content && temp->content[0] == '\"')
+			removed_quotes = ft_strtrim(temp->content, "\"");
+		else
+			removed_quotes = ft_strdup(temp->content);
+		if (!removed_quotes)
+			return (err_msg(NULL, NULL, NULL));
+		if ((rd->arg_count <= 1 && temp->id == rd->id_last_in
+				&& !ft_strcmp(token_list->content, "cat"))
+			|| (temp->type < redirect_input || temp->type > is_heredoc))
+			rd->arg_arr[i++] = removed_quotes;
+		temp = temp->next;
 	}
 }
 
