@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 13:34:38 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/14 13:05:16 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/15 11:12:57 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ static char	*get_executable_path(char *command_str)
 
 	if (!command_str)
 		return (NULL);
+	if (access(command_str, F_OK | X_OK) == 0)
+		return (ft_strdup(command_str));
 	command = ft_strjoin("/", command_str);
 	if (!command)
 		return (NULL);
