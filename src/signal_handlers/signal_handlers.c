@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/21 14:16:31 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/31 15:05:07 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/16 12:44:52 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,9 @@ void	kill_heredoc(int signum)
 void	executor_signal_handler(int signum)
 {
 	if (signum == SIGINT)
-	{
-		ft_putendl_fd("^C", 1);
 		set_exit_code(130);
-	}
 	else if (signum == SIGQUIT)
-	{
-		ft_putendl_fd("^\\Quit: 3", 1);
 		set_exit_code(131);
-	}
 }
 
 static void	handle_crtl_c(int signum)

@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/10 13:53:23 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/15 10:03:25 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/16 12:44:36 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,10 @@ void	wait_processes(pid_t pid)
 	waitpid(pid, &child_state, WUNTRACED);
 	while (wait(NULL) > 0)
 		continue ;
-	if (WIFEXITED(child_state))
+	if (WIFEXITED(child_state) && !WIFSIGNALED(child_state))
 		set_exit_code(WEXITSTATUS(child_state));
+	if (WIFSIGNALED(child_state) && get_program()->exit_code == 130)
+		ft_putendl_fd("^C", 1);
+	if (WIFSIGNALED(child_state) && get_program()->exit_code == 131)
+		ft_putendl_fd("^\\Quit: 3", 1);
 }
