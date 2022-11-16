@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 11:35:19 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/14 15:31:10 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/16 10:23:13 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,9 @@ bool	str_is_num(char *num)
 		i++;
 	while (num[i])
 	{
-		if (!ft_isdigit(num[i++]))
+		if (!ft_isquote(num[i]) && !ft_isdigit(num[i]))
 			return (false);
+		i++;
 	}
 	return (true);
 }

@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/19 12:56:50 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/11 11:16:23 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/16 10:21:30 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,10 @@ static t_env	*create_new_node(char *env_var)
 	new_node = malloc(sizeof(t_env));
 	if (!new_node)
 		return (NULL);
-	new_node->var_name = ft_strdup_before_char(env_var, '=');
+	if (ft_strchr(env_var, '='))
+		new_node->var_name = ft_strdup_before_char(env_var, '=');
+	else
+		new_node->var_name = ft_strdup(env_var);
 	new_node->has_value = check_if_env_has_value(env_var);
 	new_node->unset = false;
 	if (!ft_strcmp(new_node->var_name, "OLDPWD"))
@@ -121,19 +124,16 @@ t_program	*get_program(void)
 
 	if (program.env_list)
 		return (&program);
-	else
+	program.env_list = malloc(sizeof(t_program));
+	if (!program.env_list)
+		exit(12);
+	if (set_environment_variables(program.env_list) == false)
 	{
-		program.env_list = malloc(sizeof(t_program));
-		if (!program.env_list)
-			exit(12);
-		if (set_environment_variables(program.env_list) == false)
-		{
-			destroy_env_list(program.env_list);
-			exit(12);
-		}
-		set_shlvl(program.env_list);
-		program.exit_code = 0;
-		program.amount_commands = 1;
-		return (&program);
+		destroy_env_list(program.env_list);
+		exit(12);
 	}
+	set_shlvl(program.env_list);
+	program.exit_code = 0;
+	program.amount_commands = 1;
+	return (&program);
 }

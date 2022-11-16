@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/07 15:15:31 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/14 17:02:01 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/16 10:20:44 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,7 @@ void	new_env_var(t_env **env_list, char *new_var, char *new_value)
 void	set_shlvl(t_env **env_list)
 {
 	t_env	*temp;
+	char	*c_num;
 	int		num;
 
 	temp = *env_list;
@@ -153,7 +154,11 @@ void	set_shlvl(t_env **env_list)
 	{
 		if (temp->has_value && str_is_num(temp->value))
 		{
-			num = ft_atoi(temp->value);
+			c_num = ft_strtrim(temp->value, "\'\"");
+			// figure out how to handle if NULL
+			if (!c_num)
+				c_num = "1";
+			num = ft_atoi(c_num);
 			free(temp->value);
 			temp->value = ft_itoa(num + 1);
 		}
