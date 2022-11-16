@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/07 15:15:31 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/16 10:20:44 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/16 13:30:30 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,6 @@ void	set_shlvl(t_env **env_list)
 		if (temp->has_value && str_is_num(temp->value))
 		{
 			c_num = ft_strtrim(temp->value, "\'\"");
-			// figure out how to handle if NULL
 			if (!c_num)
 				c_num = "1";
 			num = ft_atoi(c_num);
