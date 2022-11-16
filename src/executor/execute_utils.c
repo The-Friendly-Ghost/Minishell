@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/08 11:10:19 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/14 12:02:28 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/16 17:53:54 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@
 void	set_dup(t_redirect *rd)
 {
 	dup2(rd->fd_in, STDIN_FILENO);
-	if (rd->fd_in != STDIN_FILENO)
+	if (rd->fd_in != STDIN_FILENO && rd->fd_in >= 0)
 		close(rd->fd_in);
 	dup2(rd->fd_out, STDOUT_FILENO);
-	if (rd->fd_out != STDOUT_FILENO)
+	if (rd->fd_out != STDOUT_FILENO && rd->fd_out >= 0)
 		close(rd->fd_out);
 	return ;
 }

@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 14:15:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/11 11:15:44 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/16 18:14:50 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,8 @@ bool	parser(char **token_array, t_token **token_list)
 	t_token	*new_element;
 	int		i;
 
+	if (!token_array)
+		return (NULL);
 	i = 0;
 	while (token_array[i])
 	{

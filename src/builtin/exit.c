@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/31 14:42:20 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/15 11:05:51 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/16 18:20:09 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ void	exit_minishell(t_token *token)
 	char	*trimmed_str;
 
 	if (token->next == NULL || token->next->type == is_pipe)
-		return (print_fork_exit(), destroy_token_list(&token), exit(0));
+		return (print_fork_exit(), destroy_token_list(&token),
+			destroy_env_list(get_program()->env_list), exit(0));
 	if (token->next && token->next->content && token->next->next
 		&& token->next->next->content && token->next->next->type != is_pipe)
 		return (print_fork_exit(),
@@ -67,9 +68,11 @@ void	exit_minishell(t_token *token)
 	trimmed_str = remove_whitespace(removed_quotes);
 	if (token->next && token->next->content && !trimmed_str)
 		return (print_fork_exit(), err_msg("exit: ", removed_quotes,
-				": numeric argument required"),
-			destroy_token_list(&token), exit(255));
+				": numeric argument required"), destroy_token_list(&token),
+			destroy_env_list(get_program()->env_list),
+			exit(255));
 	if (token->next && token->next->content && str_is_num(trimmed_str))
 		return (print_fork_exit(), destroy_token_list(&token),
+			destroy_env_list(get_program()->env_list),
 			exit(ft_atoi(trimmed_str)));
 }

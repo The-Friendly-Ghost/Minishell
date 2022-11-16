@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/13 12:04:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/13 13:28:48 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/16 18:02:51 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	print_export_env(void)
 	i = 0;
 	while (env_array[i])
 	{
-		printf("%s\n", env_array[i]);
+		printf("declare -x %s\n", env_array[i]);
 		i++;
 	}
 	destroy_double_array(env_array);
