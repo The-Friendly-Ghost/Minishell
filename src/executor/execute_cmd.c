@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/15 18:20:55 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/16 11:47:11 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,9 @@ void	exec_command(t_token **token_list)
 	pid_t		pid;
 	t_redirect	rd;
 
+	// create a builtin for this situation
+	if (!ft_strcmp((*token_list)->content, "clear"))
+		return ((void)printf("\E[H\E[J"));
 	pid = 0;
 	rd.arg_arr = NULL;
 	backup_std_and_set_signals();

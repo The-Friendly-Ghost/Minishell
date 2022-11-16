@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/19 12:56:50 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/16 10:21:30 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/16 12:15:49 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static t_env	*create_new_node(char *env_var)
 		new_node->has_value = false;
 	}
 	if (new_node->has_value == true)
-		new_node->value = ft_strdup_after_char(env_var, '=');
+		new_node->value = ft_strtrim(ft_strdup_after_char(env_var, '='), "\"");
 	else
 		new_node->value = NULL;
 	new_node->next = NULL;

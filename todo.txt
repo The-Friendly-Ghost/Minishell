@@ -36,4 +36,3 @@ DEBUG:
     valgrind --track-origins=yes --leak-check=full --show-leak-kinds=definite,possible --log-file="check_mem.txt" ./minishell
     valgrind --track-origins=yes --leak-check=full --show-leak-kinds=definite --log-file="check_mem.txt" ./minishell
 
-minishell recursive aanroepen lukt niet.
