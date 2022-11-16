@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/17 14:19:55 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/09 16:06:17 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/16 19:25:13 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,14 @@ void	destroy_double_array(char **token_array)
 	unsigned int	i;
 
 	i = 0;
-	if (token_array)
+	if (!token_array)
+		return ;
+	while (token_array[i])
 	{
-		while (token_array[i])
-		{
-			if (token_array[i])
-				free(token_array[i]);
-			i++;
-		}
-		free(token_array);
+		free(token_array[i]);
+		i++;
 	}
+	free(token_array);
 }
 
 /**
@@ -48,24 +46,24 @@ void	destroy_token_list(t_token **token_list)
 	t_token	*temp;
 	t_token	*previous_node;
 
-	if (*token_list)
+	if (!*token_list)
+		return ;
+	temp = *token_list;
+	while (temp)
 	{
-		temp = *token_list;
-		while (temp)
+		if (temp->heredoc_file)
 		{
-			if (temp->heredoc_file)
-			{
-				unlink(temp->heredoc_file);
-				free(temp->heredoc_file);
-				temp->heredoc_file = NULL;
-			}
-			previous_node = temp;
-			free(temp->content);
-			temp = temp->next;
-			free(previous_node);
+			unlink(temp->heredoc_file);
+			free(temp->heredoc_file);
+			temp->heredoc_file = NULL;
 		}
-		*token_list = NULL;
+		previous_node = temp;
+fprintf(stderr, "free [%s]\n", temp->content);
+		free(temp->content);
+		temp = temp->next;
+		free(previous_node);
 	}
+	*token_list = NULL;
 }
 
 /**

@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/16 13:28:34 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/16 19:19:17 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,15 +59,14 @@ int	main(void)
 	while (1)
 	{
 		init_signal_handler();
-		if (token_list)
-			destroy_token_list(&token_list);
+		destroy_token_list(&token_list);
 		input = get_input();
 		tokens = lexer(input);
 		if (!parser(tokens, &token_list))
 			continue ;
 		expander(token_list);
 		exec_command(&token_list);
-		destroy_double_array(tokens);
+		// destroy_double_array(tokens);
 	}
 	return (0);
 }
