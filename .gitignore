@@ -6,3 +6,5 @@ lib/libft/libft.a
 minishell
 minishell_test.log
 todo.txt
+minishell.dSYM
+check_mem.txt

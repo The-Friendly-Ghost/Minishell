@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/07 15:15:31 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/16 17:53:17 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/16 18:58:11 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,18 +149,15 @@ void	set_shlvl(t_env **env_list)
 		temp = temp->next;
 	}
 	if (temp == NULL)
-		new_env_var(env_list, ft_strdup("SHLVL"), ft_strdup("1"));
-	else
+		return (new_env_var(env_list, ft_strdup("SHLVL"), ft_strdup("1")));
+	if (temp->has_value && str_is_num(temp->value))
 	{
-		if (temp->has_value && str_is_num(temp->value))
-		{
-			c_num = ft_strtrim(temp->value, "\'\"");
-			if (!c_num)
-				c_num = ft_strdup("1");
-			num = ft_atoi(c_num);
-			free(temp->value);
-			free(c_num);
-			temp->value = ft_itoa(num + 1);
-		}
+		c_num = ft_strtrim(temp->value, "\'\"");
+		if (!c_num)
+			c_num = ft_strdup("1");
+		num = ft_atoi(c_num);
+		free(temp->value);
+		free(c_num);
+		temp->value = ft_itoa(num + 1);
 	}
 }
