@@ -6,10 +6,9 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/18 13:28:45 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/18 13:29:02 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/18 13:29:59 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "minishell.h"
 
