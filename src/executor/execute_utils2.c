@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/10 13:53:23 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/15 10:03:25 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/18 12:44:37 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,33 +30,6 @@ pid_t	ft_get_a_pid(void)
 	return (pid);
 }
 
-t_token	*move_command_in_front(t_token *token_list)
-{
-	t_token	*temp;
-	t_token	*prev;
-	t_token	*next;
-
-	temp = token_list;
-	if (temp->type < redirect_input || temp->type > is_heredoc)
-		return (token_list);
-	while (temp && temp->type != is_pipe)
-	{
-		if (temp->type < redirect_input || temp->type > is_heredoc)
-		{
-			prev = temp->previous;
-			next = temp->next;
-			prev->next = next;
-			next->previous = prev;
-			temp->next = token_list;
-			temp->previous = NULL;
-			return (temp);
-		}
-		temp = temp->next;
-	}
-	destroy_token_list(&token_list);
-	return (NULL);
-}
-
 void	wait_processes(pid_t pid)
 {
 	int	child_state;
@@ -67,4 +40,21 @@ void	wait_processes(pid_t pid)
 		continue ;
 	if (WIFEXITED(child_state))
 		set_exit_code(WEXITSTATUS(child_state));
+}
+
+bool	cmd_is_builtin(t_token *token_list)
+{
+	t_token	*temp;
+
+	temp = token_list;
+	while (temp && temp->type != is_pipe)
+	{
+		if (temp->type >= redirect_input && temp->type <= is_heredoc)
+			temp = temp->next;
+		else if (temp->type >= print_exit_code)
+			return (true);
+		else
+			return (false);
+	}
+	return (false);
 }

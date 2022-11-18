@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/31 14:42:20 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/15 11:05:51 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/18 11:54:53 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,11 @@ static char	*remove_whitespace(char *str)
 		i++;
 	if (str[i] == '-' || str[i] == '+')
 		i++;
-	while (str[i] && ft_isdigit(str[i++]))
+	while (str[i] && ft_isdigit(str[i]))
+	{
 		num = true;
+		i++;
+	}
 	while (str[i] && ft_is_whitespace(str[i]))
 		i++;
 	if (str[i] || !num)

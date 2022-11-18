@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/21 14:16:31 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/10/31 15:05:07 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/15 16:11:22 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	executor_signal_handler(int signum)
 	}
 	else if (signum == SIGQUIT)
 	{
+		rl_replace_line("", 0);
 		ft_putendl_fd("^\\Quit: 3", 1);
 		set_exit_code(131);
 	}
@@ -53,5 +54,5 @@ void	init_signal_handler(void)
 	t.c_lflag &= ~(ECHOCTL);
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &t);
 	signal(SIGINT, handle_crtl_c);
-	signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, executor_signal_handler);
 }

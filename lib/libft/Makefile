@@ -6,7 +6,7 @@
 #    By: pniezen <pniezen@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/03/08 13:54:34 by pniezen       #+#    #+#                  #
-#    Updated: 2022/08/16 11:59:37 by pniezen       ########   odam.nl          #
+#    Updated: 2022/11/18 11:53:54 by cpost         ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,6 @@ INC_PATH = ./include/
 NAME = libft.a
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
-
 SRC_NAME = $(shell ls $(SRC_PATH))
 
 OBJ_NAME = $(SRC_NAME:.c=.o)
