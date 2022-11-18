@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/08 11:10:19 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/16 18:16:11 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/18 13:50:06 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,15 @@ t_token	*destroy_command(t_token *token_list)
 		temp_prev = temp;
 		temp = temp->next;
 		if (temp == NULL)
+		{
+			free(temp_prev->content);
+			free(temp_prev->heredoc_file);
 			return (free(temp_prev), NULL);
+		}
 		if (temp_prev->type == is_pipe)
 		{
+			free(temp_prev->content);
+			free(temp_prev->heredoc_file);
 			free(temp_prev);
 			if (temp)
 				temp->previous = NULL;

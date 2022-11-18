@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 13:34:38 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/15 11:12:57 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/15 18:07:52 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,15 @@ static char	*get_executable_path(char *command_str)
 	command = ft_strjoin("/", command_str);
 	if (!command)
 		return (NULL);
+	if (!ft_getenv("PATH"))
+		return (set_exit_code(127),
+			err_msg(command_str, ": No such file or directory", NULL), NULL);
 	correct_path = check_correct_path(ft_getenv("PATH"), command);
 	if (!correct_path)
 	{
 		set_exit_code(127);
 		free(command);
-		if (command_str[1] == '/')
+		if (command_str[0] == '/')
 			return (err_msg(command_str, ": No such file or directory", NULL),
 				NULL);
 		return (err_msg(command_str, ": command not found", NULL), NULL);

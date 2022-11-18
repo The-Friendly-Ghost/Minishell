@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/18 13:29:41 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/18 13:49:07 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,15 @@ static int	str_is_whitespace(char *str)
 
 static char	*get_input(void)
 {
-	char		*input;
+	char	*input;
 
 	while (1)
 	{
 		input = readline("minishell> ");
 		if (!input)
 		{
-			ft_putendl_fd("minishell> exit", 1);
-			exit(errno);
+			ft_putendl_fd("exit", 1);
+			exit(get_program()->exit_code);
 		}
 		add_history(input);
 		if (!str_is_whitespace(input))
@@ -59,15 +59,14 @@ int	main(void)
 	while (1)
 	{
 		init_signal_handler();
-		if (token_list)
-			destroy_token_list(&token_list);
+		destroy_token_list(&token_list);
 		input = get_input();
 		tokens = lexer(input);
 		if (!parser(tokens, &token_list))
 			continue ;
 		expander(token_list);
 		exec_command(&token_list);
-		destroy_double_array(tokens);
+		// destroy_double_array(tokens);
 	}
 	return (0);
 }

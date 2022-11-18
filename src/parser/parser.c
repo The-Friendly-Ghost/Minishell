@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 14:15:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/11 11:15:44 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/16 19:36:49 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,23 +119,24 @@ bool	parser(char **token_array, t_token **token_list)
 	t_token	*new_element;
 	int		i;
 
+	if (!token_array)
+		return (false);
 	i = 0;
 	while (token_array[i])
 	{
 		new_element = create_new_element(token_array[i], i);
 		if (!new_element)
 		{
-			err_msg(NULL, NULL, NULL);
 			destroy_double_array(token_array);
-			return (destroy_token_list(token_list), false);
+			return (false);
 		}
 		add_new_element_to_token_list(token_list, new_element);
 		i++;
 	}
 	if (check_for_syntax_error(*token_list))
-		return (destroy_token_list(token_list), false);
+		return (destroy_double_array(token_array), false);
 	if (!expand_heredocs(*token_list))
-		return (false);
+		return (destroy_double_array(token_array), false);
 	set_amount_of_commands(token_list);
-	return (true);
+	return (destroy_double_array(token_array), true);
 }

@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/18 13:13:47 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/18 13:49:48 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,7 @@ static void	execute_child_process(t_token *token_list, int ends[2],
 		return (destroy_double_array(ev_arr), free(cmd_path),
 			exit(get_program()->exit_code));
 	execve(cmd_path, rd->arg_arr, ev_arr);
-	if (!ft_strcmp("./minishell", token_list->content))
-		err_msg(token_list->content, ": is a directory", NULL);
+	err_msg(token_list->content, ": is a directory", NULL);
 	destroy_double_array(ev_arr);
 }
 
@@ -124,6 +123,8 @@ void	exec_command(t_token **token_list)
 	pid_t		pid;
 	t_redirect	rd;
 
+	if (!ft_strcmp((*token_list)->content, "clear"))
+		return ((void)printf("\E[H\E[J"));
 	pid = 0;
 	rd.arg_arr = NULL;
 	backup_std_and_set_signals();

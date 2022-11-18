@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 15:14:05 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/13 14:13:54 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/16 17:59:33 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static char	*create_env_string(t_env *env_var)
 	int		i;
 	int		x;
 
-	len = ft_strlen(env_var->var_name) + ft_strlen(env_var->value) + 4;
+	len = ft_strlen(env_var->var_name) + ft_strlen(env_var->value) + 2;
 	str = malloc(len * sizeof(char));
 	if (!str)
 		return (NULL);
@@ -35,15 +35,10 @@ static char	*create_env_string(t_env *env_var)
 	while (env_var->var_name != NULL && env_var->var_name[i])
 		str[x++] = env_var->var_name[i++];
 	if (env_var->value)
-	{
 		str[x++] = '=';
-		str[x++] = '\"';
-	}
 	i = 0;
 	while (env_var->value != NULL && env_var->value[i])
 		str[x++] = env_var->value[i++];
-	if (env_var->value)
-		str[x++] = '\"';
 	str[x] = '\0';
 	return (str);
 }

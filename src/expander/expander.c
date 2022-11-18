@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 16:56:17 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/15 14:10:08 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/15 17:52:27 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static char	*search_env_variables_extension(char *str, int i)
 	char	*temp_str;
 	char	*tmp_itoa;
 
-	if (str[i] == '$' && str[i + 1] && str[i + 1] == '?')
+	if (str[i + 1] && str[i + 1] == '?')
 	{
 		temp_str = str;
 		tmp_itoa = ft_itoa(get_program()->exit_code);
@@ -53,7 +53,7 @@ static char	*search_env_variables_extension(char *str, int i)
 		free(temp_str);
 		free(tmp_itoa);
 	}
-	else if (str[i] == '$')
+	else
 	{
 		env_var_name = id_env_var(str + i);
 		env_var_value = ft_getenv(env_var_name + 1);
@@ -83,7 +83,8 @@ char	*search_env_variables(char *str, int i, bool is_double_quote)
 			i = skip_single_quotes(str, i + 1);
 		if (str[i] == '\0')
 			return (str);
-		str = search_env_variables_extension(str, i);
+		if (str[i] == '$')
+			str = search_env_variables_extension(str, i);
 		i++;
 	}
 	return (str);
