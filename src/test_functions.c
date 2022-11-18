@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/18 13:28:45 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/18 13:28:46 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/18 13:29:02 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 void	print_token_list(t_token *token)
 {
-	t_token *temp;
+	t_token	*temp;
 
 	temp = token;
 	while (temp)
