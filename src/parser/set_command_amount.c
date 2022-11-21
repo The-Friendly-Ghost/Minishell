@@ -6,11 +6,12 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/03 11:07:45 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/04 14:57:39 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/21 13:22:49 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <limits.h>
 
 /**
  * @brief Literally like the functions name says.
@@ -18,7 +19,7 @@
  * @return Nothing
  * @note
  */
-void	set_amount_of_commands(t_token **token_list)
+bool	set_amount_of_commands(t_token **token_list)
 {
 	t_program	*program;
 	t_token		*temp;
@@ -32,4 +33,11 @@ void	set_amount_of_commands(t_token **token_list)
 			program->amount_commands++;
 		temp = temp->next;
 	}
+	if (program->amount_commands > OPEN_MAX)
+	{
+		err_msg("fork: Resource temporarily unavailable", NULL, NULL);
+		set_exit_code(1);
+		return (false);
+	}
+	return (true);
 }

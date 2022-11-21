@@ -6,18 +6,14 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/22 12:13:37 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/12 11:19:16 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/21 12:24:21 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	env_error_check(t_env *temp)
+static void	env_error_check(t_env *temp, char *path)
 {
-	static char	*path;
-
-	if (!path && !ft_strcmp(temp->var_name, "PATH"))
-		path = ft_strdup(temp->value);
 	if (!ft_strcmp(temp->var_name, "PATH") && temp->unset)
 	{
 		if (!temp->value)
@@ -49,7 +45,8 @@ void	print_env(void)
 	temp = *env;
 	while (temp)
 	{
-		env_error_check(temp);
+		if (!ft_strcmp(temp->var_name, "PATH"))
+			env_error_check(temp, temp->value);
 		temp = temp->next;
 	}
 	temp = *env;

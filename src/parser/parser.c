@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 14:15:09 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/16 19:36:49 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/21 13:18:34 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ bool	parser(char **token_array, t_token **token_list)
 		return (destroy_double_array(token_array), false);
 	if (!expand_heredocs(*token_list))
 		return (destroy_double_array(token_array), false);
-	set_amount_of_commands(token_list);
+	if (!set_amount_of_commands(token_list))
+		return (destroy_double_array(token_array), false);
 	return (destroy_double_array(token_array), true);
 }

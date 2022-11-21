@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/18 12:44:23 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/18 12:53:18 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/21 12:05:29 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ static void	delete_redirects_from_list2(t_token *temp)
 				temp_prev->next = temp_next;
 			if (temp_next)
 				temp_next->previous = temp_prev;
+			free(temp->content);
+			free(temp->heredoc_file);
 			free(temp);
 		}
 		temp = temp_next;

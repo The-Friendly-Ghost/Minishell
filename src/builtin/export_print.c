@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/13 12:04:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/16 18:02:51 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/21 09:18:01 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void	sort_env_array(char **env_array, int array_size)
 void	print_export_env(void)
 {
 	char	**env_array;
+	char	**split;
 	int		i;
 
 	env_array = get_env_array();
@@ -71,7 +72,15 @@ void	print_export_env(void)
 	i = 0;
 	while (env_array[i])
 	{
-		printf("declare -x %s\n", env_array[i]);
+		split = ft_split(env_array[i], '=');
+		if (!split)
+			return ;
+		if (split[1])
+			printf("declare -x %s=\"%s\"\n", split[0], split[1]);
+		else
+			printf("declare -x %s\n", split[0]);
+		destroy_double_array(split);
+		split = NULL;
 		i++;
 	}
 	destroy_double_array(env_array);

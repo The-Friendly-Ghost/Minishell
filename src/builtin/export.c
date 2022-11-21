@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 09:44:35 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/16 18:50:17 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/21 09:16:07 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,22 @@ static void	add_change_env_var(char *spl_0, char *spl_1, t_token *token_list)
 	new_env_var(env_list, ft_strdup(spl_0), NULL);
 }
 
+static bool	is_it_alpha(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (str[i] == '=')
+		return (false);
+	while (ft_isalpha(str[i]))
+		i++;
+	if (str[i] == '\0')
+		return (true);
+	else if (str[i] == '=')
+		return (true);
+	return (false);
+}
+
 void	export_env_var(t_token *token_list)
 {
 	char	**split;
@@ -67,7 +83,7 @@ void	export_env_var(t_token *token_list)
 	char	*split_1;
 
 	split_1 = NULL;
-	if (token_list->next->content[0] == '=')
+	if (!is_it_alpha(token_list->next->content))
 	{
 		msg = ft_strjoin("`", token_list->next->content);
 		set_exit_code(1);

@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/18 13:20:25 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/18 13:13:21 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/21 11:49:12 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
  * @note This function does not yet replace the STDIN for the infile. This is
  * done in another function (with dup2).
  */
-static void	set_infile(t_token *token, t_redirect *rd)
+static bool	set_infile(t_token *token, t_redirect *rd)
 {
 	char	*msg;
 
@@ -31,13 +31,14 @@ static void	set_infile(t_token *token, t_redirect *rd)
 	{
 		msg = ft_strjoin(token->content, ": ");
 		return (err_msg(msg, strerror(errno), NULL),
-			set_exit_code(errno));
+			set_exit_code(errno), free(msg), false);
 	}
 	if (rd->fd_in != STDIN_FILENO)
 		close(rd->fd_in);
 	rd->fd_in = open(token->content, O_RDONLY, 0777);
 	rd->id_last_in = token->id;
 	rd->redirects_count++;
+	return (true);
 }
 
 /**
@@ -64,7 +65,7 @@ static void	set_outfile(t_token *token, t_redirect *rd, t_token_type type)
 	{
 		msg = ft_strjoin(token->content, ": ");
 		return (err_msg(msg, strerror(errno), NULL),
-			set_exit_code(errno));
+			free(msg), set_exit_code(errno));
 	}
 	rd->redirects_count++;
 }
@@ -79,11 +80,10 @@ static void	set_outfile(t_token *token, t_redirect *rd, t_token_type type)
  * malloced. It uses pointers to token->content. These pointers already 
  * exist in the token list.
  */
-static void	create_arg_array_str(t_token *token_list, t_redirect *rd)
+static void	create_arg_array_str(t_token *token_list, t_redirect *rd,
+	t_token *temp, int i)
 {
-	t_token	*temp;
 	char	*removed_quotes;
-	int		i;
 
 	i = 0;
 	temp = token_list;
@@ -104,6 +104,8 @@ static void	create_arg_array_str(t_token *token_list, t_redirect *rd)
 				&& !ft_strcmp(token_list->content, "cat"))
 			|| (temp->type < redirect_input || temp->type > is_heredoc))
 			rd->arg_arr[i++] = removed_quotes;
+		else
+			free(removed_quotes);
 		temp = temp->next;
 	}
 }
@@ -132,7 +134,7 @@ static void	set_redirect_starting_values(t_redirect *rd)
  * @return Nothing
  * @note
  */
-void	check_redirect(t_token *token_list, t_redirect *rd)
+bool	check_redirect(t_token *token_list, t_redirect *rd)
 {
 	t_token	*token;
 
@@ -141,7 +143,10 @@ void	check_redirect(t_token *token_list, t_redirect *rd)
 	while (token && token->type != is_pipe)
 	{
 		if (token->type == infile)
-			set_infile(token, rd);
+		{
+			if (!set_infile(token, rd))
+				return (false);
+		}
 		else if (token->type == outfile)
 			set_outfile(token, rd, token->previous->type);
 		else if (token->type != redirect_input
@@ -150,6 +155,7 @@ void	check_redirect(t_token *token_list, t_redirect *rd)
 			rd->arg_count++;
 		token = token->next;
 	}
-	create_arg_array_str(token_list, rd);
+	create_arg_array_str(token_list, rd, NULL, 0);
 	set_dup(rd);
+	return (true);
 }
