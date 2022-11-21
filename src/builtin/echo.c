@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/06 14:18:14 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/15 14:54:24 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/17 12:52:45 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,19 +46,17 @@ static bool	is_n_flag(char *str)
 	i = 1;
 	while (str[i])
 	{
-		if (str[i] == 'n')
-			return (true);
+		if (str[i] != 'n')
+			return (false);
 		i++;
 	}
-	return (false);
+	return (true);
 }
 
-void	echo_builtin(t_token *token_list)
+void	echo_builtin(t_token *token_list, int nl)
 {
 	t_token	*temp;
-	int		nl;
 
-	nl = 1;
 	temp = token_list;
 	if (temp->next && is_n_flag(temp->next->content))
 	{
@@ -71,9 +69,12 @@ void	echo_builtin(t_token *token_list)
 		temp = temp->next;
 	while (temp && temp->type != is_pipe)
 	{
-		print_echo(temp->content);
-		if (temp->next && temp->content)
-			print_echo(" ");
+		if (temp->type < redirect_input || temp->type > is_heredoc)
+		{
+			print_echo(temp->content);
+			if (temp->next && temp->content)
+				print_echo(" ");
+		}
 		temp = temp->next;
 	}
 	if (nl)

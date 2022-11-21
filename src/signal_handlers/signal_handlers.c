@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/21 14:16:31 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/16 12:44:52 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/18 13:50:27 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,5 @@ void	init_signal_handler(void)
 	t.c_lflag &= ~(ECHOCTL);
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &t);
 	signal(SIGINT, handle_crtl_c);
-	signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, executor_signal_handler);
 }

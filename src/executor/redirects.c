@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/18 13:20:25 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/15 12:25:19 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/18 13:13:21 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	set_infile(t_token *token, t_redirect *rd)
 	{
 		msg = ft_strjoin(token->content, ": ");
 		return (err_msg(msg, strerror(errno), NULL),
-			set_exit_code(errno), exit(1));
+			set_exit_code(errno));
 	}
 	if (rd->fd_in != STDIN_FILENO)
 		close(rd->fd_in);
@@ -64,7 +64,7 @@ static void	set_outfile(t_token *token, t_redirect *rd, t_token_type type)
 	{
 		msg = ft_strjoin(token->content, ": ");
 		return (err_msg(msg, strerror(errno), NULL),
-			set_exit_code(errno), exit(1));
+			set_exit_code(errno));
 	}
 	rd->redirects_count++;
 }

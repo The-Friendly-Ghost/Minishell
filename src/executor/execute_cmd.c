@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/16 13:31:48 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/18 13:49:48 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static void	exec_builtin(t_token_type type, t_token *token_list)
 	free(char_exit_code);
 	set_exit_code(0);
 	if (type == echo)
-		return (echo_builtin(token_list));
+		return (echo_builtin(token_list, 1));
 	if (type == cd)
 		return (cd_builtin(token_list));
 	if (type == pwd)
@@ -77,8 +77,9 @@ static void	execute_child_process(t_token *token_list, int ends[2],
 	char		**ev_arr;
 
 	signal(SIGINT, SIG_DFL);
-	if (token_list->type >= print_exit_code)
+	if (cmd_is_builtin(token_list))
 	{
+		token_list = delete_redirects_from_list(token_list);
 		exec_builtin(token_list->type, token_list);
 		close(ends[WRITE_END]);
 		exit(get_program()->exit_code);
@@ -129,10 +130,11 @@ void	exec_command(t_token **token_list)
 	backup_std_and_set_signals();
 	while (*token_list)
 	{
-		if ((*token_list)->type >= print_exit_code
+		if (cmd_is_builtin(*token_list)
 			&& get_program()->amount_commands == 1)
 		{
 			check_redirect(*token_list, &rd);
+			*token_list = delete_redirects_from_list(*token_list);
 			exec_builtin((*token_list)->type, *token_list);
 			destroy_double_array(rd.arg_arr);
 			break ;

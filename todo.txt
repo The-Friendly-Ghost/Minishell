@@ -1,3 +1,17 @@
+Todo na eval:
+- Leaks fixen
+- Export
+V Redirects niet meegeven
+V Flag Echo -nnnn-n
+V Command vooraan zetten.
+- Export quotes fixed
+V Exit 113142a werkt :(
+V fd fout
+V Export a=0 en dan a+=10 mag niet segfaulten
+- ./minishell werkt of niet??
+V < adsf env    dit exit minishell
+
+
 
 Todo:
 V Pipes
