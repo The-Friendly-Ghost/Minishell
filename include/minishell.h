@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/21 13:18:06 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/22 15:14:46 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,6 +203,9 @@ int				ft_tokenlen(t_token *token_list);
 char			**ft_nulloc(int n_point);
 void			err_msg(char *str1, char *str2, char *str3);
 bool			str_is_num(char *num);
+
+//utils/error_messages.c
+void			err_msg(char *str1, char *str2, char *str3);
 
 //signal_handlers
 
