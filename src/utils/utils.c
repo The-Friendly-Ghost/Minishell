@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 11:35:19 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/16 10:23:13 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/22 13:47:30 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,33 +83,4 @@ int	ft_strcmp(const char *s1, const char *s2)
 		i++;
 	}
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-}
-
-void	err_msg(char *str1, char *str2, char *str3)
-{
-	char	*err_promt;
-	char	*err_msg;
-	char	*temp;
-
-	temp = NULL;
-	if (str1 && str2 && str3)
-	{
-		temp = ft_strjoin("minishell: ", str1);
-		err_promt = ft_strjoin(temp, str2);
-		err_msg = ft_strjoin(err_promt, str3);
-		free(err_promt);
-	}
-	else if (str1 && str2)
-	{
-		temp = ft_strjoin("minishell: ", str1);
-		err_msg = ft_strjoin(temp, str2);
-	}
-	else
-		err_msg = ft_strjoin("minishell: ", str1);
-	if (!err_msg)
-	{
-		ft_putendl_fd("Fatal error", 2);
-		return (free(temp), set_exit_code(ENOMEM), exit(ENOMEM));
-	}
-	return (ft_putendl_fd(err_msg, 2), free(temp), free(err_msg));
 }

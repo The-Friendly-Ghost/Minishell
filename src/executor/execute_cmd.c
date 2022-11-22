@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/18 13:49:48 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/21 11:59:44 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,8 @@ static void	execute_child(t_token *token_list, pid_t *fork_pid,
 	if (*fork_pid == 0)
 	{
 		set_pipes(ends, token_list);
-		check_redirect(token_list, rd);
+		if (!check_redirect(token_list, rd))
+			exit(get_program()->exit_code);
 		execute_child_process(token_list, ends, rd);
 		exit(errno);
 	}
@@ -133,15 +134,16 @@ void	exec_command(t_token **token_list)
 		if (cmd_is_builtin(*token_list)
 			&& get_program()->amount_commands == 1)
 		{
-			check_redirect(*token_list, &rd);
-			*token_list = delete_redirects_from_list(*token_list);
-			exec_builtin((*token_list)->type, *token_list);
+			if (check_redirect(*token_list, &rd) == true)
+			{
+				*token_list = delete_redirects_from_list(*token_list);
+				exec_builtin((*token_list)->type, *token_list);
+			}
 			destroy_double_array(rd.arg_arr);
 			break ;
 		}
 		execute_child(*token_list, &pid, &rd);
 		*token_list = destroy_command(*token_list);
 	}
-	wait_processes(pid);
-	restore_std();
+	return (wait_processes(pid), restore_std());
 }

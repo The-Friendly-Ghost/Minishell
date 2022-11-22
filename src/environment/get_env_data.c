@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/19 12:56:50 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/16 17:54:48 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/21 12:13:12 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ static t_env	*create_new_node(char *env_var)
 		new_node->value = ft_strdup_after_char(env_var, '=');
 	else
 		new_node->value = NULL;
+	new_node->export_unset = false;
 	new_node->next = NULL;
 	new_node->previous = NULL;
 	return (new_node);

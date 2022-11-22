@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 16:56:17 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/15 17:52:27 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/21 10:47:36 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,20 +50,20 @@ static char	*search_env_variables_extension(char *str, int i)
 		temp_str = str;
 		tmp_itoa = ft_itoa(get_program()->exit_code);
 		str = expand_env_var(ft_strdup("??"), tmp_itoa, str, i);
-		free(temp_str);
 		free(tmp_itoa);
 	}
 	else
 	{
 		env_var_name = id_env_var(str + i);
+		if (!env_var_name)
+			return (str);
 		env_var_value = ft_getenv(env_var_name + 1);
 		if (!env_var_value && env_var_name[1] == '/')
 			return (str);
 		temp_str = str;
 		str = expand_env_var(env_var_name, env_var_value, str, i);
-		free(temp_str);
 	}
-	return (str);
+	return (free(temp_str), str);
 }
 
 /**
@@ -75,6 +75,8 @@ static char	*search_env_variables_extension(char *str, int i)
  */
 char	*search_env_variables(char *str, int i, bool is_double_quote)
 {
+	if (!str)
+		return (NULL);
 	while (str[i])
 	{
 		if (str[i] == '\"')
@@ -84,7 +86,10 @@ char	*search_env_variables(char *str, int i, bool is_double_quote)
 		if (str[i] == '\0')
 			return (str);
 		if (str[i] == '$')
-			str = search_env_variables_extension(str, i);
+		{
+			if (str[i + 1] != '$')
+				str = search_env_variables_extension(str, i);
+		}
 		i++;
 	}
 	return (str);

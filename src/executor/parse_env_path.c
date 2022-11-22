@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 13:34:38 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/15 18:07:52 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/21 09:58:29 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,12 @@ static char	*is_minishell(char *command)
 	if (!pwd)
 		return (err_msg(NULL, NULL, NULL), NULL);
 	correct_path = ft_strjoin(pwd, command);
+	free(pwd);
 	if (!correct_path)
 		return (NULL);
 	if (access(correct_path, F_OK | R_OK | X_OK) == 0)
 		return (correct_path);
-	return (NULL);
+	return (free(correct_path), NULL);
 }
 
 static char	*get_correct_path(char *path_line, char *command)

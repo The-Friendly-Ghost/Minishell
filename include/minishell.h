@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/18 11:20:42 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/22 15:14:46 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # include <stddef.h>
 # include <stdbool.h>
 # include <unistd.h>
-# include <stdio.h>
 # include <errno.h>
 # include <signal.h>
 # include <readline/readline.h>
@@ -138,7 +137,7 @@ bool			check_for_syntax_error(t_token *token_list);
 
 //parser/set_pipe_amount.c
 
-void			set_amount_of_commands(t_token **token_list);
+bool			set_amount_of_commands(t_token **token_list);
 
 //environment/get_env_data.c
 
@@ -182,7 +181,7 @@ void			print_2d_array(char **array);
 //executor/
 
 void			exec_command(t_token **token_list);
-void			check_redirect(t_token *token_list, t_redirect *rd);
+bool			check_redirect(t_token *token_list, t_redirect *rd);
 char			**itterate_redirect(t_token *token_list, char *cmd);
 void			set_heredoc(t_token *token_list, t_redirect *rd);
 bool			expand_heredocs(t_token *token_list);
@@ -204,6 +203,9 @@ int				ft_tokenlen(t_token *token_list);
 char			**ft_nulloc(int n_point);
 void			err_msg(char *str1, char *str2, char *str3);
 bool			str_is_num(char *num);
+
+//utils/error_messages.c
+void			err_msg(char *str1, char *str2, char *str3);
 
 //signal_handlers
 

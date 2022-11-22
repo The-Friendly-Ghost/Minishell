@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 17:49:46 by cpost         #+#    #+#                 */
-/*   Updated: 2022/10/05 11:51:51 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/21 10:24:18 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,10 @@ char	*id_env_var(char *str)
 		else
 			i++;
 	}
+	if (str[1] == '\0')
+		return (NULL);
 	env_var = malloc(sizeof(char) * (i + 1));
-	if (env_var == NULL)
+	if (!env_var)
 		return (NULL);
 	env_var[i] = '\0';
 	i--;
