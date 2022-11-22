@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/06 14:18:14 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/22 13:36:06 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/22 13:43:38 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static bool	is_n_flag(char *str)
 	if (!str)
 		return (false);
 	len = ft_strlen(str);
-	if (str[0] != '-' || (str[0] == '-' && !str[1]))
+	if (str[0] != '-' || !str[1])
 		return (false);
 	if (len > 2 && str[2] != 'n')
 		return (false);
