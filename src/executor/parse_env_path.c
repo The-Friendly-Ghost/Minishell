@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 13:34:38 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/24 11:22:32 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/24 16:18:52 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static char	*get_executable_path(char *command_str)
 	char	*command;
 	char	*correct_path;
 
-	if (!command_str)
+	if (!command_str || !ft_strcmp(command_str, ""))
 		return (NULL);
 	if (access(command_str, F_OK | X_OK) == 0)
 		return (command_str);
@@ -81,7 +81,7 @@ static char	*get_executable_path(char *command_str)
 	if (!command)
 		return (NULL);
 	if (!ft_getenv("PATH"))
-		return (set_exit_code(127),
+		return (set_exit_code(127), free(command),
 			err_msg(command_str, ": No such file or directory", NULL), NULL);
 	correct_path = check_correct_path(ft_getenv("PATH"), command);
 	if (!correct_path)

@@ -47,6 +47,6 @@ V pwd aan path toevoegen
 
 DEBUG:
     zet alleen de -g flag aan in de Makefile
-    valgrind --track-origins=yes --leak-check=full --show-leak-kinds=definite,possible --log-file="check_mem.txt" ./minishell
-    valgrind --track-origins=yes --leak-check=full --show-leak-kinds=definite --log-file="check_mem.txt" ./minishell
+    valgrind --trace-children=yes --track-origins=yes --leak-check=full --show-leak-kinds=definite,possible --log-file=valgrind-%p.log ./minishell
+    valgrind --trace-children=yes --track-origins=yes --leak-check=full --show-leak-kinds=definite --log-file=valgrind-%p.log ./minishell
 
