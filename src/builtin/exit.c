@@ -6,11 +6,12 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/31 14:42:20 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/18 13:49:37 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/25 12:40:09 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <limits.h>
 
 static void	print_fork_exit(void)
 {
@@ -18,26 +19,29 @@ static void	print_fork_exit(void)
 		ft_putendl_fd("exit", 2);
 }
 
-static char	*remove_whitespace(char *str)
+static char	*remove_whitespace(char *str, int i, unsigned long long num,
+		char c)
 {
-	char	*ret;
-	int		i;
-	bool	num;
+	char				*ret;
 
-	i = 0;
-	num = false;
 	while (str[i] && ft_is_whitespace(str[i]))
 		i++;
 	if (str[i] == '-' || str[i] == '+')
+	{
+		c = str[i];
 		i++;
+	}
 	while (str[i] && ft_isdigit(str[i]))
 	{
-		num = true;
+		num = (str[i] - '0') + (num * 10);
+		if ((c == '+' && num > LLONG_MAX)
+			|| (c == '-' && num > (unsigned long long)LLONG_MAX + 1))
+			return (NULL);
 		i++;
 	}
 	while (str[i] && ft_is_whitespace(str[i]))
 		i++;
-	if (str[i] || !num)
+	if (str[i] || num == 0)
 		return (NULL);
 	ret = ft_strtrim(str, " ");
 	return (ret);
@@ -62,10 +66,6 @@ void	exit_minishell(t_token *token)
 	if (token->next == NULL || token->next->type == is_pipe)
 		return (print_fork_exit(), destroy_token_list(&token),
 			clean_exit(), exit(0));
-	if (token->next && token->next->content && token->next->next
-		&& token->next->next->content && token->next->next->type != is_pipe)
-		return (print_fork_exit(),
-			err_msg("exit: ", "too many arguments", NULL), set_exit_code(1));
 	removed_quotes = token->next->content;
 	if (token->next->content[0] == '\'')
 		removed_quotes = ft_strtrim(token->next->content, "\'");
@@ -73,11 +73,15 @@ void	exit_minishell(t_token *token)
 		removed_quotes = ft_strtrim(token->next->content, "\"");
 	if (!removed_quotes)
 		return (err_msg(NULL, NULL, NULL));
-	trimmed_str = remove_whitespace(removed_quotes);
+	trimmed_str = remove_whitespace(removed_quotes, 0, 0, '+');
 	if (token->next && token->next->content && !trimmed_str)
 		return (print_fork_exit(), err_msg("exit: ", removed_quotes,
 				": numeric argument required"), destroy_token_list(&token),
 			clean_exit(), exit(255));
+	if (token->next && token->next->content && token->next->next
+		&& token->next->next->content && token->next->next->type != is_pipe)
+		return (print_fork_exit(),
+			err_msg("exit: ", "too many arguments", NULL), set_exit_code(1));
 	if (token->next && token->next->content && str_is_num(trimmed_str))
 		return (print_fork_exit(), destroy_token_list(&token),
 			clean_exit(), exit(ft_atoi(trimmed_str)));

@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 09:44:35 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/21 09:16:07 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/25 12:46:04 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	export_env_var(t_token *token_list)
 	{
 		msg = ft_strjoin("`", token_list->next->content);
 		set_exit_code(1);
-		return (err_msg(msg, "': not a valid indentifier", NULL));
+		return (err_msg(msg, "': not a valid identifier", NULL));
 	}
 	split = ft_split(token_list->next->content, '=');
 	if (!split)
