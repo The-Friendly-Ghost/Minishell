@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 17:49:46 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/21 10:24:18 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/24 15:44:58 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,9 +118,14 @@ char	*expand_env_var(char *name, char *value, char *str, unsigned int i)
 	char	*str_after;
 	char	*temp;
 	char	*expanded_str;
+	bool	free_value;
 
+	free_value = false;
 	if (value == NULL)
+	{
 		value = ft_strdup("");
+		free_value = true;
+	}
 	str_before = ft_strdup_before_size(str, i);
 	str_after = ft_strdup(str + (i + ft_strlen(name)));
 	if (str_before == NULL)
@@ -134,5 +139,7 @@ char	*expand_env_var(char *name, char *value, char *str, unsigned int i)
 		free(temp);
 		free(str_after);
 	}
+	if (free_value)
+		free(value);
 	return (free(name), expanded_str);
 }

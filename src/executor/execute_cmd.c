@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/22 16:12:49 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/25 11:08:04 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ static void	export_loop(t_token *token_list)
 	int		token_len;
 
 	token_len = ft_tokenlen(token_list) - 1;
-	if (token_len == 0)
+	if (token_len == 0
+		|| (token_list->next && token_list->next->type == is_pipe))
 		return (print_export_env());
 	temp = token_list;
 	while (token_len > 0 && temp)

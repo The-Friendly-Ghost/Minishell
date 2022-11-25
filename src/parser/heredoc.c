@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/27 09:44:34 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/14 11:23:44 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/24 14:54:56 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,11 +90,10 @@ static bool	wait_hd(t_token *token)
  * @note A newline has to be written after every write call, because readline
  * does not read a newline when 'enter' is pressed.
  */
-static bool	get_heredoc_input(t_token *token, char *token_id)
+static bool	get_heredoc_input(t_token *token, char *token_id, char *trm_quote)
 {
-	char		*input;
-	char		*p_input;
-	int			fd;
+	char	*input;
+	int		fd;
 
 	token->heredoc_file = ft_strjoin("/tmp/Heredoc_temp", token_id);
 	if (!token->heredoc_file)
@@ -109,11 +108,12 @@ static bool	get_heredoc_input(t_token *token, char *token_id)
 		while (1)
 		{
 			input = readline("> ");
-			p_input = search_env_variables(input, 0, false);
-			if (!p_input || !ft_strcmp(p_input, trim_quote(token->content)))
-				return (close(fd), exit(0), false);
-			ft_putendl_fd(p_input, fd);
-			free(p_input);
+			trm_quote = trim_quote(token->content);
+			if (!trm_quote || !input || !ft_strcmp(input, trm_quote))
+				return (close(fd), free(input), exit(0), false);
+			ft_putendl_fd(input, fd);
+			free(input);
+			free(trm_quote);
 		}
 	}
 	return (wait_hd(token));
@@ -128,13 +128,13 @@ static bool	get_heredoc_input(t_token *token, char *token_id)
  */
 bool	expand_heredocs(t_token *token_list)
 {
-	t_token		*token;
+	t_token	*token;
 
 	token = token_list;
 	while (token)
 	{
 		if (token->previous && token->previous->type == delimiter)
-			if (!get_heredoc_input(token, ft_itoa(token->id)))
+			if (!get_heredoc_input(token, ft_itoa(token->id), NULL))
 				return (false);
 		token = token->next;
 	}

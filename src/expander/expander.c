@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 16:56:17 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/21 10:47:36 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/24 16:15:26 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ static unsigned int	skip_single_quotes(char *str, unsigned int i)
 		i++;
 	if (str[i] == '\0')
 		return (i);
-	else
-		return (i + 1);
+	return (i + 1);
 }
 
 static void	set_double_quote(bool *is_double_quote)
@@ -50,19 +49,16 @@ static char	*search_env_variables_extension(char *str, int i)
 		temp_str = str;
 		tmp_itoa = ft_itoa(get_program()->exit_code);
 		str = expand_env_var(ft_strdup("??"), tmp_itoa, str, i);
-		free(tmp_itoa);
+		return (free(tmp_itoa), free(temp_str), str);
 	}
-	else
-	{
-		env_var_name = id_env_var(str + i);
-		if (!env_var_name)
-			return (str);
-		env_var_value = ft_getenv(env_var_name + 1);
-		if (!env_var_value && env_var_name[1] == '/')
-			return (str);
-		temp_str = str;
-		str = expand_env_var(env_var_name, env_var_value, str, i);
-	}
+	env_var_name = id_env_var(str + i);
+	if (!env_var_name)
+		return (str);
+	env_var_value = ft_getenv(env_var_name + 1);
+	if (!env_var_value && env_var_name[1] == '/')
+		return (str);
+	temp_str = str;
+	str = expand_env_var(env_var_name, env_var_value, str, i);
 	return (free(temp_str), str);
 }
 
@@ -82,15 +78,22 @@ char	*search_env_variables(char *str, int i, bool is_double_quote)
 		if (str[i] == '\"')
 			set_double_quote(&is_double_quote);
 		if (str[i] == '\'' && is_double_quote == false)
+		{
 			i = skip_single_quotes(str, i + 1);
+			continue ;
+		}
 		if (str[i] == '\0')
 			return (str);
 		if (str[i] == '$')
 		{
-			if (str[i + 1] != '$')
+			if (str[i + 1] != '$' && str[i + 1] != '\0')
+			{
 				str = search_env_variables_extension(str, i);
+				continue ;
+			}
 		}
-		i++;
+		if (str[i])
+			i++;
 	}
 	return (str);
 }
