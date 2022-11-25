@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 13:34:38 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/21 09:58:29 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/22 16:09:56 by cpost         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ static char	*get_executable_path(char *command_str)
 		return (set_exit_code(127),
 			err_msg(command_str, ": No such file or directory", NULL), NULL);
 	correct_path = check_correct_path(ft_getenv("PATH"), command);
+printf("%p\n", correct_path);
 	if (!correct_path)
 	{
 		set_exit_code(127);
