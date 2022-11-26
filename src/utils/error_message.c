@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/22 13:47:12 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/22 15:11:52 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/26 13:19:30 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,23 +26,15 @@ static bool	has_quotes(char *str)
 	return (false);
 }
 
-static char	*trim_quotes(char *str)
+static void	run_while(char *str, char *temp, bool is_quote)
 {
-	char	*temp;
-	bool	is_quote;
-	char	c;
 	int		i;
 	int		j;
+	char	c;
 
-	if (!str)
-		return (NULL);
-	if (!has_quotes(str))
-		return (str);
-	temp = ft_calloc(ft_strlen(str), sizeof(char));
 	i = 0;
 	j = 0;
 	c = '\0';
-	is_quote = false;
 	while (str[i])
 	{
 		if (str[i] == c && is_quote)
@@ -59,6 +51,24 @@ static char	*trim_quotes(char *str)
 			temp[j++] = str[i];
 		i++;
 	}
+}
+
+static char	*trim_quotes(char *str)
+{
+	char	*temp;
+
+	if (!str)
+		return (NULL);
+	if (!has_quotes(str))
+		return (str);
+	if (!ft_isquote(str[0]))
+		return (str);
+	if (!ft_isquote(str[ft_strlen(str) - 1]))
+		return (str);
+	temp = ft_calloc(ft_strlen(str), sizeof(char));
+	if (!temp)
+		return (str);
+	run_while(str, temp, false);
 	ft_bzero(str, ft_strlen(str));
 	ft_memcpy(str, temp, ft_strlen(temp));
 	return (free(temp), str);
