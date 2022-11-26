@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 17:49:46 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/24 15:44:58 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/26 18:40:35 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,17 @@ char	*id_env_var(char *str)
 	return (env_var);
 }
 
+static void	ugly_norminette_fix(char *str_after, char *expanded_str)
+{
+	char	*temp;
+
+	temp = NULL;
+	temp = expanded_str;
+	expanded_str = ft_strjoin(temp, str_after);
+	free(temp);
+	free(str_after);
+}
+
 /**
  * @brief Identifies the portion of the string after the dollar sign that
  * qualifies as the environment variable.
@@ -112,11 +123,10 @@ char	*id_env_var(char *str)
  * @return returns a new string that is the environment variable. 
  * @note This function does not check if the environment variable is valid.
  */
-char	*expand_env_var(char *name, char *value, char *str, unsigned int i)
+char	*expand_env_var(char *name, char *value, char *str, int i)
 {
 	char	*str_before;
 	char	*str_after;
-	char	*temp;
 	char	*expanded_str;
 	bool	free_value;
 
@@ -133,12 +143,7 @@ char	*expand_env_var(char *name, char *value, char *str, unsigned int i)
 	else
 		expanded_str = ft_strjoin_alt(str_before, value);
 	if (str_after)
-	{
-		temp = expanded_str;
-		expanded_str = ft_strjoin(temp, str_after);
-		free(temp);
-		free(str_after);
-	}
+		ugly_norminette_fix(str_after, expanded_str);
 	if (free_value)
 		free(value);
 	return (free(name), expanded_str);

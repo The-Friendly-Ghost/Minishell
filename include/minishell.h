@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/26 13:46:55 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/26 18:36:24 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ char			*search_env_variables(char *str, int i, bool is_double_quote);
 
 char			*id_env_var(char *str);
 char			*expand_env_var(char *name, char *value, char *str,
-					unsigned int i);
+					int i);
 
 // lexer/
 
