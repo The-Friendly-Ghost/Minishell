@@ -6,11 +6,12 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/10 13:53:23 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/26 16:54:04 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/26 18:30:33 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <sys/wait.h>
 
 void	set_pipes(int ends[2], t_token *token_list)
 {

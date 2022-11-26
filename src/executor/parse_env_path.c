@@ -6,12 +6,14 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 13:34:38 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/25 12:59:47 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/26 18:18:35 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <errno.h>
+#include <fcntl.h>
+#include <string.h>
 
 static char	*is_minishell(char *command)
 {
@@ -73,10 +75,10 @@ static char	*get_executable_path(char *command_str)
 	char	*command;
 	char	*correct_path;
 
-	if (!command_str || !ft_strcmp(command_str, ""))
-		return (NULL);
-	if (access(command_str, F_OK | X_OK) == 0)
-		return (command_str);
+	if (command_str[0] == '.' && command_str[1] == '/'
+		&& ft_strcmp(command_str, "./minishell"))
+		if (access(command_str, F_OK | X_OK | AT_FDCWD) == -1)
+			return (set_exit_code(127), command_str);
 	command = ft_strjoin("/", command_str);
 	if (!command)
 		return (NULL);
@@ -104,7 +106,11 @@ char	*create_executable_path(t_token *token_list)
 	while (temp && temp->type != is_pipe)
 	{
 		if (temp->type < redirect_input || temp->type > is_heredoc)
+		{
+			if (!temp->content || !ft_strcmp(temp->content, ""))
+				return (NULL);
 			return (get_executable_path(temp->content));
+		}
 		temp = temp->next;
 	}
 	return (NULL);

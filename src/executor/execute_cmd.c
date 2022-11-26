@@ -6,13 +6,13 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/26 16:53:08 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/26 18:28:13 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <sys/wait.h>
 #include <errno.h>
+#include <string.h>
 
 static void	export_loop(t_token *token_list)
 {
@@ -93,7 +93,7 @@ static void	execute_child_process(t_token *token_list, int ends[2],
 		return (destroy_double_array(ev_arr), free(cmd_path),
 			exit(get_program()->exit_code));
 	execve(cmd_path, rd->arg_arr, ev_arr);
-	err_msg(token_list->content, ": is a directory", NULL);
+	err_msg(token_list->content, ": ", strerror(errno));
 	destroy_double_array(ev_arr);
 }
 
@@ -113,7 +113,8 @@ static bool	execute_child(t_token *token_list, pid_t *fork_pid,
 		if (!check_redirect(token_list, rd))
 			exit(get_program()->exit_code);
 		execute_child_process(token_list, ends, rd);
-		exit(errno);
+		set_exit_code(127);
+		exit(get_program()->exit_code);
 	}
 	close(ends[WRITE_END]);
 	dup2(ends[READ_END], STDIN_FILENO);
