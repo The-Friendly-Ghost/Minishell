@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/10 13:53:23 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/18 13:50:13 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/26 13:46:43 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ pid_t	ft_get_a_pid(void)
 	return (pid);
 }
 
-void	wait_processes(pid_t pid)
+void	wait_processes(pid_t pid, bool child)
 {
 	int	child_state;
 
@@ -38,7 +38,7 @@ void	wait_processes(pid_t pid)
 	waitpid(pid, &child_state, WUNTRACED);
 	while (wait(NULL) > 0)
 		continue ;
-	if (WIFEXITED(child_state) && !WIFSIGNALED(child_state))
+	if (child && WIFEXITED(child_state) && !WIFSIGNALED(child_state))
 		set_exit_code(WEXITSTATUS(child_state));
 	if (WIFSIGNALED(child_state) && get_program()->exit_code == 130)
 		ft_putendl_fd("^C", 1);

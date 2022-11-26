@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/22 15:14:46 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/26 13:46:55 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,7 @@ void			set_dup(t_redirect *rd);
 void			set_pipes(int *ends, t_token *token);
 bool			is_last_command(t_token *token_list);
 pid_t			ft_get_a_pid(void);
-void			wait_processes(pid_t pid);
+void			wait_processes(pid_t pid, bool child);
 char			*create_executable_path(t_token *token_list);
 t_token			*delete_redirects_from_list(t_token *token_list);
 bool			cmd_is_builtin(t_token *token_list);

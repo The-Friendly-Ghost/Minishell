@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/24 16:34:56 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/26 13:49:45 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ static void	execute_child_process(t_token *token_list, int ends[2],
 }
 
 static void	execute_child(t_token *token_list, pid_t *fork_pid,
-			t_redirect *rd)
+			t_redirect *rd, bool child)
 {
 	int			ends[2];
 
@@ -109,6 +109,7 @@ static void	execute_child(t_token *token_list, pid_t *fork_pid,
 		return ;
 	if (*fork_pid == 0)
 	{
+		child = true;
 		set_pipes(ends, token_list);
 		if (!check_redirect(token_list, rd))
 			exit(get_program()->exit_code);
@@ -124,11 +125,11 @@ void	exec_command(t_token **token_list)
 {
 	pid_t		pid;
 	t_redirect	rd;
+	bool		child;
 
-	if (!ft_strcmp((*token_list)->content, "clear"))
-		return ((void)printf("\E[H\E[J"));
 	pid = 0;
 	rd.arg_arr = NULL;
+	child = false;
 	backup_std_and_set_signals();
 	while (*token_list)
 	{
@@ -143,8 +144,8 @@ void	exec_command(t_token **token_list)
 			destroy_double_array(rd.arg_arr);
 			break ;
 		}
-		execute_child(*token_list, &pid, &rd);
+		execute_child(*token_list, &pid, &rd, child);
 		*token_list = destroy_command(*token_list);
 	}
-	return (wait_processes(pid), restore_std());
+	return (wait_processes(pid, child), restore_std());
 }
