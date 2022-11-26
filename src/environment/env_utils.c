@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/20 21:34:39 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/11 13:04:56 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/26 16:51:32 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,8 +122,5 @@ char	*ft_getenv(const char *name)
 
 void	set_exit_code(int exit_code)
 {
-	t_program	*program;
-
-	program = get_program();
-	program->exit_code = exit_code % 256;
+	get_program()->exit_code = exit_code;
 }

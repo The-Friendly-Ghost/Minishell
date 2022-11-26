@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/26 13:55:46 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/26 16:53:08 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,8 @@ static void	execute_child_process(t_token *token_list, int ends[2],
 	destroy_double_array(ev_arr);
 }
 
-static void	execute_child(t_token *token_list, pid_t *fork_pid,
-			t_redirect *rd, bool child)
+static bool	execute_child(t_token *token_list, pid_t *fork_pid,
+			t_redirect *rd)
 {
 	int			ends[2];
 
@@ -106,10 +106,9 @@ static void	execute_child(t_token *token_list, pid_t *fork_pid,
 		exit(1);
 	*fork_pid = fork();
 	if (*fork_pid == -1)
-		return ;
+		return (false);
 	if (*fork_pid == 0)
 	{
-		child = true;
 		set_pipes(ends, token_list);
 		if (!check_redirect(token_list, rd))
 			exit(get_program()->exit_code);
@@ -119,6 +118,7 @@ static void	execute_child(t_token *token_list, pid_t *fork_pid,
 	close(ends[WRITE_END]);
 	dup2(ends[READ_END], STDIN_FILENO);
 	close(ends[READ_END]);
+	return (true);
 }
 
 void	exec_command(t_token **token_list)
@@ -129,7 +129,6 @@ void	exec_command(t_token **token_list)
 
 	pid = 0;
 	rd.arg_arr = NULL;
-	child = false;
 	backup_std_and_set_signals();
 	while (*token_list)
 	{
@@ -144,7 +143,7 @@ void	exec_command(t_token **token_list)
 			destroy_double_array(rd.arg_arr);
 			break ;
 		}
-		execute_child(*token_list, &pid, &rd, child);
+		child = execute_child(*token_list, &pid, &rd);
 		*token_list = destroy_command(*token_list);
 	}
 	return (wait_processes(pid, child), restore_std());

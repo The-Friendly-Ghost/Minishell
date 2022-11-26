@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 16:56:17 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/25 11:14:44 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/26 15:07:35 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char	*search_env_variables(char *str, int i, bool is_double_quote)
 		}
 		if (str[i] == '\0')
 			return (str);
-		if (str[i] == '$')
+		if (str[i] == '$' && str[i + 1] != ' ')
 		{
 			if (str[i + 1] != '$' && str[i + 1] != '\0' && str[i + 1] != '\"')
 			{

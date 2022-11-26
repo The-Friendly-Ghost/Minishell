@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/16 08:19:07 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/25 12:58:20 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/26 13:58:20 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,6 @@ static char	*get_input(void)
 	}
 }
 
-void	leeeks(void)
-{
-	system("leaks -q minishell");
-}
-
 int	main(void)
 {
 	char	*input;
@@ -61,7 +56,6 @@ int	main(void)
 	input = NULL;
 	token_list = NULL;
 	get_program();
-	// atexit(leeeks);
 	while (1)
 	{
 		init_signal_handler();
