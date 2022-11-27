@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 17:49:46 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/26 18:40:35 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/27 11:45:49 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,15 +105,14 @@ char	*id_env_var(char *str)
 	return (env_var);
 }
 
-static void	ugly_norminette_fix(char *str_after, char *expanded_str)
+static char	*ugly_norminette_fix(char *str_after, char *temp)
 {
-	char	*temp;
+	char	*expanded_str;
 
-	temp = NULL;
-	temp = expanded_str;
 	expanded_str = ft_strjoin(temp, str_after);
 	free(temp);
 	free(str_after);
+	return (expanded_str);
 }
 
 /**
@@ -143,7 +142,7 @@ char	*expand_env_var(char *name, char *value, char *str, int i)
 	else
 		expanded_str = ft_strjoin_alt(str_before, value);
 	if (str_after)
-		ugly_norminette_fix(str_after, expanded_str);
+		expanded_str = ugly_norminette_fix(str_after, expanded_str);
 	if (free_value)
 		free(value);
 	return (free(name), expanded_str);
