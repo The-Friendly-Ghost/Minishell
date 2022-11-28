@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/26 18:28:13 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/28 08:23:07 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,8 +113,7 @@ static bool	execute_child(t_token *token_list, pid_t *fork_pid,
 		if (!check_redirect(token_list, rd))
 			exit(get_program()->exit_code);
 		execute_child_process(token_list, ends, rd);
-		set_exit_code(127);
-		exit(get_program()->exit_code);
+		exit(127);
 	}
 	close(ends[WRITE_END]);
 	dup2(ends[READ_END], STDIN_FILENO);

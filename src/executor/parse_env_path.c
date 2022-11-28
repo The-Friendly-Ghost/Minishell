@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 13:34:38 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/26 18:18:35 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/28 08:38:39 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,8 @@ static char	*get_executable_path(char *command_str)
 	char	*command;
 	char	*correct_path;
 
-	if (command_str[0] == '.' && command_str[1] == '/'
-		&& ft_strcmp(command_str, "./minishell"))
-		if (access(command_str, F_OK | X_OK | AT_FDCWD) == -1)
-			return (set_exit_code(127), command_str);
+	if (access(command_str, F_OK | X_OK) == 0)
+		return (command_str);
 	command = ft_strjoin("/", command_str);
 	if (!command)
 		return (NULL);
@@ -109,6 +107,10 @@ char	*create_executable_path(t_token *token_list)
 		{
 			if (!temp->content || !ft_strcmp(temp->content, ""))
 				return (NULL);
+			if (temp->content[0] == '.' && temp->content[1] == '/'
+				&& ft_strcmp(temp->content, "./minishell"))
+				if (access(temp->content, F_OK | X_OK | AT_FDCWD) == -1)
+					return (set_exit_code(127), temp->content);
 			return (get_executable_path(temp->content));
 		}
 		temp = temp->next;
