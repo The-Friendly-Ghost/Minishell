@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/10 13:53:23 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/26 18:30:33 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/28 14:47:35 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ bool	cmd_is_builtin(t_token *token_list)
 	temp = token_list;
 	while (temp && temp->type != is_pipe)
 	{
-		if (temp->type >= redirect_input && temp->type <= is_heredoc)
+		if ((temp->type >= redirect_input && temp->type <= is_heredoc)
+			|| !ft_strcmp(temp->content, ""))
 			temp = temp->next;
 		else if (temp->type >= print_exit_code)
 			return (true);

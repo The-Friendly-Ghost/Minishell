@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/18 13:20:25 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/25 13:02:45 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/28 14:29:57 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static bool	set_infile(t_token *token, t_redirect *rd)
 {
 	char	*msg;
 
-	if (access(token->content, F_OK | R_OK | W_OK) == -1)
+	if (access(trim_quotes(token->content), F_OK | R_OK | W_OK) == -1)
 	{
 		msg = ft_strjoin(token->content, ": ");
 		return (err_msg(msg, strerror(errno), NULL),
@@ -58,9 +58,15 @@ static void	set_outfile(t_token *token, t_redirect *rd, t_token_type type)
 	if (rd->fd_out != -2)
 		close(rd->fd_out);
 	if (type == redirect_output_append)
+	{
+		trim_quotes(token->content);
 		rd->fd_out = open(token->content, O_APPEND | O_WRONLY | O_CREAT, 0777);
+	}
 	else if (type == redirect_output)
+	{
+		trim_quotes(token->content);
 		rd->fd_out = open(token->content, O_TRUNC | O_WRONLY | O_CREAT, 0777);
+	}
 	if (rd->fd_out == -1)
 	{
 		msg = ft_strjoin(token->content, ": ");

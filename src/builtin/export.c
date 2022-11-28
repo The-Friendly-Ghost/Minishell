@@ -6,12 +6,24 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 09:44:35 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/28 11:23:11 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/28 14:17:38 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "lexer_utils.h"
+
+bool	check_empty_export(t_token *token_list)
+{
+	t_token	*temp;
+
+	temp = token_list->next;
+	while (temp && !ft_strcmp(temp->content, ""))
+		temp = temp->next;
+	if (!temp || temp->type == is_pipe)
+		return (true);
+	return (false);
+}
 
 /**
  * @brief Checks if the given name is in the env.
@@ -90,7 +102,6 @@ void	export_env_var(t_token *token_list)
 		return (err_msg(msg, "': not a valid identifier", NULL), free(msg));
 	}
 	split = ft_split(token_list->next->content, '=');
-fprintf(stderr, "split = [%s]\n", split[0]);
 	if (!split)
 		return (set_exit_code(12), err_msg(NULL, NULL, NULL));
 	if (split[1] && split[1][0] == '\'')

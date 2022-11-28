@@ -6,25 +6,13 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/28 11:24:06 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/28 15:08:26 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <errno.h>
 #include <string.h>
-
-static bool	check_empty_export(t_token *token_list)
-{
-	t_token	*temp;
-
-	temp = token_list->next;
-	while (temp && !ft_strcmp(temp->content, ""))
-		temp = temp->next;
-	if (!temp || temp->type == is_pipe)
-		return (true);
-	return (false);
-}
 
 static void	export_loop(t_token *token_list)
 {
@@ -33,7 +21,6 @@ static void	export_loop(t_token *token_list)
 	temp = token_list;
 	if (check_empty_export(token_list))
 		return (print_export_env());
-fprintf(stderr, "voor\n");
 	while (temp)
 	{
 		if (temp->next && temp->next->type == is_pipe)
@@ -42,7 +29,6 @@ fprintf(stderr, "voor\n");
 			export_env_var(temp);
 		temp = temp->next;
 	}
-fprintf(stderr, "na\n");
 }
 
 /**
@@ -63,7 +49,6 @@ static void	exec_builtin(t_token_type type, t_token *token_list)
 		return (err_msg(char_exit_code, ": command not found", NULL),
 			set_exit_code(127), free(char_exit_code));
 	free(char_exit_code);
-	set_exit_code(0);
 	if (type == echo)
 		return (echo_builtin(token_list, 1));
 	if (type == cd)
@@ -80,6 +65,8 @@ static void	exec_builtin(t_token_type type, t_token *token_list)
 		return (err_msg(token_list->content, ": command not found", NULL));
 	if (type == exit_program)
 		return (exit_minishell(token_list));
+	if (token_list->next && type == enviroment_variable)
+		return (exec_builtin(token_list->next->type, token_list->next));
 }
 
 static void	execute_child_process(t_token *token_list, int ends[2],
@@ -92,6 +79,7 @@ static void	execute_child_process(t_token *token_list, int ends[2],
 	if (cmd_is_builtin(token_list))
 	{
 		token_list = delete_redirects_from_list(token_list);
+		set_exit_code(0);
 		exec_builtin(token_list->type, token_list);
 		close(ends[WRITE_END]);
 		exit(get_program()->exit_code);
@@ -149,6 +137,7 @@ void	exec_command(t_token **token_list)
 			if (check_redirect(*token_list, &rd) == true)
 			{
 				*token_list = delete_redirects_from_list(*token_list);
+				set_exit_code(0);
 				exec_builtin((*token_list)->type, *token_list);
 			}
 			destroy_double_array(rd.arg_arr);

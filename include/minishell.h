@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 14:44:45 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/28 09:47:14 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/28 14:17:56 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,6 +196,7 @@ void			wait_processes(pid_t pid, bool child);
 char			*create_executable_path(t_token *token_list);
 t_token			*delete_redirects_from_list(t_token *token_list);
 bool			cmd_is_builtin(t_token *token_list);
+bool			check_empty_export(t_token *token_list);
 
 //utils/
 
