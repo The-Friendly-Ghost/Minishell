@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/10 11:35:19 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/22 13:47:30 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/28 10:51:18 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	ft_tokenlen(t_token *token_list)
 
 	temp = token_list;
 	count = 0;
-	while (temp)
+	while (temp && temp->type != is_pipe)
 	{
 		count++;
 		temp = temp->next;

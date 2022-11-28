@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/22 13:47:12 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/28 09:47:08 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/28 10:27:05 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ char	*trim_quotes(char *str)
 		return (str);
 	if (!ft_isquote(str[ft_strlen(str) - 1]))
 		return (str);
-	temp = ft_calloc(ft_strlen(str), sizeof(char));
+	temp = ft_calloc(ft_strlen(str) + 1, sizeof(char));
 	if (!temp)
 		return (str);
 	run_while(str, temp, false);

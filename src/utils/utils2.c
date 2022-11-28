@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/28 09:44:10 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/28 09:55:17 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/28 10:26:50 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ bool	compare_no_quotes(char *token, char *cmp)
 
 	if (!token)
 		return (false);
-	temp = ft_calloc(ft_strlen(token), sizeof(char));
+	temp = ft_calloc(ft_strlen(token) + 1, sizeof(char));
 	if (!temp)
 		return (false);
 	run_while(token, temp, false);

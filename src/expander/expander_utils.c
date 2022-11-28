@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 17:49:46 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/27 11:45:49 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/28 10:32:01 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,8 @@ static char	*ugly_norminette_fix(char *str_after, char *temp)
 {
 	char	*expanded_str;
 
+	if (!ft_strcmp(temp, ""))
+		return (ft_strdup(""));
 	expanded_str = ft_strjoin(temp, str_after);
 	free(temp);
 	free(str_after);

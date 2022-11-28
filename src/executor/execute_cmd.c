@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 14:49:16 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/28 08:23:07 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/28 11:24:06 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,35 @@
 #include <errno.h>
 #include <string.h>
 
+static bool	check_empty_export(t_token *token_list)
+{
+	t_token	*temp;
+
+	temp = token_list->next;
+	while (temp && !ft_strcmp(temp->content, ""))
+		temp = temp->next;
+	if (!temp || temp->type == is_pipe)
+		return (true);
+	return (false);
+}
+
 static void	export_loop(t_token *token_list)
 {
 	t_token	*temp;
-	int		token_len;
 
-	token_len = ft_tokenlen(token_list) - 1;
-	if (token_len == 0
-		|| (token_list->next && token_list->next->type == is_pipe))
-		return (print_export_env());
 	temp = token_list;
-	while (token_len > 0 && temp)
+	if (check_empty_export(token_list))
+		return (print_export_env());
+fprintf(stderr, "voor\n");
+	while (temp)
 	{
-		if (temp->next->type == is_pipe)
+		if (temp->next && temp->next->type == is_pipe)
 			break ;
-		export_env_var(temp);
+		if (temp->next && ft_strcmp(temp->next->content, ""))
+			export_env_var(temp);
 		temp = temp->next;
-		token_len--;
 	}
+fprintf(stderr, "na\n");
 }
 
 /**
