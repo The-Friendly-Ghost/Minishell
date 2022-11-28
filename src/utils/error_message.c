@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/22 13:47:12 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/26 13:19:30 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/28 09:47:08 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static void	run_while(char *str, char *temp, bool is_quote)
 	}
 }
 
-static char	*trim_quotes(char *str)
+char	*trim_quotes(char *str)
 {
 	char	*temp;
 

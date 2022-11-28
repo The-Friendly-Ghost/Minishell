@@ -6,7 +6,7 @@
 /*   By: pniezen <pniezen@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 13:34:38 by pniezen       #+#    #+#                 */
-/*   Updated: 2022/11/28 08:38:39 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/28 10:03:55 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ char	*create_executable_path(t_token *token_list)
 	{
 		if (temp->type < redirect_input || temp->type > is_heredoc)
 		{
+			trim_quotes(temp->content);
 			if (!temp->content || !ft_strcmp(temp->content, ""))
 				return (NULL);
 			if (temp->content[0] == '.' && temp->content[1] == '/'

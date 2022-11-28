@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/17 14:54:42 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/15 13:41:41 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/28 09:48:48 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,19 +65,19 @@ static int	check_if_token_is_redirection(char *token, t_token_type *token_type)
  */
 static int	check_if_token_is_builtin(char *token, t_token_type *token_type)
 {
-	if (ft_strcmp(token, "echo") == 0)
+	if (compare_no_quotes(token, "echo"))
 		*token_type = echo;
-	else if (ft_strcmp(token, "cd") == 0)
+	else if (compare_no_quotes(token, "cd"))
 		*token_type = cd;
-	else if (ft_strcmp(token, "pwd") == 0)
+	else if (compare_no_quotes(token, "pwd"))
 		*token_type = pwd;
-	else if (ft_strcmp(token, "export") == 0)
+	else if (compare_no_quotes(token, "export"))
 		*token_type = export_var;
-	else if (ft_strcmp(token, "unset") == 0)
+	else if (compare_no_quotes(token, "unset"))
 		*token_type = unset;
-	else if (ft_strcmp(token, "env") == 0)
+	else if (compare_no_quotes(token, "env"))
 		*token_type = env;
-	else if (ft_strcmp(token, "exit") == 0)
+	else if (compare_no_quotes(token, "exit"))
 		*token_type = exit_program;
 	return (*token_type);
 }

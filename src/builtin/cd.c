@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/06 16:08:39 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/15 17:05:44 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/28 09:27:20 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,9 @@ static bool	set_cd_path(t_token *token_list, int *cd_count)
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 		return (set_exit_code(errno), false);
-	if (chdir(token_list->next->content) == -1)
+	if (chdir(trim_quotes(token_list->next->content)) == -1)
 	{
-		err_str = ft_strjoin(" ", strerror(errno));
+		err_str = ft_strjoin(": ", strerror(errno));
 		err_msg("cd: ", token_list->next->content, err_str);
 		set_exit_code(1);
 		return (free(pwd), free(err_str), false);

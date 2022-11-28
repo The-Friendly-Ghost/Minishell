@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/24 16:56:17 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/26 18:35:43 by pniezen       ########   odam.nl         */
+/*   Updated: 2022/11/28 09:12:37 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static char	*search_env_variables_extension(char *str, int i)
 		return (str);
 	env_var_value = ft_getenv(env_var_name + 1);
 	if (!env_var_value && env_var_name[1] == '/')
-		return (str);
+		return (free(env_var_name), str);
 	temp_str = str;
 	str = expand_env_var(env_var_name, env_var_value, str, i);
 	return (free(temp_str), str);
@@ -71,9 +71,7 @@ static char	*search_env_variables_extension(char *str, int i)
  */
 char	*search_env_variables(char *str, int i, bool is_double_quote)
 {
-	if (!str)
-		return (NULL);
-	while (str[i])
+	while (str && str[i])
 	{
 		if (str[i] == '\"')
 			set_double_quote(&is_double_quote);
@@ -89,6 +87,8 @@ char	*search_env_variables(char *str, int i, bool is_double_quote)
 			if (str[i + 1] != '$' && str[i + 1] != '\0' && str[i + 1] != '\"')
 			{
 				str = search_env_variables_extension(str, i);
+				if (str[1] && str[1] == '/')
+					i++;
 				continue ;
 			}
 		}
