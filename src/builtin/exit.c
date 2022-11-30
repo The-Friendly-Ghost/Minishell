@@ -6,7 +6,7 @@
 /*   By: cpost <cpost@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/31 14:42:20 by cpost         #+#    #+#                 */
-/*   Updated: 2022/11/25 12:40:09 by cpost         ########   odam.nl         */
+/*   Updated: 2022/11/30 10:02:54 by pniezen       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,10 @@ void	exit_minishell(t_token *token)
 	if (token->next && token->next->content && !trimmed_str)
 		return (print_fork_exit(), err_msg("exit: ", removed_quotes,
 				": numeric argument required"), destroy_token_list(&token),
-			clean_exit(), exit(255));
+			clean_exit(), free(trimmed_str), exit(255));
 	if (token->next && token->next->content && token->next->next
 		&& token->next->next->content && token->next->next->type != is_pipe)
-		return (print_fork_exit(),
+		return (print_fork_exit(), free(trimmed_str),
 			err_msg("exit: ", "too many arguments", NULL), set_exit_code(1));
 	if (token->next && token->next->content && str_is_num(trimmed_str))
 		return (print_fork_exit(), destroy_token_list(&token),
